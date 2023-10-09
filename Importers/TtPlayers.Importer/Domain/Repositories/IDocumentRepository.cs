@@ -18,6 +18,7 @@ namespace TtPlayers.Importer.Domain.Repositories
         Task<List<TDocument>> FilterByAsync(
             Expression<Func<TDocument, bool>> filterExpression);
 
+        Task<List<TDocument>> FilterByAsyncOrderByDesending(Expression<Func<TDocument, bool>> filterExpression, Expression<Func<TDocument, object>> field, int skip = 0, int limit = 50);
         public Task<List<TProjected>> FilterByAsync<TProjected>(
             Expression<Func<TDocument, bool>> filterExpression,
             Expression<Func<TDocument, TProjected>> projectionExpression);

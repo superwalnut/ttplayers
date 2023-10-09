@@ -3,11 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TtPlayers.Importer", "TtPlayers.Importer.csproj", "{83D13344-2DCC-4432-A1E9-5025469575B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TtPlayers.Importer", "TtPlayers.Importer.csproj", "{83D13344-2DCC-4432-A1E9-5025469575B3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{8926A6FD-1075-492C-968F-B4DACC8D3C1A}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\docker-compose.yml = ..\..\docker-compose.yml
+		teamName.csv = teamName.csv
 	EndProjectSection
 EndProject
 Global

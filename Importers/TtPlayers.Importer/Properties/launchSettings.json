@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TtPlayers.Importer": {
+      "commandName": "Project",
+      "commandLineArgs": "-h"
+    }
+  }
+}

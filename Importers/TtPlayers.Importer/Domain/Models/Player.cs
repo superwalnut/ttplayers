@@ -12,13 +12,25 @@ namespace TtPlayers.Importer.Domain.Models
     [BsonCollection("Players")]
     public class Player : IDocument
     {
-        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        [BsonElement("_id")]
+        [BsonId]
+        public string? Id { get; set; } // this is the rating central ID
+        
+        public string? FullName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Rating { get; set; }
+        public DateTime LastPlayed { get; set; }
 
-        public string PlayerId { get; set; }
-        public string Name { get; set; }
-        public string Team { get; set; }
+        // from sndtta
+        public List<string> Team { get; set; }
         public int Division { get; set; }
+        public bool IsSndtta { get; set; }
+
+        //extra from RC player info page
+        public string Gender { get; set; }
+        public string State { get; set; }
+        public string TTAustraliaId { get; set; }
+
     }
 }

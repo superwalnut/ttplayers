@@ -54,6 +54,9 @@ namespace TtPlayers.Importer
 
             //Services
             services.AddTransient<ISndttaPlayerImporters, SndttaPlayerImporter>();
+            services.AddTransient<IRatingCentralPlayersImporter, RatingCentralPlayersImporter>();
+            services.AddTransient<IRatingCentralEventsImporter, RatingCentralEventsImporter>();
+            services.AddTransient<IRatingCentralPlayerHistoryImporter, RatingCentralPlayerHistoryImporter>();
         }
     }
 }

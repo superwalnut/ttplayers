@@ -8,8 +8,8 @@ namespace TtPlayers.Importer.Domain.Models
 {
     public enum Divisions
     {
-        None = -1,
-        Premier = 0,
+        None = 0,
+        Premier = 99,
         Div1 = 1, 
         Div2 = 2,
         Div3 = 3,

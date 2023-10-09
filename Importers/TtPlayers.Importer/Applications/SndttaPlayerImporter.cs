@@ -54,6 +54,7 @@ namespace TtPlayers.Importer.Applications
 
             var division = Divisions.None;
             var teamName = "";
+            var players = new List<Player>();
             foreach ( var trNode in trNodes)
             {
                 if (trNode.Attributes["bgcolor"]!=null && trNode.Attributes["bgcolor"].Value == "#D3D3D3")
@@ -79,24 +80,42 @@ namespace TtPlayers.Importer.Applications
                     {
                         var playerLink = playerLinkNode.Attributes["href"].Value;
                         var playerId = playerLink.Replace(_settings.RcPlayerUrl, "");
-                        var playerName = playerLinkNode.InnerText.Trim();
+                        var playerName = playerLinkNode.InnerText.Replace("- Utility Player","").Trim();
 
-                        // import a player
-                        try
+                        var player = players.FirstOrDefault(x => x.Id == playerId);
+                        if (player!= null)
                         {
-                            await _playerRepository.InsertOneAsync(new Player
+                            //player already in the list, just add another team name
+                            player.Team.Add(teamName);
+                        }
+                        else
+                        {
+                            players.Add(new Player
                             {
-                                PlayerId = playerId,
-                                Name = playerName,
-                                Team = teamName,
+                                Id = playerId,
+                                FullName = playerName,
+                                Team = new List<string> { teamName },
                                 Division = (int)division
                             });
                         }
-                        catch(Exception ex)
-                        {
-                            _logger.LogError(ex,"Failed to import Player.");
-                        }
+                    }
+                }
+            }
 
+            if(players.Any())
+            {
+                var foundPlayers = await _playerRepository.FilterByAsync(x => true);
+                foreach(var player in players)
+                {
+                    var found = foundPlayers.FirstOrDefault(x=>x.Id == player.Id);
+                    if(found != null)
+                    {
+                        found.IsSndtta = true;
+                        found.Division= player.Division;
+                        found.Team= player.Team;
+                        found.State = "NSW";
+
+                        await _playerRepository.UpsertAsync(found, x => x.Id == player.Id);
                     }
                 }
             }

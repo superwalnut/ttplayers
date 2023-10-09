@@ -57,6 +57,11 @@ namespace TtPlayers.Importer.Domain.Repositories
             return await _collection.Find(filterExpression).ToListAsync();
         }
 
+        public virtual async Task<List<TDocument>> FilterByAsyncOrderByDesending(Expression<Func<TDocument, bool>> filterExpression, Expression<Func<TDocument, object>> field, int skip =0, int limit = 50)
+        {
+            return await _collection.Find(filterExpression).SortByDescending(field).Skip(skip).Limit(limit).ToListAsync();
+        }
+
         public virtual Task<List<TProjected>> FilterByAsync<TProjected>(
             Expression<Func<TDocument, bool>> filterExpression,
             Expression<Func<TDocument, TProjected>> projectionExpression)
