@@ -8,7 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{8926A6FD-1075-492C-968F-B4DACC8D3C1A}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\docker-compose.yml = ..\..\docker-compose.yml
-		teamName.csv = teamName.csv
 	EndProjectSection
 EndProject
 Global

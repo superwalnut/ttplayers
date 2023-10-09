@@ -30,6 +30,8 @@ namespace TtPlayers.Importer
             [Option('m', "event-matches", Required = false, HelpText = "Import tt event matches.")]
             public bool EventMatchesImport { get; set; }
 
+            [Option('g', "sndtta-upcoming", Required = false, HelpText = "Import sndtta upcoming events.")]
+            public bool SndttaUpcomingEvent { get; set; }
         }
 
         static void Main(string[] args)
@@ -43,6 +45,8 @@ namespace TtPlayers.Importer
 
             var eventImporter = host.Services.GetRequiredService<IRatingCentralEventsImporter>();
             var playerHistoryImporter = host.Services.GetRequiredService<IRatingCentralPlayerHistoryImporter>();
+
+            var sndttaUpcomingEventImporter = host.Services.GetRequiredService<ISndttaUpcomingEventImporter>();
             try
             {
                 Parser.Default.ParseArguments<Options>(args)
@@ -71,6 +75,10 @@ namespace TtPlayers.Importer
                        else if (o.EventMatchesImport)
                        {
                            eventImporter.ImportEventMatches().GetAwaiter().GetResult();
+                       }
+                       else if(o.SndttaUpcomingEvent)
+                       {
+                           sndttaUpcomingEventImporter.Import().GetAwaiter().GetResult();
                        }
                        else
                        {
