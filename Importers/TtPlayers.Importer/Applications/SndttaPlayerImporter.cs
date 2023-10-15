@@ -1,11 +1,16 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CsvHelper.Configuration;
+using CsvHelper;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TtPlayers.Importer.Configurations;
+using TtPlayers.Importer.data;
+using TtPlayers.Importer.Domain.CsvMapping;
 using TtPlayers.Importer.Domain.Models;
 using TtPlayers.Importer.Domain.Repositories;
 using TtPlayers.Importer.Infrastructure;
@@ -23,17 +28,24 @@ namespace TtPlayers.Importer.Applications
         private readonly IHttpDownloader _httpDownloader;
         private readonly ILogger<SndttaPlayerImporter> _logger;
         private readonly IDocumentRepository<Player> _playerRepository;
+        private readonly IDocumentRepository<SndttaTeam> _teamRepository;
 
-        public SndttaPlayerImporter(IOptions<SndttaSettings> settings, IHttpDownloader downloader, IDocumentRepository<Player> playerRepository, ILogger<SndttaPlayerImporter> logger)
+        public SndttaPlayerImporter(IOptions<SndttaSettings> settings, IHttpDownloader downloader, 
+            IDocumentRepository<Player> playerRepository,
+            IDocumentRepository<SndttaTeam> teamRepository, 
+            ILogger<SndttaPlayerImporter> logger)
         {
             _settings = settings.Value;
             _httpDownloader = downloader;
             _playerRepository = playerRepository;
+            _teamRepository = teamRepository;
             _logger = logger;
         }
 
         public async Task Import()
         {
+            var teamNameDict = GetTeamNames();
+
             var playerHtml = _httpDownloader.DownloadByGet(_settings.PlayerListUrl);
             HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
             htmlDoc.LoadHtml(playerHtml);
@@ -55,6 +67,7 @@ namespace TtPlayers.Importer.Applications
             var division = Divisions.None;
             var teamName = "";
             var players = new List<Player>();
+            var teams = new List<SndttaTeam>();
             foreach ( var trNode in trNodes)
             {
                 if (trNode.Attributes["bgcolor"]!=null && trNode.Attributes["bgcolor"].Value == "#D3D3D3")
@@ -69,6 +82,11 @@ namespace TtPlayers.Importer.Applications
                 {
                     // team name row
                     teamName = trNode.InnerText.Trim();
+
+                    teams.Add(new SndttaTeam { 
+                        Id = teamName,
+                        ShortName = teamNameDict?.FirstOrDefault(x=>x.Name.Equals(teamName))?.ShortName,
+                    });
                     continue;
                 }
 
@@ -110,14 +128,56 @@ namespace TtPlayers.Importer.Applications
                     var found = foundPlayers.FirstOrDefault(x=>x.Id == player.Id);
                     if(found != null)
                     {
-                        found.IsSndtta = true;
-                        found.Division= player.Division;
-                        found.Team= player.Team;
-                        found.State = "NSW";
+                        player.FirstName = found.FirstName;
+                        player.LastName = found.LastName;
+                        player.FullName = found.FullName;
+                        player.Rating = found.Rating;
+                        player.LastPlayed = found.LastPlayed;
 
-                        await _playerRepository.UpsertAsync(found, x => x.Id == player.Id);
+                        player.IsSndtta = true;
+                        player.Division= player.Division;
+                        player.Team= player.Team;
+
+                        player.LastUpdated = DateTime.Now;
+                        player.RequireDeltaPush = true;
+
+                        await _playerRepository.UpsertAsync(player, x => x.Id == player.Id);
                     }
                 }
+            }
+
+            if (teams.Any())
+            {
+                foreach (var team in teams)
+                {
+                    var teamPlayers = players.Where(x => x.Team.Contains(team.Id));
+                    team.Players.AddRange(teamPlayers);
+                    team.LastUpdated = DateTime.Now;
+
+                    await _teamRepository.UpsertAsync(team, x => x.Id == team.Id);
+                }
+            }
+        }
+
+        private List<TeamNameCsvModel> GetTeamNames()
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = true,
+                Delimiter = ",",
+                IgnoreBlankLines = true,
+                MissingFieldFound = null,
+                ReadingExceptionOccurred = null,
+            };
+
+            var content = SndttaResource.teamName;
+
+            using (var reader = new StringReader(content))
+            using (var csvReader = new CsvReader(reader, config))
+            {
+                csvReader.Context.RegisterClassMap<TeamNameCsvMapping>();
+                var models = csvReader.GetRecords<TeamNameCsvModel>().ToList();
+                return models;
             }
         }
     }

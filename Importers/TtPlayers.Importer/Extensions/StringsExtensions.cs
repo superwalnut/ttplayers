@@ -65,6 +65,9 @@ namespace TtPlayers.Importer.Extensions
 
         public static List<string> ToWinnerScores(this string val)
         {
+            if(string.IsNullOrEmpty(val))
+                return new List<string>();
+
             /* "-16,9,-8,8,6"
               Represent as 
                 16:18
@@ -99,14 +102,17 @@ namespace TtPlayers.Importer.Extensions
 
         public static List<string> ToLoserScores(this string val)
         {
+            if (string.IsNullOrEmpty(val))
+                return new List<string>();
+
             /* "-16,9,-8,8,6"
-              Represent as 
-                16:18
-                11:9
-                8:11
-                11:8
-                11:6
-            */
+                 Represent as 
+                   16:18
+                   11:9
+                   8:11
+                   11:8
+                   11:6
+               */
             var output = new List<string>();
             var vals = val.Split(new[] { ',' });
             foreach (var s in vals)

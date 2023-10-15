@@ -1,0 +1,19 @@
+<!--brand slider start-->
+<section class="gym brand-slider">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                    <owl-carousel-o [options]="brandcarouselOptions">
+                        <ng-container *ngFor="let brand of brands">
+                        <ng-template carouselSlide class="item">
+                        <a href="javascript:void(0)">
+                            <img [src]="brand.img" alt="" class="img-fluid">
+                        </a>
+                        </ng-template>
+                        </ng-container>
+                        </owl-carousel-o>
+                </div>
+        </div>
+    </div>
+</section>
+<!--brand slider end-->

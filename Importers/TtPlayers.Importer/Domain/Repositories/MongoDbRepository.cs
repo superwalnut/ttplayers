@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TtPlayers.Importer.Configurations;
 using TtPlayers.Importer.Domain.Models;
+using TtPlayers.Importer.Domain.Attributes;
 
 namespace TtPlayers.Importer.Domain.Repositories
 {

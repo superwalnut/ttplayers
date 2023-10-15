@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TtPlayers.Importer.Applications.Base;
 using TtPlayers.Importer.Configurations;
+using TtPlayers.Importer.Domain.CsvMapping;
 using TtPlayers.Importer.Domain.Models;
 using TtPlayers.Importer.Domain.Repositories;
 using TtPlayers.Importer.Extensions;
@@ -23,58 +25,74 @@ namespace TtPlayers.Importer.Applications
         private readonly SndttaSettings _settings;
         private readonly ILogger<RatingCentralPlayersImporter> _logger;
         private readonly IDocumentRepository<Player> _playerRepository;
-        public RatingCentralPlayersImporter(IOptions<SndttaSettings> settings, IHttpDownloader downloader, IDocumentRepository<Player> playerRepository, ILogger<RatingCentralPlayersImporter> logger)
-            :base(logger,downloader)
+        private readonly ICsvService<PlayerCsvModel, PlayerCsvMapping> _csvPlayerService;
+        public RatingCentralPlayersImporter(IOptions<SndttaSettings> settings, 
+            IDocumentRepository<Player> playerRepository,
+            ICsvService<PlayerCsvModel, PlayerCsvMapping> csvPlayerService,
+            ILogger<RatingCentralPlayersImporter> logger)
+            :base(logger)
         {
             _settings = settings.Value;
             _playerRepository = playerRepository;
+            _csvPlayerService = csvPlayerService;
             _logger = logger;
         }
 
         public async Task Import()
         {
-            var trNodes = GetTrNodes(_settings.RcAusPlayerListUrl);
-            if (trNodes == null)
-                return;
+            var url = _settings.RcAusPlayerListUrl;
+            var csvPlayers = _csvPlayerService.DownloadCsv(url);
 
-            var players = new List<Player>();
-            foreach (var trNode in trNodes)
+            var players = csvPlayers.Select(x => new Player
             {
-                if(trNode.ChildNodes.Count == 4)
-                {
-                    var ratingNode = trNode.ChildNodes[0];
-                    var nameNode = trNode.ChildNodes[1];
-                    var idNode = trNode.ChildNodes[2];
-                    var dateNode = trNode.ChildNodes[3];
-
-                    var firstName = nameNode.InnerText.Trim().ToFirstName();
-                    var lastName = nameNode.InnerText.Trim().ToLastName();
-                    var fullName = nameNode.InnerText.Trim().ToFirstLastName();
-                    var id = nameNode.FirstChild.Attributes["href"].Value.ToPlayerId();
-                    DateTime.TryParse(dateNode.InnerText.Trim(), out var lastPlayedDate);
-
-                    players.Add(new Player
-                    {
-                        Id = id,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        FullName = fullName,
-                        Rating = ratingNode.InnerText.Trim(),
-                        LastPlayed = lastPlayedDate
-                    });
-                    _logger.LogInformation($"Player {fullName} added with ID {id}.");
-                }
-            }
+                Id= x.Id,
+                FirstName = x.Name.ToFirstName(),
+                LastName = x.Name.ToLastName(),
+                FullName = x.Name.ToFirstLastName(),
+                Rating = x.Rating,
+                StDev= x.StDev,
+                PrimaryClubId = x.PrimaryClubId,
+                State = x.Province,
+                Country= x.Country,
+                Gender = x.Sex,
+                TtaId = x.TTA_ID,
+                LastPlayed = x.LastPlayed,
+                LastEventId = x.LastEventId,
+                LastUpdated = DateTime.Now
+            });
 
             if (players.Any())
             {
+                var importedPlayers = await _playerRepository.FilterByAsync(x => true);
+
                 foreach (var player in players)
                 {
-                    await _playerRepository.UpsertAsync(player, x => x.Id == player.Id);
-                }
-                _logger.LogInformation($"Finish upserting {players.Count} players.");
-            }
+                    _logger.LogInformation($"Importing player {player.FullName}:{player.Id}...");
 
+                    var importedPlayer = importedPlayers.FirstOrDefault(x => x.Id == player.Id);
+
+                    if(importedPlayer!= null)
+                    {
+                        //found in database, if player rating has changed or player last-played date has changed, we need to upsert
+                        if(player.Rating != importedPlayer.Rating || player.LastPlayed != importedPlayer.LastPlayed)
+                        {
+                            player.RequireDeltaPush = true;
+                            await _playerRepository.UpsertAsync(player, x => x.Id == player.Id);
+                        }
+                        else
+                        {
+                            _logger.LogInformation($"Player {player.FullName}:{player.Id} remain unchanged.");
+                        }
+                    }
+                    else
+                    {
+                        //not exist, go straight import
+                        player.RequireDeltaPush = true;
+                        await _playerRepository.UpsertAsync(player, x => x.Id == player.Id);
+                    }
+                }
+                _logger.LogInformation($"Finish upserting {players.Count()} players.");
+            }
         }
     }
 }

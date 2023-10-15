@@ -15,23 +15,38 @@ namespace TtPlayers.Importer
             [Option('p', "player", Required = false, HelpText = "Import players.")]
             public bool PlayerImport { get; set; }
 
-            [Option('s', "sndtta-player", Required = false, HelpText = "Import sndtta players.")]
-            public bool SndttaPlayerImport { get; set; }
-
             [Option('h', "history", Required = false, HelpText = "Import player histories.")]
             public bool SndttaPlayerHistoryImport { get; set; }
 
             [Option('e', "event", Required = false, HelpText = "Import tt events.")]
             public bool EventImport { get; set; }
 
-            [Option('u', "event-summary", Required = false, HelpText = "Import tt events player-summary.")]
-            public bool EventSummaryImport { get; set; }
-
-            [Option('m', "event-matches", Required = false, HelpText = "Import tt event matches.")]
+            [Option('m', "match", Required = false, HelpText = "Import tt event matches.")]
             public bool EventMatchesImport { get; set; }
 
-            [Option('g', "sndtta-upcoming", Required = false, HelpText = "Import sndtta upcoming events.")]
+            [Option('s', "sndtta-player", Required = false, HelpText = "Import sndtta players.")]
+            public bool SndttaPlayerImport { get; set; }
+
+            [Option('u', "sndtta-upcoming", Required = false, HelpText = "Import sndtta upcoming events.")]
             public bool SndttaUpcomingEvent { get; set; }
+
+            [Option("push-player", Required = false, HelpText = "Push players.")]
+            public bool PushPlayers { get; set; }
+
+            [Option("push-player-history", Required = false, HelpText = "Push player history.")]
+            public bool PushPlayerHistory { get; set; }
+
+            [Option("push-event", Required = false, HelpText = "Push events.")]
+            public bool PushEvent { get; set; }
+
+            [Option("push-event-match", Required = false, HelpText = "Push event matches.")]
+            public bool PushEventMatches { get; set; }
+
+            [Option("push-sndtta-team", Required = false, HelpText = "Push sndtta team.")]
+            public bool PushSndttaTeam { get; set; }
+
+            [Option("push-sndtta-upcoming", Required = false, HelpText = "Push sndtta upcoming events.")]
+            public bool PushSndttaUpcoming { get; set; }
         }
 
         static void Main(string[] args)
@@ -42,11 +57,12 @@ namespace TtPlayers.Importer
             
             var playerImporter = host.Services.GetRequiredService<IRatingCentralPlayersImporter>();
             var sndttaPlayerImporter = host.Services.GetRequiredService<ISndttaPlayerImporters>();
-
             var eventImporter = host.Services.GetRequiredService<IRatingCentralEventsImporter>();
             var playerHistoryImporter = host.Services.GetRequiredService<IRatingCentralPlayerHistoryImporter>();
-
             var sndttaUpcomingEventImporter = host.Services.GetRequiredService<ISndttaUpcomingEventImporter>();
+
+            var firebasePusher = host.Services.GetRequiredService<IFirebaseDeltaPushImporter>();
+
             try
             {
                 Parser.Default.ParseArguments<Options>(args)
@@ -54,31 +70,57 @@ namespace TtPlayers.Importer
                    {
                        if (o.PlayerImport)
                        {
+                           // players need to be updated regularly
                            playerImporter.Import().GetAwaiter().GetResult();
                        } 
                        else if(o.SndttaPlayerImport)
                        {
+                           // sndtta players need to be updated regularly after playersImport
                            sndttaPlayerImporter.Import().GetAwaiter().GetResult();
                        }
                        else if (o.SndttaPlayerHistoryImport)
                        {
+                           // sndtta players need to be updated regularly after sndtta players import
                            playerHistoryImporter.Import().GetAwaiter().GetResult();
                        }
                        else if (o.EventImport)
                        {
+                           // events need to be updated regularly only refresh the new events
                            eventImporter.ImportEvents().GetAwaiter().GetResult();
-                       }
-                       else if(o.EventSummaryImport)
-                       {
-                           eventImporter.ImportEventSummaries().GetAwaiter().GetResult();
                        }
                        else if (o.EventMatchesImport)
                        {
+                           // events matches need to be updated after new events import
                            eventImporter.ImportEventMatches().GetAwaiter().GetResult();
                        }
                        else if(o.SndttaUpcomingEvent)
                        {
+                           // sndtta events only need to be updated once per season
                            sndttaUpcomingEventImporter.Import().GetAwaiter().GetResult();
+                       }
+                       else if(o.PushPlayers)
+                       {
+                           firebasePusher.PushPlayers().GetAwaiter().GetResult();
+                       }
+                       else if(o.PushPlayerHistory)
+                       {
+                           firebasePusher.PushPlayerHistories().GetAwaiter().GetResult();
+                       }
+                       else if(o.PushEvent)
+                       {
+                           firebasePusher.PushEvents().GetAwaiter().GetResult();
+                       }
+                       else if(o.PushEventMatches)
+                       {
+                           firebasePusher.PushEventMatches().GetAwaiter().GetResult();
+                       }
+                       else if (o.PushSndttaTeam)
+                       {
+                           firebasePusher.PushSndttaTeams().GetAwaiter().GetResult();
+                       }
+                       else if(o.PushSndttaUpcoming)
+                       {
+                           firebasePusher.PushSndttaUpcomingEvents().GetAwaiter().GetResult();
                        }
                        else
                        {

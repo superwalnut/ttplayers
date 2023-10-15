@@ -1,0 +1,105 @@
+<!--schedule section start-->
+<section class="gym format bg-schedule" id="schedule"  [ngStyle]="{'background-image': 'url(assets/images/gym/bg.png)'}">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="title">
+                    <div class="main-title">
+                        <h2 class="text-white m-b-15">classes schedule</h2>
+                    </div>
+                    <img src="assets/images/logo/l5-title-bottom.png" alt="" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-12">
+                    <owl-carousel-o [options]="schedulecarouselOptions" class="default-dots gym-about-slider">
+                            <ng-container *ngFor="let schedule of schedulecarousel">
+                                <ng-template carouselSlide class="row">
+                        <div class="col-lg-5 item">
+                            <div class="center-text">
+                                <div>
+                                    <div class="format-small-text">
+                                        <h6 class="text-white borders-before"><span>{{schedule.tagLine1}}</span></h6>
+                                    </div>
+                                    <div class="format-head-text">
+                                        <h3 class="text-white about-font-header">{{schedule.tagLine2}}</h3>
+                                    </div>
+                                    <div class="format-sub-text">
+                                        <p class="p-light about-para text-white">{{schedule.description1}}/p>
+                                        <p class="p-light about-para text-white">{{schedule.description2}}</p>
+                                    </div>
+                                    <ul class="icon-collection">
+                                        <li class="about-icon">
+                                            <a href="#" class="center-content"><img
+                                                    src="assets/images/gym/icons/2.png" alt=""
+                                                    class="img-fluid icons"></a>
+                                        </li>
+                                        <li class="about-icon">
+                                            <a href="#" class="center-content"><img
+                                                    src="assets/images/gym/icons/1.png" alt=""
+                                                    class="img-fluid icons"></a>
+                                        </li>
+                                        <li class="about-icon">
+                                            <a href="#" class="center-content"><img
+                                                    src="assets/images/gym/icons/3.png" alt=""
+                                                    class="img-fluid icons"></a>
+                                        </li>
+                                    </ul>
+                                    <a class="btn btn-default back-white m-t-45">learn more</a>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                    </ng-container>
+                    </owl-carousel-o>
+                    <!-- <div class="row">
+                        <div class="col-lg-5 item ">
+                            <div class=" center-text">
+                                <div>
+                                    <div class="format-small-text">
+                                        <h6 class="text-white borders-before"><span>#1 Day Training</span></h6>
+                                    </div>
+                                    <div class="format-head-text">
+                                        <h3 class="text-white about-font-header">Monday</h3>
+                                    </div>
+                                    <div class="format-sub-text">
+                                        <p class="p-light about-para text-white">Lorem Ipsum is simply dummy text of the
+                                            printing
+                                            and
+                                            typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                                            text
+                                            ever
+                                            since
+                                            the 1500s</p>
+                                        <p class="p-light about-para text-white">Lorem Ipsum has been the industry's
+                                            standard
+                                            dummy
+                                            text
+                                            ever since the 1500s</p>
+                                    </div>
+                                    <ul class="icon-collection">
+                                        <li class="about-icon">
+                                            <a href="#" class="center-content"><img
+                                                    src="assets/images/gym/icons/2.png" alt=""
+                                                    class="img-fluid icons"></a>
+                                        </li>
+                                        <li class="about-icon">
+                                            <a href="#" class="center-content"><img
+                                                    src="assets/images/gym/icons/1.png" alt=""
+                                                    class="img-fluid icons"></a>
+                                        </li>
+                                        <li class="about-icon">
+                                            <a href="#" class="center-content"><img
+                                                    src="assets/images/gym/icons/3.png" alt=""
+                                                    class="img-fluid icons"></a>
+                                        </li>
+                                    </ul>
+                                    <a class="btn btn-default back-white m-t-45">learn more</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+            </div>
+        </div>
+    </div>
+</section>
+<!--schedule section end-->

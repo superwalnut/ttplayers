@@ -1,0 +1,40 @@
+<!-- header Start-->
+<section class="gym header" id="home">
+    <div class="header5-content">
+            <owl-carousel-o [options]="headercarouselOptions" class="default-dots gym-slider">
+                    <ng-container *ngFor="let header of headercarousel">
+                        <ng-template carouselSlide class="item">
+                <div class="gym-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header.jpg)'}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-10 offset-md-1">
+                                <div class="center-text">
+                                    <div class="text-center">
+                                        <div class="header-text">
+                                            <h1><span class="bold-text">{{header.tagLine1}}</span>{{header.tagLine2}}</h1>
+                                        </div>
+                                        <div class="header-sub-text">
+                                            <p class="text-white p-light">{{header.description}}</p>
+                                        </div>
+                                        <div class="link-horizontal">
+                                            <ul class="justify-content-center">
+                                                <li>
+                                                    <a class=" btn btn-default"><span>register 20%<sup>off</sup></span></a>
+                                                </li>
+                                                <li>
+                                                    <a class=" btn btn-default">start now</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </ng-template>
+                </ng-container>
+                </owl-carousel-o>
+              </div>
+</section>
+<!-- header end-->

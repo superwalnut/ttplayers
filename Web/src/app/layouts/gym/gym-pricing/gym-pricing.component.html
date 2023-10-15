@@ -1,0 +1,47 @@
+<!--pricing section start-->
+<section class="gym pricing set-relative" id="plan">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="title">
+                    <div class="text-center">
+                        <div>
+                            <h6 class=" borders-before"><span>OUR PROGRESS</span></h6>
+                        </div>
+                        <div class="main-title">
+                            <h2>price plan</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                    <owl-carousel-o [options]="pricingcarouselOptions" class="price-margin pricing-slider">
+                            <ng-container *ngFor="let price of pricing">
+                                <ng-template carouselSlide class="item">
+                        <div class="price-container price-margin hover-overlay shadows bg-white text-center">
+                            <div class="price-feature-container set-relative">
+                                <div class="feature-text">
+                                    <span class="flaticon-{{price.icon}} feature-icon"></span>
+                                    <h4 class="feature-text-heading bold text-uppercase">{{price.package}}</h4>
+                                    <hr class="set-border">
+                                </div>
+                                <div class="price-features">
+                                    <h5 class="price-feature text-center">{{price.feature1}}</h5>
+                                    <h5 class="price-feature text-center">{{price.feature2}}</h5>
+                                    <h5 class="price-feature text-center">{{price.feature3}}</h5>
+                                </div>
+                                <div class="price-value">
+                                    <h6 class="price text-center">$<span class="large">{{price.price}}</span>/month</h6>
+                                </div>
+
+                                <a href="#" class="btn btn-default back-white">{{price.btn}}</a>
+                            </div>
+                        </div>
+                        </ng-template>
+                        </ng-container>
+                    </owl-carousel-o>
+            </div>
+        </div>
+    </div>
+</section>
+<!--pricing section end-->

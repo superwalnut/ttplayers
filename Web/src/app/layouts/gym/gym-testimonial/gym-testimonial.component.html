@@ -1,0 +1,46 @@
+<!--testimonial section start-->
+<section class="gym testimonial" [ngStyle]="{'background-image': 'url(assets/images/gym/testimonial/testimonial-bg.jpg)'}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="title">
+                    <div class="text-center">
+                        <div>
+                            <h6 class=" borders-before text-white"><span>OUR PROGRESS</span></h6>
+                        </div>
+                        <div class="main-title">
+                            <h2 class="text-white">what people say</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 offset-lg-2">
+                <owl-carousel-o [options]="testimonialCarouselOptions" class=" testimonial-slider">
+                    <ng-container *ngFor="let user of users">
+                        <ng-template carouselSlide class="item">
+                            <div class="">
+                                <img [src]="user.img" alt="" class="img-fluid m-auto">
+                                <div class="text-center testimonial-info">
+                                    <p class="p-light testimonial-para">Lorem Ipsum is simply dummy text of the printing
+                                        and
+                                        typesetting industry. Lorem
+                                        Ipsum
+                                        has been the industry's standard dummy text ever since the 1500s, when an
+                                        unknown
+                                        printer took a galley of type and scrambled it to.</p>
+                                    <div class="testimonial-name">
+                                        <h5 class="text-white name">Alan Lakor</h5>
+                                    </div>
+                                    <div class="testimonial-post">
+                                        <h6 class="text-white post">CEO OF SC.</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-container>
+                </owl-carousel-o>
+            </div>
+        </div>
+    </div>
+</section>
+<!--testimonial section end-->

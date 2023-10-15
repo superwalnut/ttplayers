@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Google.Cloud.Firestore.V1;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -24,9 +25,11 @@ namespace TtPlayers.Importer
 
             services.Configure<MongoDbSettings>(configuration.GetSection("MongoDbSettings"));
             services.Configure<SndttaSettings>(configuration.GetSection("SndttaSettings"));
+            services.Configure<FireStoreSettings>(configuration.GetSection("FireStoreSettings"));
 
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<MongoDbSettings>>().Value);
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<SndttaSettings>>().Value);
+            services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<FireStoreSettings>>().Value);
 
             services.AddSingleton<IHttpDownloader, HttpDownloader>();
 
@@ -58,6 +61,9 @@ namespace TtPlayers.Importer
             services.AddTransient<IRatingCentralEventsImporter, RatingCentralEventsImporter>();
             services.AddTransient<IRatingCentralPlayerHistoryImporter, RatingCentralPlayerHistoryImporter>();
             services.AddTransient<ISndttaUpcomingEventImporter, SndttaUpcomingEventImporter>();
+            services.AddTransient(typeof(IFireBaseRepository<>), typeof(FireBaseRepository<>));
+            services.AddTransient(typeof(ICsvService<,>), typeof(CsvService<,>));
+            services.AddTransient<IFirebaseDeltaPushImporter, FirebaseDeltaPushImporter>();
         }
     }
 }

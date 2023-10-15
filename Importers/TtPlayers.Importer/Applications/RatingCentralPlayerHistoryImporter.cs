@@ -13,6 +13,9 @@ using TtPlayers.Importer.Domain.CsvMapping;
 using TtPlayers.Importer.Domain.Models;
 using TtPlayers.Importer.Domain.Repositories;
 using TtPlayers.Importer.Infrastructure;
+using System.Numerics;
+using TtPlayers.Importer.Applications.Base;
+using System.Reflection;
 
 namespace TtPlayers.Importer.Applications
 {
@@ -27,18 +30,19 @@ namespace TtPlayers.Importer.Applications
         private readonly ILogger<RatingCentralPlayerHistoryImporter> _logger;
         private readonly IDocumentRepository<PlayerHistory> _playerHistoryRepository;
         private readonly IDocumentRepository<Player> _playerRepository;
-        private readonly IHttpDownloader _downloader;
+        private readonly ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> _playerHistoryCsvService;
 
-        public RatingCentralPlayerHistoryImporter(IOptions<SndttaSettings> settings, IHttpDownloader downloader,
+        public RatingCentralPlayerHistoryImporter(IOptions<SndttaSettings> settings,
             IDocumentRepository<PlayerHistory> playerHistoryRepository,
             IDocumentRepository<Player> playerRepository,
+            ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> playerHistoryCsvService,
             ILogger<RatingCentralPlayerHistoryImporter> logger)
-            : base(logger, downloader)
+            : base(logger)
         {
             _settings = settings.Value;
             _playerHistoryRepository = playerHistoryRepository;
             _playerRepository = playerRepository;
-            _downloader = downloader;
+            _playerHistoryCsvService= playerHistoryCsvService;
             _logger = logger;
         }
 
@@ -54,32 +58,28 @@ namespace TtPlayers.Importer.Applications
 
         private async Task ImportSinglePlayerHistory(string playerId)
         {
+            // download player history json
             var url = _settings.RcPlayerHistoryUrl.Replace("{0}", playerId);
-            var csv = _downloader.DownloadByGet(url);
-
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            var entries = _playerHistoryCsvService.DownloadCsv(url);
+            var history = new PlayerHistory
             {
-                HasHeaderRecord = true,
-                Delimiter = ",",
-                IgnoreBlankLines = true,
-                MissingFieldFound = null,
-                ReadingExceptionOccurred = null,
+                Id = playerId,
+                History = entries,
+                LastUpdated = DateTime.Now
             };
 
-            using (var reader = new StringReader(csv))
-            using (var csvReader = new CsvReader(reader, config))
+            var importedPlayerHistory = await _playerHistoryRepository.FindOneAsync(x => x.Id == playerId);
+
+            if (importedPlayerHistory == null || importedPlayerHistory.History.Count != entries.Count)
             {
-                csvReader.Context.RegisterClassMap<PlayerHistoryCsvMapping>();
-                var models = csvReader.GetRecords<PlayerHistoryEntry>().ToList();
-
-                var matches = new PlayerHistory
-                {
-                    Id = playerId,
-                    History = models
-                };
-                _logger.LogInformation($"Start importing {models.Count} records for player:{playerId}.");
-
-                await _playerHistoryRepository.UpsertAsync(matches, x => x.Id == playerId);
+                // if never imported before OR imported history != current history, do an update
+                history.RequireDeltaPush = true;
+                await _playerHistoryRepository.UpsertAsync(history, x => x.Id == playerId);
+                _logger.LogInformation($"Imported {entries.Count} match records for player:{playerId}.");
+            }
+            else
+            {
+                _logger.LogInformation($"Player:{playerId} history remain unchanged.");
             }
         }
     }

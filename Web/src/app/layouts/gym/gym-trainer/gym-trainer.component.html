@@ -1,0 +1,56 @@
+<!--trainer section start-->
+<section class="gym trainers">
+    <div class="container overflow-hide">
+        <div class="row">
+            <div class="col-12">
+                <div class="title">
+                    <div class="text-center">
+                        <div>
+                            <h6 class=" borders-before"><span>OUR PROGRESS</span></h6>
+                        </div>
+                        <div class="main-title">
+                            <h2>our trainers</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <owl-carousel-o [options]="trainercarouselOptions" class="trainers-slider">
+                    <ng-container *ngFor="let trainer of trainercarousel">
+                        <ng-template carouselSlide class="item">
+                            <img [src]="trainer.img" alt="" class="img-fluid">
+                            <div class="text-center trainers-info">
+                                <h3 class="m-b-10">Ethan Robbines</h3>
+                                <div class="socials-lists">
+                                    <ul class="socials-horizontal justify-content-center">
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-facebook center-content" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-twitter center-content" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-google center-content" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-instagram center-content" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-container>
+                </owl-carousel-o>
+            </div>
+        </div>
+    </div>
+</section>
+<!--trainer section end-->
