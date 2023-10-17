@@ -151,7 +151,9 @@ namespace TtPlayers.Importer.Applications
             
             var matches = new TtEventMatches { 
                 Id= evt.Id,
-                Matches= matchEntries
+                Matches= matchEntries,
+                RequireTransform = true,
+                LastUpdated = DateTime.Now,
             };
             _logger.LogInformation($"Start importing {matchEntries.Count} matches for event:{evt.Id}.");
 

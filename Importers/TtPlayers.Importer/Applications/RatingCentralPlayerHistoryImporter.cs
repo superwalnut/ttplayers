@@ -48,11 +48,16 @@ namespace TtPlayers.Importer.Applications
 
         public async Task Import()
         {
-            var players = await _playerRepository.FilterByAsync(x => x.IsSndtta);
-            foreach(var player in players)
+            var players = await _playerRepository.FilterByAsync(x => x.IsSndtta || x.LastPlayed > DateTime.Now.AddMonths(-6));
+            _logger.LogInformation($"Found {players.Count} players to import.");
+            var index = players.Count;
+
+            foreach (var player in players)
             {
+                _logger.LogInformation($"{index} - Importing {player.FullName}:{player.Id} history...");
                 await ImportSinglePlayerHistory(player.Id);
                 Thread.Sleep(100);
+                index--;
             }
         }
 

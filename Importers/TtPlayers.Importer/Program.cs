@@ -24,6 +24,9 @@ namespace TtPlayers.Importer
             [Option('m', "match", Required = false, HelpText = "Import tt event matches.")]
             public bool EventMatchesImport { get; set; }
 
+            [Option('t', "transform-match", Required = false, HelpText = "Transform tt matches.")]
+            public bool EventMatchesTransform { get; set; }
+
             [Option('s', "sndtta-player", Required = false, HelpText = "Import sndtta players.")]
             public bool SndttaPlayerImport { get; set; }
 
@@ -39,7 +42,7 @@ namespace TtPlayers.Importer
             [Option("push-event", Required = false, HelpText = "Push events.")]
             public bool PushEvent { get; set; }
 
-            [Option("push-event-match", Required = false, HelpText = "Push event matches.")]
+            [Option("push-match", Required = false, HelpText = "Push event matches.")]
             public bool PushEventMatches { get; set; }
 
             [Option("push-sndtta-team", Required = false, HelpText = "Push sndtta team.")]
@@ -58,6 +61,7 @@ namespace TtPlayers.Importer
             var playerImporter = host.Services.GetRequiredService<IRatingCentralPlayersImporter>();
             var sndttaPlayerImporter = host.Services.GetRequiredService<ISndttaPlayerImporters>();
             var eventImporter = host.Services.GetRequiredService<IRatingCentralEventsImporter>();
+            var matchTransformer = host.Services.GetRequiredService<IRatingCentralMatchTransformer>();
             var playerHistoryImporter = host.Services.GetRequiredService<IRatingCentralPlayerHistoryImporter>();
             var sndttaUpcomingEventImporter = host.Services.GetRequiredService<ISndttaUpcomingEventImporter>();
 
@@ -92,6 +96,10 @@ namespace TtPlayers.Importer
                        {
                            // events matches need to be updated after new events import
                            eventImporter.ImportEventMatches().GetAwaiter().GetResult();
+                       }
+                       else if (o.EventMatchesTransform)
+                       {
+                           matchTransformer.TransformMatches().GetAwaiter().GetResult();
                        }
                        else if(o.SndttaUpcomingEvent)
                        {

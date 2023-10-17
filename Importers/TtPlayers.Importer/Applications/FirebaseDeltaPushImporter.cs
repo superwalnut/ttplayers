@@ -21,14 +21,14 @@ namespace TtPlayers.Importer.Applications
         private readonly IDocumentRepository<Player> _playerRepository;
         private readonly IDocumentRepository<PlayerHistory> _playerHistoryRepository;
         private readonly IDocumentRepository<TtEvent> _eventRepository;
-        private readonly IDocumentRepository<TtEventMatches> _eventMatchesRepository;
+        private readonly IDocumentRepository<Match> _matchRepository;
         private readonly IDocumentRepository<SndttaTeam> _sndttaTeamRepository;
         private readonly IDocumentRepository<SndttaUpcomingEvent> _upcomingEventRepository;
 
         private readonly IFireBaseRepository<Player> _firebasePlayerRepository;
         private readonly IFireBaseRepository<PlayerHistory> _firebasePlayerHistoryRepository;
         private readonly IFireBaseRepository<TtEvent> _firebaseEventRepository;
-        private readonly IFireBaseRepository<TtEventMatches> _firebaseEventMatchesRepository;
+        private readonly IFireBaseRepository<Match> _firebaseEventMatchesRepository;
         private readonly IFireBaseRepository<SndttaTeam> _firebaseSndttaTeamRepository;
         private readonly IFireBaseRepository<SndttaUpcomingEvent> _firebaseUpcomingEventRepository;
 
@@ -36,12 +36,12 @@ namespace TtPlayers.Importer.Applications
             IDocumentRepository<Player> playerRepository,
             IDocumentRepository<PlayerHistory> playerHistoryRepository,
             IDocumentRepository<TtEvent> eventRepository,
-            IDocumentRepository<TtEventMatches> eventMatchesRepository,
+            IDocumentRepository<Match> matchRepository,
             IDocumentRepository<SndttaTeam> sndttaTeamRepository,
             IDocumentRepository<SndttaUpcomingEvent> upcomingEventRepository,
             IFireBaseRepository<Player> firebasePlayerRepository,
             IFireBaseRepository<PlayerHistory> firebasePlayerHistoryRepository,
-            IFireBaseRepository<TtEventMatches> firebaseEventMatchesRepository,
+            IFireBaseRepository<Match> firebaseEventMatchesRepository,
             IFireBaseRepository<SndttaTeam> firebaseSndttaTeamRepository,
             IFireBaseRepository<TtEvent> firebaseEventRepository, 
             IFireBaseRepository<SndttaUpcomingEvent> firebaseUpcomingEventRepository)
@@ -53,7 +53,7 @@ namespace TtPlayers.Importer.Applications
             _playerHistoryRepository = playerHistoryRepository;
             _eventRepository = eventRepository;
             _firebaseEventRepository = firebaseEventRepository;
-            _eventMatchesRepository = eventMatchesRepository;
+            _matchRepository = matchRepository;
             _firebaseEventMatchesRepository = firebaseEventMatchesRepository;
             _sndttaTeamRepository = sndttaTeamRepository;
             _firebaseSndttaTeamRepository = firebaseSndttaTeamRepository;
@@ -108,15 +108,17 @@ namespace TtPlayers.Importer.Applications
 
         public async Task PushEventMatches()
         {
-            var matches = await _eventMatchesRepository.FilterByAsync(x => x.RequireDeltaPush);
-            _logger.LogInformation($"Pushing {matches.Count} event-matches to firebase");
+            var matches = await _matchRepository.FilterByAsync(x => x.RequireDeltaPush && x.MatchDate > DateTime.Now.AddMonths(-2));
+            _logger.LogInformation($"Pushing {matches.Count} matches with match details to firebase");
+
             foreach (var match in matches)
             {
                 await _firebaseEventMatchesRepository.Update(match);
+                _logger.LogInformation($"Pushed event:{match.EventId} - match:{match.Id} - between {match.WinnerId}-vs-{match.LoserId}...");
 
                 match.RequireDeltaPush = false;
                 match.LastDeltaPushDate = DateTime.Now;
-                await _eventMatchesRepository.UpsertAsync(match, x=>x.Id == match.Id);
+                await _matchRepository.UpsertAsync(match, x=>x.Id == match.Id);
                 _logger.LogInformation($"Pushing event:{match.Id} matches to firebase");
             }
         }

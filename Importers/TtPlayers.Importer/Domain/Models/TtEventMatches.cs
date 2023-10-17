@@ -29,5 +29,9 @@ namespace TtPlayers.Importer.Domain.Models
         public DateTime? LastDeltaPushDate { get; set; }
         public bool RequireDeltaPush { get; set; }
 
+        // transformed
+
+        public bool RequireTransform { get; set; }
+
     }
 }
