@@ -12,12 +12,13 @@ export class GymBrandComponent implements OnInit {
   ngOnInit() {
   }
   brands = [
-    { img: "assets/images/gym/brand/1.jpg" },
-    { img: "assets/images/gym/brand/2.jpg" },
-    { img: "assets/images/gym/brand/3.jpg" },
-    { img: "assets/images/gym/brand/4.jpg" },
-    { img: "assets/images/gym/brand/1.jpg" },
-    { img: "assets/images/gym/brand/2.jpg" }
+    { img: "assets/images/gym/brand/tt-nsw-logo.png" },
+    { img: "assets/images/gym/brand/tt-vic-logo.png" },
+    { img: "assets/images/gym/brand/tt-sa-logo.png" },
+    { img: "assets/images/gym/brand/tt-act-logo.png" },
+    { img: "assets/images/gym/brand/tt-qld-logo.png" },
+    { img: "assets/images/gym/brand/tt-wa-logo.png" },
+    { img: "assets/images/gym/brand/sndtta-logo.png" }
   ]
   
   brandcarouselOptions= {

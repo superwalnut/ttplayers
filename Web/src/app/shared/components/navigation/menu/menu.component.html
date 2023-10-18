@@ -18,7 +18,7 @@
                 {{menuItem.title}}
             </a>
             <!-- Link -->
-            <a routerLink="/" routerLinkActive="active" class="dropdown" *ngIf="menuItem.type === 'link'">
+            <a routerLink="{{menuItem.path}}" routerLinkActive="active" *ngIf="menuItem.type === 'link'">
                 {{menuItem.title}}
             </a>
             <!-- External Link -->

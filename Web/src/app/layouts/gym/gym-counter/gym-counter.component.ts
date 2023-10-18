@@ -14,24 +14,24 @@ export class GymCounterComponent implements OnInit {
 
   counter = [
     {
-      count:'1510',
+      count:'22776+',
       img:'assets/images/gym/counter/happy-icon.png',
-      type:'Satisfied Customers'
+      type:'TT Players'
     },
     {
-      count:'1510',
-      img:'assets/images/gym/counter/project-icon.png',
-      type:'Projects Completed'
-    },
-    {
-      count:'1510',
-      img:'assets/images/gym/counter/work-icon.png',
-      type:'Hours Worked'
-    },
-    {
-      count:'1510',
+      count:'18559+',
       img:'assets/images/gym/counter/award-icon.png',
-      type:'Awwards Winning'
+      type:'TT Events'
+    },
+    {
+      count:'1.2m+',
+      img:'assets/images/gym/counter/project-icon.png',
+      type:'Matches Played'
+    },
+    {
+      count:'7511+',
+      img:'assets/images/gym/counter/work-icon.png',
+      type:'Active Players'
     }]
 
 }

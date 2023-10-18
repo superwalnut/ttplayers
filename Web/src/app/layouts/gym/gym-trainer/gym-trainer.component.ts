@@ -15,22 +15,28 @@ export class GymTrainerComponent implements OnInit {
   
   trainercarousel = [
     { 
-     img:"assets/images/gym/traniers/1.jpg"
+     img:"assets/images/gym/traniers/1.jpg",
+     title:"SNDTTA Open 2023"
     },
     { 
-      img:"assets/images/gym/traniers/2.jpg"
+      img:"assets/images/gym/traniers/2.jpg",
+      title:""
     },
     { 
-      img:"assets/images/gym/traniers/3.jpg"
+      img:"assets/images/gym/traniers/3.jpg",
+      title:""
     },
     { 
-      img:"assets/images/gym/traniers/4.jpg"
+      img:"assets/images/gym/traniers/4.jpg",
+      title:""
     },
     { 
-      img:"assets/images/gym/traniers/5.jpg"
+      img:"assets/images/gym/traniers/5.jpg",
+      title:""
     },
     { 
-      img:"assets/images/gym/traniers/3.jpg"
+      img:"assets/images/gym/traniers/3.jpg",
+      title:""
     }
   ]
 
