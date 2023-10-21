@@ -108,7 +108,7 @@ namespace TtPlayers.Importer.Applications
 
         public async Task PushEventMatches()
         {
-            var matches = await _matchRepository.FilterByAsync(x => x.RequireDeltaPush && x.MatchDate > DateTime.Now.AddMonths(-2));
+            var matches = await _matchRepository.FilterByAsync(x => x.RequireDeltaPush && x.MatchDate > DateTime.Now.AddMonths(-4));
             _logger.LogInformation($"Pushing {matches.Count} matches with match details to firebase");
 
             foreach (var match in matches)

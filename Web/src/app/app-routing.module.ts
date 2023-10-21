@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { GymComponent } from './layouts/gym/gym.component';
+import { PlayerListComponent } from './layouts/players/player-list/player-list.component';
 
 export const routes: Routes = [
   {
@@ -11,6 +12,10 @@ export const routes: Routes = [
   {
     path: 'gym',
     component: GymComponent
+  },
+  {
+    path: 'players/:keyword',
+    component: PlayerListComponent
   }
 ];
 

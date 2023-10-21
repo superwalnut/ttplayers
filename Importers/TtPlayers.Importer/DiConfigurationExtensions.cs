@@ -65,6 +65,8 @@ namespace TtPlayers.Importer
             services.AddTransient(typeof(ICsvService<,>), typeof(CsvService<,>));
             services.AddTransient<IFirebaseDeltaPushImporter, FirebaseDeltaPushImporter>();
             services.AddTransient<IRatingCentralMatchTransformer, RatingCentralMatchTransformer>();
+            services.AddTransient<ISndttaPlayerScraper, SndttaPlayerScraper>();
+            
         }
     }
 }

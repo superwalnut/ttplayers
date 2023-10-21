@@ -1,21 +1,11 @@
-﻿using CsvHelper.Configuration;
-using CsvHelper;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TtPlayers.Importer.Applications.Base;
 using TtPlayers.Importer.Configurations;
 using TtPlayers.Importer.Domain.CsvMapping;
 using TtPlayers.Importer.Domain.Models;
 using TtPlayers.Importer.Domain.Repositories;
 using TtPlayers.Importer.Infrastructure;
-using System.Numerics;
-using TtPlayers.Importer.Applications.Base;
-using System.Reflection;
 
 namespace TtPlayers.Importer.Applications
 {

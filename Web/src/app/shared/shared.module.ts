@@ -5,13 +5,17 @@ import { ToastrModule } from 'ngx-toastr';
 import { LoaderComponent } from './components/loader/loader.component';
 import { MenuComponent } from './components/navigation/menu/menu.component';
 import { TapToTopComponent } from './components/tap-to-top/tap-to-top.component';
+import { GymFooterComponent } from './components/gym-footer/gym-footer.component';
+import { GymNavComponent } from './components/gym-nav/gym-nav.component';
 
 @NgModule({
-  declarations: [MenuComponent, TapToTopComponent, LoaderComponent],
+  declarations: [MenuComponent, TapToTopComponent, LoaderComponent, GymFooterComponent, GymNavComponent],
   exports: [
     MenuComponent,
     LoaderComponent,
-    TapToTopComponent
+    TapToTopComponent,
+    GymFooterComponent,
+    GymNavComponent,
   ],
   imports: [
     CommonModule,

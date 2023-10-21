@@ -29,6 +29,18 @@ namespace TtPlayers.Importer.Domain.Models
         public string LastName { get; set; }
 
         [FirestoreProperty]
+        public List<string> Names {
+            get
+            {
+                return new List<string> { 
+                    FirstName.ToLower(),
+                    LastName.ToLower(),
+                    FullName.ToLower()
+                };
+            }
+        }
+
+        [FirestoreProperty]
         public int Rating { get; set; }
 
         [FirestoreProperty]
@@ -63,6 +75,17 @@ namespace TtPlayers.Importer.Domain.Models
         [FirestoreProperty]
         public bool IsSndtta { get; set; }
 
+
+        // summary
+        public int PlayedMatchesLast6Mth { get; set; }
+        public int PlayedEventsLast6Mth { get; set; }
+        public int RatingChangesLast6Mth { get; set; }
+
+        public int Wins { get; set; }
+        public int Loses { get; set; }
+        
+        public string? LastPlayedEvent { get; set; }
+        public int? LastPlayedEventRatingChange { get; set; }
      
         [FirestoreProperty]
         public DateTime LastUpdated { get; set; }

@@ -1,0 +1,110 @@
+<app-gym-nav></app-gym-nav>
+
+<!-- header Start-->
+<div class="header5-content">
+    <div class="player-list-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header3.jpg)'}">
+    </div>
+</div>
+<!-- header end-->
+
+<!-- Breadcrumb -->
+<section class="breadcrumb-section-main inner-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-contain">
+                    <div>
+                        <ul>
+                            <li><a href="/"><i class="fa fa-home"></i></a></li>
+                            <li><a><i class="fa fa-angle-double-right"></i> players</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 class="breadcrumb-txt">Australian Players</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb end -->
+
+<section class="search pt-0 pb-0">
+    <div class="container padding-cls">
+        <div class="checkout-page">
+            <div class="checkout-form">
+                <form>
+                    <div class="row">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                            <div class="field-label">Address</div>
+                            <input type="text" name="address" [formControl]="checkoutForm.controls['address']" value="" placeholder="" autocomplete="off">
+                            <div *ngIf="checkoutForm.controls.address.touched && checkoutForm.controls.address.errors?.required" class="text text-danger">
+                            Address is required
+                            </div>
+                            <div *ngIf="checkoutForm.controls.address.touched && checkoutForm.controls.address.errors?.maxlength" class="text text-danger">
+                            Maximum 50 character
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- section start -->
+<section class="agency blog blog-sec blog-sidebar  blog-list sider pt-4">
+    <div class="container">
+        <div class="row pl-0 pr-0">
+            <div class="col-lg-9 order-lg-2">
+                <div class="row">
+                    <div class="col-12 blog-sec blog-list" *ngFor="let player of players">
+                        <div class="blog-agency">
+                            <div class="row blog-contain pl-0 pr-0">
+                                <div class="col-xl-3 col-lg-4 col-lg-5 col-md-4 p-0">
+                                    <div class="text-center init-img" [ngClass]="{'blue-bg': player.Gender == 'M', 'red-bg': player.Gender == 'F'}">
+                                        {{toInitials(player)}}
+                                    </div>
+                                </div>
+                                <div class="col-xl-9 col-lg-7 col-md-8 p-0">
+                                    <div class="img-container center-content">
+                                        <div>
+                                            <div class="blog-info">
+                                                <div class="m-b-20">
+                                                    <div class="center-text">
+                                                        <i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>
+                                                        <h6 class="m-r-25 font-blog">Last Played: {{player.LastPlayed.toDate() | date:"dd/MM/yyyy"}}</h6>                                                        
+                                                        <i class="fa fa-map-marker m-r-10" aria-hidden="true"></i>
+                                                        <h6 class="font-blog m-r-25">{{player.State}}</h6>
+                                                        <i class="fa m-r-10" aria-hidden="true" [ngClass]="{'blue-text fa-male': player.Gender == 'M', 'red-text fa-female': player.Gender == 'F'}"></i>
+                                                        <h6 class="font-blog m-r-25" [ngClass]="{'blue-text': player.Gender == 'M', 'red-text': player.Gender == 'F'}">{{player.Gender}}</h6>
+                                                        <i class="fa fa-list-ol m-r-10" aria-hidden="true" *ngIf="player.Division > 0"></i>
+                                                        <h6 class="font-blog m-r-25" *ngIf="player.Division > 0">{{toDivision(player)}}</h6>
+                                                    </div>
+                                                </div>
+                                                <h5 class="blog-head font-600"><span class="m-r-25">{{player.FullName}}</span><span class="text-muted">{{toRating(player)}}</span></h5>
+                                                <div class="para2">
+                                                    Rating Central ID: {{player.Id}} <br/>
+                                                    TTA ID: {{player.TtaId}}
+                                                </div>
+                                                <div class="btn-bottom m-t-20">
+                                                    <a href="/player-detail/{{player.Id}}" class="btn btn-default btn-white">View Details</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+               <app-sidebar></app-sidebar>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- section end -->
+
+<app-gym-footer></app-gym-footer>
