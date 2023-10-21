@@ -77,14 +77,21 @@ namespace TtPlayers.Importer.Domain.Models
 
 
         // summary
+        [FirestoreProperty]
         public int PlayedMatchesLast6Mth { get; set; }
+        [FirestoreProperty]
         public int PlayedEventsLast6Mth { get; set; }
+        [FirestoreProperty]
         public int RatingChangesLast6Mth { get; set; }
 
+        [FirestoreProperty]
         public int Wins { get; set; }
+        [FirestoreProperty]
         public int Loses { get; set; }
-        
+
+        [FirestoreProperty]
         public string? LastPlayedEvent { get; set; }
+        [FirestoreProperty]
         public int? LastPlayedEventRatingChange { get; set; }
      
         [FirestoreProperty]

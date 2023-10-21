@@ -11,6 +11,8 @@ namespace TtPlayers.Importer.Applications
         Task PushEvents();
         Task PushEventMatches();
 
+        Task PushClubs();
+
         Task PushSndttaTeams();
         Task PushSndttaUpcomingEvents();
     }
@@ -24,6 +26,7 @@ namespace TtPlayers.Importer.Applications
         private readonly IDocumentRepository<Match> _matchRepository;
         private readonly IDocumentRepository<SndttaTeam> _sndttaTeamRepository;
         private readonly IDocumentRepository<SndttaUpcomingEvent> _upcomingEventRepository;
+        private readonly IDocumentRepository<Club> _clubRepository;
 
         private readonly IFireBaseRepository<Player> _firebasePlayerRepository;
         private readonly IFireBaseRepository<PlayerHistory> _firebasePlayerHistoryRepository;
@@ -31,6 +34,7 @@ namespace TtPlayers.Importer.Applications
         private readonly IFireBaseRepository<Match> _firebaseEventMatchesRepository;
         private readonly IFireBaseRepository<SndttaTeam> _firebaseSndttaTeamRepository;
         private readonly IFireBaseRepository<SndttaUpcomingEvent> _firebaseUpcomingEventRepository;
+        private readonly IFireBaseRepository<Club> _firebaseClubRepository;
 
         public FirebaseDeltaPushImporter(ILogger<FirebaseDeltaPushImporter> logger, 
             IDocumentRepository<Player> playerRepository,
@@ -39,12 +43,14 @@ namespace TtPlayers.Importer.Applications
             IDocumentRepository<Match> matchRepository,
             IDocumentRepository<SndttaTeam> sndttaTeamRepository,
             IDocumentRepository<SndttaUpcomingEvent> upcomingEventRepository,
+            IDocumentRepository<Club> clubRepository,
             IFireBaseRepository<Player> firebasePlayerRepository,
             IFireBaseRepository<PlayerHistory> firebasePlayerHistoryRepository,
             IFireBaseRepository<Match> firebaseEventMatchesRepository,
             IFireBaseRepository<SndttaTeam> firebaseSndttaTeamRepository,
             IFireBaseRepository<TtEvent> firebaseEventRepository, 
-            IFireBaseRepository<SndttaUpcomingEvent> firebaseUpcomingEventRepository)
+            IFireBaseRepository<SndttaUpcomingEvent> firebaseUpcomingEventRepository,
+            IFireBaseRepository<Club> firebaseClubRepository)
         {
             _logger = logger;
             _playerRepository = playerRepository;
@@ -59,6 +65,8 @@ namespace TtPlayers.Importer.Applications
             _firebaseSndttaTeamRepository = firebaseSndttaTeamRepository;
             _upcomingEventRepository = upcomingEventRepository;
             _firebaseUpcomingEventRepository = firebaseUpcomingEventRepository;
+            _clubRepository = clubRepository;
+            _firebaseClubRepository = firebaseClubRepository;
         }
 
         public async Task PushPlayers()
@@ -120,6 +128,20 @@ namespace TtPlayers.Importer.Applications
                 match.LastDeltaPushDate = DateTime.Now;
                 await _matchRepository.UpsertAsync(match, x=>x.Id == match.Id);
                 _logger.LogInformation($"Pushing event:{match.Id} matches to firebase");
+            }
+        }
+
+        public async Task PushClubs()
+        {
+            var clubs = await _clubRepository.FilterByAsync(x => x.RequireDeltaPush);
+            _logger.LogInformation($"Pushing {clubs.Count} clubs to firebase");
+            foreach(var club in clubs)
+            {
+                await _firebaseClubRepository.Update(club);
+                club.RequireDeltaPush = false;
+                club.LastDeltaPushDate = DateTime.Now;
+                await _clubRepository.UpsertAsync(club, x => x.Id == club.Id);
+                _logger.LogInformation($"Pushed club:{club.Name}:{club.Id}...");
             }
         }
 

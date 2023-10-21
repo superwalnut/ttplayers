@@ -19,5 +19,7 @@ namespace TtPlayers.Importer.Configurations
         public string RcAusEventListUrl { get; set; }
 
         public string RcAusEventSummaryUrl { get; set; }
+
+        public string RcClubListUrl { get; set; }
     }
 }

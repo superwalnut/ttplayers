@@ -24,6 +24,10 @@ namespace TtPlayers.Importer
             [Option('m', "match", Required = false, HelpText = "Import tt event matches.")]
             public bool EventMatchesImport { get; set; }
 
+            [Option('c', "club", Required = false, HelpText = "Import clubs.")]
+            public bool ClubImport { get; set; }
+
+
             [Option('t', "transform-match", Required = false, HelpText = "Transform tt matches.")]
             public bool EventMatchesTransform { get; set; }
 
@@ -45,6 +49,9 @@ namespace TtPlayers.Importer
             [Option("push-match", Required = false, HelpText = "Push event matches.")]
             public bool PushEventMatches { get; set; }
 
+            [Option("push-club", Required = false, HelpText = "Push clubs.")]
+            public bool PushClub { get; set; }
+
             [Option("push-sndtta-team", Required = false, HelpText = "Push sndtta team.")]
             public bool PushSndttaTeam { get; set; }
 
@@ -64,6 +71,7 @@ namespace TtPlayers.Importer
             var matchTransformer = host.Services.GetRequiredService<IRatingCentralMatchTransformer>();
             var playerHistoryImporter = host.Services.GetRequiredService<IRatingCentralPlayerHistoryImporter>();
             var sndttaUpcomingEventImporter = host.Services.GetRequiredService<ISndttaUpcomingEventImporter>();
+            var clubImporter = host.Services.GetRequiredService<IRatingCentralClubImporter>();
 
             var firebasePusher = host.Services.GetRequiredService<IFirebaseDeltaPushImporter>();
 
@@ -129,6 +137,14 @@ namespace TtPlayers.Importer
                        else if(o.PushSndttaUpcoming)
                        {
                            firebasePusher.PushSndttaUpcomingEvents().GetAwaiter().GetResult();
+                       }
+                       else if (o.ClubImport)
+                       {
+                           clubImporter.Import().GetAwaiter().GetResult();
+                       }
+                       else if (o.PushClub)
+                       {
+                           firebasePusher.PushClubs().GetAwaiter().GetResult();
                        }
                        else
                        {
