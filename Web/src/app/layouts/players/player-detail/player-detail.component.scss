@@ -1,0 +1,59 @@
+.player-list-header{
+    min-height:70px;
+}
+
+.breadcrumb-section-main {
+    padding:30px;
+}
+
+.blue-text {
+    color: rgba(65, 163, 255, 1) !important;
+}
+
+.red-text {
+    color:#e3154f !important;
+}
+
+h1 span{
+    font-size:0.7em;
+}
+
+.border-around {
+    border: 13px solid #fff;
+    border-radius: 100%;
+    -webkit-box-shadow: 0 0 30px #e2e2e2;
+    box-shadow: 0 0 30px #e2e2e2;
+    height: 150px;
+    width: 150px;
+}
+
+#gender-ico{
+    font-size:0.8em;
+}
+
+.portfolio-left {
+    width:50% !important;
+}
+
+.portfolio-right {
+    width:50% !important;
+}
+
+.counter-img {
+    font-size:1.8em;
+    color:#357fef;
+    font-weight: 500;
+}
+
+.match-player{
+    .win {
+        color:#357fef;
+    }
+}
+
+.player-activity-summary {
+    strong {
+        font-size:1.1em;
+        color:#357fef;
+    }
+}

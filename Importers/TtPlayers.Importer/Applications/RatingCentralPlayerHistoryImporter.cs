@@ -21,11 +21,13 @@ namespace TtPlayers.Importer.Applications
         private readonly IDocumentRepository<PlayerHistory> _playerHistoryRepository;
         private readonly IDocumentRepository<Player> _playerRepository;
         private readonly ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> _playerHistoryCsvService;
+        private readonly ICsvService<PlayerCsvModel, PlayerCsvMapping> _csvPlayerService;
 
         public RatingCentralPlayerHistoryImporter(IOptions<SndttaSettings> settings,
             IDocumentRepository<PlayerHistory> playerHistoryRepository,
             IDocumentRepository<Player> playerRepository,
             ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> playerHistoryCsvService,
+            ICsvService<PlayerCsvModel, PlayerCsvMapping> csvPlayerService,
             ILogger<RatingCentralPlayerHistoryImporter> logger)
             : base(logger)
         {
@@ -33,18 +35,21 @@ namespace TtPlayers.Importer.Applications
             _playerHistoryRepository = playerHistoryRepository;
             _playerRepository = playerRepository;
             _playerHistoryCsvService= playerHistoryCsvService;
+            _csvPlayerService = csvPlayerService;
             _logger = logger;
         }
 
         public async Task Import()
         {
-            var players = await _playerRepository.FilterByAsync(x => x.IsSndtta || x.LastPlayed > DateTime.Now.AddMonths(-6));
-            _logger.LogInformation($"Found {players.Count} players to import.");
-            var index = players.Count;
+            var url = _settings.RcAusPlayerListUrl;
+            var csvPlayers = _csvPlayerService.DownloadCsv(url);
 
-            foreach (var player in players)
+            _logger.LogInformation($"Found {csvPlayers.Count} players to import.");
+            var index = csvPlayers.Count;
+
+            foreach (var player in csvPlayers)
             {
-                _logger.LogInformation($"{index} - Importing {player.FullName}:{player.Id} history...");
+                _logger.LogInformation($"{index} - Importing {player.Name}:{player.Id} history...");
                 await ImportSinglePlayerHistory(player.Id);
                 Thread.Sleep(100);
                 index--;

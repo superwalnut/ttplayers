@@ -85,7 +85,7 @@ namespace TtPlayers.Importer.Extensions
                 {
                     //winner lose
                     int winnerScore = Math.Abs(score);
-                    int loserScore = score>=9? score + 2: 11;
+                    int loserScore = Math.Abs(score) >= 9? Math.Abs(score) + 2: 11;
                     output.Add($"{winnerScore}:{loserScore}");
                 }
                 else
@@ -122,7 +122,7 @@ namespace TtPlayers.Importer.Extensions
                 {
                     //winner lose
                     int winnerScore = Math.Abs(score);
-                    int loserScore = score >= 9 ? score + 2 : 11;
+                    int loserScore = Math.Abs(score) >= 9 ? Math.Abs(score) + 2 : 11;
                     output.Add($"{loserScore}:{winnerScore}");
                 }
                 else
@@ -135,6 +135,77 @@ namespace TtPlayers.Importer.Extensions
             }
 
             return output;
+        }
+
+        public static (int?, List<int>?, int?, List<int>?) GetSetWinsAndScores(this string score)
+        {
+            if (string.IsNullOrEmpty(score))
+                return (null, null, null, null);
+
+            var setNumbers = Regex.Match(score, @"^(\d+)-(\d+)$");
+            if (setNumbers.Success)
+            {
+                // score contains set numbers, such as 3-2
+                int firstNumber = int.Parse(setNumbers.Groups[1].Value);
+                int secondNumber = int.Parse(setNumbers.Groups[2].Value);
+                return (firstNumber, null, secondNumber, null);
+            }
+
+            if (score.Contains(","))
+            {
+                var gameStrs = score.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                var games = gameStrs.Select(x => {
+                    int.TryParse(x, out var result);
+                    return result;
+                }).ToList();
+
+                var winnerSets = games.Count(x => x > 0);
+                var loserSets = games.Count(x => x <= 0);
+
+                var (winnerScores, loserScores) = GetWinnerLoserSetScores(games);
+
+                return (winnerSets, winnerScores, loserSets, loserScores);
+            }
+
+            return (null, null, null, null);
+        }
+
+        public static (List<int>, List<int>) GetWinnerLoserSetScores(List<int> scores)
+        {
+            var FirstPlayerScores = new List<int>();
+            var SecondPlayerScores = new List<int>();
+
+            /* "-16,9,-8,8,6"
+              Represent as 
+                16:18
+                11:9
+                8:11
+                11:8
+                11:6
+            */
+            foreach (var score in scores)
+            {
+                if (score <= 0)
+                {
+                    //winner lose
+                    int winnerScore = Math.Abs(score);
+                    int loserScore = Math.Abs(score) >= 9 ? Math.Abs(score) + 2 : 11;
+
+                    FirstPlayerScores.Add(winnerScore);
+                    SecondPlayerScores.Add(loserScore);
+                }
+                else
+                {
+                    //winner win
+                    int loserScore = score;
+                    int winnerScore = score > 9 ? score + 2 : 11;
+
+                    FirstPlayerScores.Add(winnerScore);
+                    SecondPlayerScores.Add(loserScore);
+                }
+            }
+
+            return (FirstPlayerScores, SecondPlayerScores);
         }
     }
 }

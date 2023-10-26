@@ -26,6 +26,7 @@ namespace TtPlayers.Importer.Applications
         private readonly ILogger<RatingCentralEventsImporter> _logger;
         private readonly IDocumentRepository<TtEvent> _eventRepository;
         private readonly IDocumentRepository<TtEventMatches> _eventMatchesRepository;
+        private readonly IDocumentRepository<PlayerUpdate> _playerUpdateRepository;
         private readonly ICsvService<TtEventMatchEntry, TtEventMatchCsvMapping> _eventMatchEntryCsvService;
         private readonly ICsvService<TtEventPlayerRatingChange, TtEventPlayerRatingChangeCsvMapping> _eventRatingChangeCsvService;
         private readonly ICsvService<TtEventCsvModel, TtEventCsvMapping> _eventCsvService;
@@ -36,6 +37,7 @@ namespace TtPlayers.Importer.Applications
             ICsvService<TtEventMatchEntry, TtEventMatchCsvMapping> eventMatchEntryCsvService,
             ICsvService<TtEventPlayerRatingChange, TtEventPlayerRatingChangeCsvMapping> eventRatingChangeCsvService,
             ICsvService<TtEventCsvModel, TtEventCsvMapping> eventCsvService,
+            IDocumentRepository<PlayerUpdate> playerUpdateRepository,
             ILogger<RatingCentralEventsImporter> logger)
             :base(logger)
         {
@@ -44,6 +46,7 @@ namespace TtPlayers.Importer.Applications
             _eventMatchesRepository= eventMatchesRepository;
             _eventMatchEntryCsvService= eventMatchEntryCsvService;
             _eventRatingChangeCsvService= eventRatingChangeCsvService;
+            _playerUpdateRepository= playerUpdateRepository;
             _eventCsvService= eventCsvService;
             _logger = logger;
         }
@@ -73,7 +76,7 @@ namespace TtPlayers.Importer.Applications
             {
                 var importedEvents = await _eventRepository.FilterByAsync(x => true);
                 var importedIds = importedEvents.Select(x=>x.Id).ToList();
-                var pendingEvents = importedEvents.Where(x => !importedIds.Contains(x.Id));
+                var pendingEvents = events.Where(x => !importedIds.Contains(x.Id));
                 _logger.LogInformation($"There are {events.Count()} events found, need to import {pendingEvents.Count()} events.");
 
                 var index = pendingEvents.Count();
@@ -85,6 +88,14 @@ namespace TtPlayers.Importer.Applications
                     var ratings = ImportEventPlayerRatings(evt.Id);
                     _logger.LogInformation($"Importing {ratings.Count} player ratings for event {evt.Name}:{evt.Id}...");
                     Thread.Sleep(1000);
+
+                    // insert player update to player-update action table
+                    var updates = ratings.Select(x => new PlayerUpdate
+                    {
+                        Id = x.PlayerId,
+                        UpdatedDate = evt.Date
+                    }).ToList();
+                    await _playerUpdateRepository.InsertManyAsync(updates);
 
                     // update
                     evt.PlayerRatings = ratings;
@@ -124,7 +135,7 @@ namespace TtPlayers.Importer.Applications
             var eventMatches = await _eventMatchesRepository.FilterByAsync(c => true);
             var importedEventIds = eventMatches.Select(x => x.Id).ToList();
 
-            var pendingEvents = events.Where(x => !importedEventIds.Contains(x.Id) || x.Date > DateTime.Now.AddDays(-30));
+            var pendingEvents = events.Where(x => !importedEventIds.Contains(x.Id));
             _logger.LogInformation($"There are {events.Count()} events in total, need to import {pendingEvents.Count()} events.");
             var index = pendingEvents.Count();
             foreach (var evt in pendingEvents)

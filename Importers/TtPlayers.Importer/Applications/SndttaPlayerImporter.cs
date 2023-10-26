@@ -22,6 +22,7 @@ namespace TtPlayers.Importer.Applications
         Task Import();
     }
 
+    [Obsolete]
     public class SndttaPlayerImporter : ISndttaPlayerImporters
     {
         private readonly SndttaSettings _settings;

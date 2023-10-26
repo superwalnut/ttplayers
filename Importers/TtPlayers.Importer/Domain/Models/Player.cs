@@ -84,16 +84,69 @@ namespace TtPlayers.Importer.Domain.Models
         [FirestoreProperty]
         public int RatingChangesLast6Mth { get; set; }
 
+
         [FirestoreProperty]
-        public int Wins { get; set; }
+        public int TotalPlayedEvents { get; set; }
+
         [FirestoreProperty]
-        public int Loses { get; set; }
+        public int TotalPlayedMatches { get; set; }
+
+        [FirestoreProperty]
+        public int TotalWins { get; set; }
+        [FirestoreProperty]
+        public int TotalLoses { get; set; }
+
+        [FirestoreProperty]
+        public double WinRateFirstGame { get; set; }
+
+        [FirestoreProperty]
+        public double WinRateSecondGame { get; set; }
+
+        [FirestoreProperty]
+        public double WinRateThirdGame { get; set;}
+
+        [FirestoreProperty]
+        public double WinRateFourthGame { get;set; }
+
+        [FirestoreProperty]
+        public double WinRateFifthGame { get; set;}
+
+        [FirestoreProperty]
+        public int TotalBeatHigherRatingPlayers { get; set; }
+
+        [FirestoreProperty]
+        public int TotalLostLowerRatingPlayers { get; set; }
+
+        [FirestoreProperty]
+        public int TotalBeatPlayersCount { get; set; } // total beat distinct players
 
         [FirestoreProperty]
         public string? LastPlayedEvent { get; set; }
+        
         [FirestoreProperty]
         public int? LastPlayedEventRatingChange { get; set; }
-     
+
+        [FirestoreProperty]
+        public DateTime? StartPlayingDate { get; set; }
+
+        [FirestoreProperty]
+        public int TotalOpponentCount { get; set; } // total distinct opponents
+
+        [FirestoreProperty]
+        public int NationalRanking { get; set; }
+
+        [FirestoreProperty]
+        public int NationalGenderRanking { get; set; }
+
+        [FirestoreProperty]
+        public int StateRanking { get; set; }
+
+        [FirestoreProperty]
+        public int StateGenderRanking { get; set; }
+
+        [FirestoreProperty]
+        public bool IsJunior { get; set; }
+
         [FirestoreProperty]
         public DateTime LastUpdated { get; set; }
 

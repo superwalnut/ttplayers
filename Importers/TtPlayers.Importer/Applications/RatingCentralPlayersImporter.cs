@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using TtPlayers.Importer.Applications.Base;
@@ -29,14 +31,19 @@ namespace TtPlayers.Importer.Applications
         private readonly IDocumentRepository<Match> _matchRepository;
         private readonly ICsvService<PlayerCsvModel, PlayerCsvMapping> _csvPlayerService;
         private readonly ISndttaPlayerScraper _sndttaScraper;
+        private readonly ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> _playerHistoryCsvService;
+
+        static int ProcessedIndex = 0;
+
         public RatingCentralPlayersImporter(IOptions<SndttaSettings> settings, 
             IDocumentRepository<Player> playerRepository,
             IDocumentRepository<PlayerHistory> playerHistoryRepository,
             IDocumentRepository<Match> matchRepository,
             ICsvService<PlayerCsvModel, PlayerCsvMapping> csvPlayerService,
             ISndttaPlayerScraper sndttaScraper,
-            ILogger<RatingCentralPlayersImporter> logger)
-            :base(logger)
+            ILogger<RatingCentralPlayersImporter> logger,
+            ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> playerHistoryCsvService)
+            : base(logger)
         {
             _settings = settings.Value;
             _playerRepository = playerRepository;
@@ -45,6 +52,7 @@ namespace TtPlayers.Importer.Applications
             _csvPlayerService = csvPlayerService;
             _sndttaScraper = sndttaScraper;
             _logger = logger;
+            _playerHistoryCsvService = playerHistoryCsvService;
         }
 
         public async Task Import()
@@ -72,54 +80,105 @@ namespace TtPlayers.Importer.Applications
 
             if (players.Any())
             {
-                var index = players.Count();
 
-                //var importedPlayers = await _playerRepository.FilterByAsync(x => true);
+                // update sndtta player division & teams
+                _logger.LogInformation($"Updating Divisions & Teams & Rankings.");
 
                 var sndttaPlayers = _sndttaScraper.GetPlayers();
+               
+                var sw = new Stopwatch();
+                sw.Start();
 
-                foreach (var player in players)
+                int numThreads = 10; // Number of threads for parallel importing
+
+                List<Task> importTasks = new List<Task>();
+
+                for (int i = 0; i < numThreads; i++)
                 {
-                    _logger.LogInformation($"{index} - Importing player {player.FullName}:{player.Id}...");
-
-                    //if it is sndtta player, update team & division
-                    var sndtta = sndttaPlayers.FirstOrDefault(x=>x.Id == player.Id);
-                    if(sndtta != null)
-                    {
-                        player.IsSndtta = true;
-                        player.Division = sndtta.Division;
-                        player.Team = sndtta.Team;
-                    }
-
-                    await UpdatePlayer(player);
-
-                    //var importedPlayer = importedPlayers.FirstOrDefault(x => x.Id == player.Id);
-                    //if (importedPlayer != null)
-                    //{
-                    //    //found in database, if player rating has changed or player last-played date has changed, we need to upsert
-                    //    if (player.Rating != importedPlayer.Rating || player.LastPlayed != importedPlayer.LastPlayed)
-                    //    {
-                    //        await UpdatePlayer(player);
-                    //    }
-                    //    else
-                    //    {
-                    //        _logger.LogInformation($"Player {player.FullName}:{player.Id} remain unchanged.");
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    //not exist, go straight import
-                    //    await UpdatePlayer(player);
-                    //}
-                    index--;
+                    importTasks.Add(ImportPlayersAsync(players.ToList(), i, numThreads, sndttaPlayers));
                 }
-                _logger.LogInformation($"Finish upserting {players.Count()} players.");
+
+                await Task.WhenAll(importTasks);
+                sw.Stop();
+                //load player-update action table
+                _logger.LogInformation($"Finish upserting {players.Count()} players in {sw.Elapsed.TotalMinutes} mins.");
             }
+        }
+
+        private async Task ImportPlayersAsync(List<Player> players, int startIndex, int step, List<Player> sndttaPlayers)
+        {
+            for (int i = startIndex; i < players.Count; i += step)
+            {
+                Player player = players[i];
+                UpdateTeamAndDivision(player, sndttaPlayers);
+                UpdatePlayerRanking(player, players);
+                //await ImportSinglePlayerHistory(player.Id);
+                await UpdatePlayerSummary(player);
+                await UpdatePlayer(player);
+                _logger.LogInformation($"Index:{i} Imported player: {player.FullName}:{player.Id}");
+            }
+        }
+
+        private void UpdateTeamAndDivision(Player player, List<Player> sndttaPlayers)
+        {
+            //if it is sndtta player, update team & division
+            var sndtta = sndttaPlayers.FirstOrDefault(x => x.Id == player.Id);
+            if (sndtta != null)
+            {
+                player.IsSndtta = true;
+                player.Division = sndtta.Division;
+                player.Team = sndtta.Team;
+            }
+        }
+
+        private async Task ImportSinglePlayerHistory(string playerId)
+        {
+            // download player history json
+            var url = _settings.RcPlayerHistoryUrl.Replace("{0}", playerId);
+            var entries = _playerHistoryCsvService.DownloadCsv(url);
+            var history = new PlayerHistory
+            {
+                Id = playerId,
+                History = entries,
+                LastUpdated = DateTime.Now
+            };
+
+            var importedPlayerHistory = await _playerHistoryRepository.FindOneAsync(x => x.Id == playerId);
+
+            if (importedPlayerHistory == null || importedPlayerHistory.History.Count != entries.Count)
+            {
+                // if never imported before OR imported history != current history, do an update
+                history.RequireDeltaPush = true;
+                await _playerHistoryRepository.UpsertAsync(history, x => x.Id == playerId);
+                _logger.LogInformation($"Imported {entries.Count} match records for player:{playerId}.");
+            }
+            else
+            {
+                _logger.LogInformation($"Player:{playerId} history remain unchanged.");
+            }
+        }
+
+        private void UpdatePlayerRanking(Player player, IEnumerable<Player> players)
+        {
+            _logger.LogInformation($"Update {player.LastName}:{player.Id} Ranking.");
+
+            var count = players.Where(x=>x.Rating > player.Rating).Count();
+            var genderCount = players.Where(x => x.Gender == player.Gender && x.Rating > player.Rating).Count();
+            
+            //national ranking
+            player.NationalRanking = count;
+            player.NationalGenderRanking = genderCount;
+
+            //state ranking
+            var stateCount = players.Where(x => x.Rating > player.Rating && x.State == player.State).Count();
+            var stateGenderCount = players.Where(x => x.Rating > player.Rating && x.Gender == player.Gender && x.State == player.State).Count();
+
+            player.StateRanking = stateCount;
+            player.StateGenderRanking = stateGenderCount;
         }
 
         private async Task UpdatePlayer(Player player)
         {
-            await UpdatePlayerSummary(player);
 
             player.RequireDeltaPush = true;
             await _playerRepository.UpsertAsync(player, x => x.Id == player.Id);
@@ -131,12 +190,31 @@ namespace TtPlayers.Importer.Applications
             var playerHistory = await _playerHistoryRepository.FindOneAsync(x => x.Id == player.Id);
             if(playerHistory != null)
             {
-                var histories = playerHistory.History.Where(x => x.EventDate > DateTime.Now.AddMonths(-6)).OrderByDescending(x => x.EventDate);
+                var histories = playerHistory.History.OrderByDescending(x => x.EventDate);
 
-                player.PlayedEventsLast6Mth = histories.Count();
-                player.RatingChangesLast6Mth = histories.Sum(x => x.PointChange);
-                player.LastPlayedEvent = histories.FirstOrDefault()?.EventName;
-                player.LastPlayedEventRatingChange = histories.FirstOrDefault()?.PointChange;
+                // recent histories 6 months
+                var recentHistories = histories.Where(x => x.EventDate > DateTime.Now.AddMonths(-6)).OrderByDescending(x => x.EventDate);
+                player.PlayedEventsLast6Mth = recentHistories.Count();
+                player.RatingChangesLast6Mth = recentHistories.FirstOrDefault()?.FinalMean??0 - recentHistories.LastOrDefault()?.InitialMean??0;
+                player.LastPlayedEvent = recentHistories.FirstOrDefault()?.EventName;
+                player.LastPlayedEventRatingChange = recentHistories.FirstOrDefault()?.PointChange;
+
+                // total events
+                player.TotalPlayedEvents = playerHistory.History.Count;
+
+                // history first date
+                var firstHistory = histories.FirstOrDefault();
+                if(firstHistory != null)
+                {
+                    player.StartPlayingDate = firstHistory.EventDate;
+                }
+
+                // is junior
+                var hasJuniorEvent = histories.Any(x => x.EventName.ToLower().Contains("junior"));
+                if (hasJuniorEvent)
+                {
+                    player.IsJunior = true;
+                }
             }
 
             var matches = await _matchRepository.FilterByAsync(x => x.PlayerIds.Contains(player.Id));
@@ -147,10 +225,89 @@ namespace TtPlayers.Importer.Applications
                 var loses = matches.Count(x => x.LoserId == player.Id);
 
                 player.PlayedMatchesLast6Mth = matchPlayed;
-                player.Wins = wins;
-                player.Loses = loses;
+                player.TotalWins = wins;
+                player.TotalLoses = loses;
+                player.TotalPlayedMatches= matches.Count();
+
+                // first - fifth games
+                var firstGameWins = matches.Select(x => WinGame(0, player.Id, x));
+                player.WinRateFirstGame = TryDivide(firstGameWins.Count(x => x == true), firstGameWins.Count(x => x.HasValue));
+                
+                var secondGameWins = matches.Select(y => WinGame(1, player.Id, y));
+                player.WinRateSecondGame = TryDivide(secondGameWins.Count(y => y == true), secondGameWins.Count(x => x.HasValue));
+
+                var thirdGameWins = matches.Select(x => WinGame(2, player.Id, x));
+                player.WinRateThirdGame = TryDivide(thirdGameWins.Count(x => x == true) , thirdGameWins.Count(x => x.HasValue));
+
+                var fourthGameWins = matches.Select(x => WinGame(3, player.Id, x));
+                player.WinRateFourthGame = TryDivide(fourthGameWins.Count(z => z == true) , fourthGameWins.Count(x => x.HasValue));
+
+                var fifthGameWins = matches.Select(x => WinGame(4, player.Id, x));
+                player.WinRateFifthGame = TryDivide(fifthGameWins.Count(x => x == true) , fifthGameWins.Count(x => x.HasValue));
+
+                // beat higher player ratings, I am the winner, LoserOpponentMean => is my rating, WinnerOpponentMean => is my opponent rating
+                player.TotalBeatHigherRatingPlayers = matches.Count(x => x.WinnerId == player.Id && x.LoserOpponentMean < x.WinnerOpponentMean);
+
+                // lose lower player ratings, I am the loser, WinnerOpponentMean => is my rating, LoserOpponentMean => is my opponent rating
+                player.TotalLostLowerRatingPlayers = matches.Count(x => x.LoserId == player.Id && x.WinnerOpponentMean > x.LoserOpponentMean);
+
+                // all opponents
+                var opponentIds = new List<string>();
+                var loserOpponents = matches.Where(x => x.WinnerId == player.Id).Select(x => x.LoserId);
+                var winnerOpponents = matches.Where(x => x.LoserId == player.Id).Select(x => x.WinnerId);
+                opponentIds = loserOpponents.Union(winnerOpponents).Distinct().ToList();
+                player.TotalOpponentCount = opponentIds.Count;
+
+                player.TotalBeatPlayersCount = loserOpponents.Distinct().Count();
             }
+
             _logger.LogInformation($"Updated player Summary...");
+        }
+
+        private double TryDivide(int first, int second)
+        {
+            if(second== 0) return 0;
+
+            return first * 1.0d / second;
+        }
+
+        // game index must be 0-4 for a best of 5 game match
+        private bool? WinGame(int gameIndex, string playerId, Match match)
+        {
+            if (string.IsNullOrEmpty(match.Score))
+                return null;
+
+            if(playerId == match.WinnerId)
+            {
+                //if the player is the winner, negative means lost a game
+                var games = match.Score.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (gameIndex >= games.Length)
+                    return null;
+
+                if(int.TryParse(games[gameIndex], out var game) && game>0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if(playerId == match.LoserId)
+            {
+                //if the player is the loser, negative means win a game
+                var games = match.Score.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if(gameIndex >= games.Length)
+                    return null;
+
+                if (int.TryParse(games[gameIndex], out var game) && game < 0)
+                {
+                    return true;
+                }
+                else { return false; }
+            }
+
+            return null;
         }
     }
 }

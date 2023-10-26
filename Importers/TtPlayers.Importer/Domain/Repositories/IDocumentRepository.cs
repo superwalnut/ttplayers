@@ -32,6 +32,7 @@ namespace TtPlayers.Importer.Domain.Repositories
         public Task DeleteManyAsync(Expression<Func<TDocument, bool>> filterExpression);
         Task DeleteAllAsync();
         Task<bool> ReplaceOneAsync(TDocument document, Expression<Func<TDocument, bool>> filterExpression);
+        Task<bool> UpsertManyAsync(IList<TDocument> documents);
         Task<bool> UpsertAsync(TDocument document, Expression<Func<TDocument, bool>> filterExpression);
         Task<List<TProjected>> GroupByAsync<TProjected>(BsonDocument groupBsonDocument);
     }

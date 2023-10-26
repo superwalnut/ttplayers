@@ -23,6 +23,9 @@ namespace TtPlayers.Importer.Domain.Models
         public string EventId { get; set; }
 
         [FirestoreProperty]
+        public string EventName { get; set; }
+
+        [FirestoreProperty]
         public List<string> PlayerIds { get; set; }
 
         [FirestoreProperty]
@@ -30,24 +33,45 @@ namespace TtPlayers.Importer.Domain.Models
 
         [FirestoreProperty]
         public string WinnerId { get; set; }
+
+        [FirestoreProperty] 
+        public string WinnerName { get; set; }
+
         [FirestoreProperty]
         public string LoserId { get; set; }
+
+        [FirestoreProperty] 
+        public string LoserName { get; set;}
+
         [FirestoreProperty]
         public string Score { get; set; }
+
         [FirestoreProperty]
-        public string WinnerDelta { get; set; }
+        public int? WinnerSetWins { get; set; }
+
         [FirestoreProperty]
-        public string WinnerOpponentMean { get; set; }
+        public List<int> WinnerSetScores { get;set; }
+
         [FirestoreProperty]
-        public string WinnerOpponentStDev { get; set; }
+        public int? LoserSetWins { get; set; }
+
         [FirestoreProperty]
-        public string LoserDelta { get; set; }
+        public List<int> LoserSetScores { get; set; }
+
         [FirestoreProperty]
-        public string LoserOpponentMean { get; set; }
+        public int WinnerDelta { get; set; }
         [FirestoreProperty]
-        public string LoserOpponentStDev { get; set; }
+        public int WinnerOpponentMean { get; set; }
         [FirestoreProperty]
-        public string MatchesPairPlayed { get; set; }
+        public int WinnerOpponentStDev { get; set; }
+        [FirestoreProperty]
+        public int LoserDelta { get; set; }
+        [FirestoreProperty]
+        public int LoserOpponentMean { get; set; }
+        [FirestoreProperty]
+        public int LoserOpponentStDev { get; set; }
+        [FirestoreProperty]
+        public int MatchesPairPlayed { get; set; }
 
         [FirestoreProperty]
         public DateTime LastUpdated { get; set; }

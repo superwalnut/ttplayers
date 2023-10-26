@@ -1,1 +1,309 @@
-<p>player-detail works!</p>
+<app-gym-nav></app-gym-nav>
+
+<!-- header Start-->
+<div class="header5-content">
+    <div class="player-list-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header3.jpg)'}">
+    </div>
+</div>
+<!-- header end-->
+
+<!-- Breadcrumb -->
+<section class="breadcrumb-section-main inner-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-contain">
+                    <div>
+                        <ul>
+                            <li><a href="/"><i class="fa fa-home"></i></a></li>
+                            <li><a href="/players/{{keyword}}"><i class="fa fa-angle-double-right"></i> players</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 class="breadcrumb-txt">{{player?.FullName??""}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb end -->
+
+<!-- section start -->
+<section class="agency blog-sec blog-sidebar single_blog_item pt-4" *ngIf="player">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="border-around overflow-hide m-auto">
+                                <div class="set-relative overflow-hide">
+                                    <img src="assets/images/gym/1.png" alt="" class="img-fluid team">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="portfolio-detail" *ngIf="player">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-6 p-0 m-0">
+                                            <h1>{{player.FullName}}</h1>
+                                        </div>
+                                        <div class="col-6 p-0 m-0 text-right">
+                                            <button class="btn btn-outline-danger btn-sm">
+                                                <i class="fa fa-heart"></i>
+                                                <span class="title-font">Add To WatchList</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-6 p-0">
+                                            <div class="detail-container d-flex p-t-0 mt-2">
+                                                <div class="portfolio-left">
+                                                  <h5 class="text-left">Gender :</h5>
+                                                </div>
+                                                <div class="portfolio-right">
+                                                  <h5><i id="gender-ico" class="fa m-r-10" aria-hidden="true" [ngClass]="{'blue-text fa-male': player.Gender == 'M', 'red-text fa-female': player.Gender == 'F'}"></i> {{player.Gender}}</h5>
+                                                </div>
+                                              </div>
+                                              <div class="detail-container d-flex">
+                                                <div class="portfolio-left">
+                                                  <h5 class="text-left">State :</h5>
+                                                </div>
+                                                <div class="portfolio-right">
+                                                  <h5>{{player.State}}</h5>
+                                                </div>
+                                              </div>
+                                              <div class="detail-container d-flex">
+                                                <div class="portfolio-left">
+                                                  <h5 class="text-left">Played :</h5>
+                                                </div>
+                                                <div class="portfolio-right">
+                                                  <h5>3 years</h5>
+                                                </div>
+                                              </div>
+                                        </div>
+                                        <div class="col-6 p-0">
+                                            <div class="detail-container d-flex p-t-0 mt-2">
+                                                <div class="portfolio-left">
+                                                  <h5 class="text-left">Rating :</h5>
+                                                </div>
+                                                <div class="portfolio-right">
+                                                  <h5>{{toRating(player)}}</h5>
+                                                </div>
+                                              </div>
+                                              <div class="detail-container d-flex">
+                                                <div class="portfolio-left">
+                                                  <h5 class="text-left">Ranking :</h5>
+                                                </div>
+                                                <div class="portfolio-right">
+                                                  <h5>105</h5>
+                                                </div>
+                                              </div>
+                                              <div class="detail-container d-flex">
+                                                <div class="portfolio-left">
+                                                  <h5 class="text-left">Win Rate :</h5>
+                                                </div>
+                                                <div class="portfolio-right">
+                                                  <h5>{{player.TotalWins / player.TotalPlayedMatches | percent }}</h5>
+                                                </div>
+                                              </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="container counter bg-light-inner p-4 mt-4" *ngIf="player">
+                    <div class="row">
+                        <div class="col-md-3 col-6 counter-container">
+                            <div class="counters">
+                                <i class="fa fa-calendar img-fluid counter-img" aria-hidden="true"></i>
+                                <div class="counter-text">
+                                    <div class="count-number">
+                                        <h2 class="counts text-center">{{player.TotalPlayedEvents}}</h2>
+                                    </div>
+                                    <h6 class="count-desc text-center">Total Events</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 counter-container">
+                            <div class="counters">
+                                <i class="fa fa-gamepad img-fluid counter-img" aria-hidden="true"></i>
+                                <div class="counter-text">
+                                    <div class="count-number">
+                                        <h2 class="counts text-center">{{player.TotalPlayedMatches}}</h2>
+                                    </div>
+                                    <h6 class="count-desc text-center">Total Matches</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 counter-container">
+                            <div class="counters">
+                                <i class="fa fa-trophy img-fluid counter-img" aria-hidden="true"></i>
+                                <div class="counter-text">
+                                    <div class="count-number">
+                                        <h2 class="counts text-center">{{player.TotalWins}}</h2>
+                                    </div>
+                                    <h6 class="count-desc text-center">Total Wins</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 counter-container">
+                            <div class="counters">
+                                <i class="fa fa-user img-fluid counter-img" aria-hidden="true"></i>
+                                <div class="counter-text">
+                                    <div class="count-number">
+                                        <h2 class="counts text-center">{{player.TotalOpponentCount??"56"}}</h2>
+                                    </div>
+                                    <h6 class="count-desc text-center">Total Opponents</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container mt-4" *ngIf="player">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 service-container">
+                            <div class="chat-box">
+                                <div class="feature-content">
+                                    <h4 class="service-heading"> Recent Activities
+                                    </h4>
+                                    <hr>
+                                    <div *ngIf="player.PlayedEventsLast6Mth>0" class="player-activity-summary">
+                                        In last <strong>6</strong> months, {{player.FirstName}} 
+                                        <ul class="list-group list-group-flush">
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>Participated <strong>{{player.PlayedEventsLast6Mth}}</strong> events.</li>
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>played <strong>{{player.PlayedMatchesLast6Mth}}</strong> matches.</li>
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>{{player.RatingChangesLast6Mth>0?"gained":"lost"}} <strong>{{player.RatingChangesLast6Mth}}</strong> points.</li>
+                                        </ul>
+                                    </div>
+                                    <div *ngIf="player.PlayedEventsLast6Mth<=0" class="player-activity-summary">
+                                        In last <strong>6</strong> months, {{player.FirstName}} has been very quiet.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 service-container">
+                            <div class="chat-box">
+                                <div class="feature-content">
+                                    <h4 class="service-heading"> Experiences
+                                    </h4>
+                                    <hr>
+                                    <div *ngIf="player.TotalPlayedMatches>0" class="player-activity-summary">
+                                        Since {{player.StartPlayingDate}}, {{player.FirstName}}
+                                        <ul class="list-group list-group-flush">
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>played <strong>{{player.TotalPlayedMatches}}</strong> matches.</li>
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>played against <strong>{{player.TotalOpponentCount}}</strong> different players.</li>
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>won <strong>{{player.TotalWins}}</strong> matches, lost <strong>{{player.TotalLoses}}</strong> matches.</li>
+                                        </ul>
+                                    </div>
+                                    <div *ngIf="player.TotalPlayedMatches<=0" class="player-activity-summary">
+                                        {{player.FirstName}} has been very quiet since {{player.StartPlayingDate}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-6 col-sm-6 service-container">
+                            <div class="chat-box">
+                                <div class="feature-content">
+                                    <h4 class="service-heading"> Achievements
+                                    </h4>
+                                    <hr>
+                                    <div *ngIf="player.TotalPlayedMatches>0" class="player-activity-summary">
+                                        {{player.FirstName}} has achieved
+                                        <ul class="list-group list-group-flush">
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>winning rate of <strong>{{player.TotalWins / player.TotalPlayedMatches | percent }}</strong>.</li>
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>beat higher rating players <strong>{{player.TotalBeatHigherRatingPlayers}}</strong> times.</li>
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>state rank <strong>{{player.StateRanking}}</strong>, national rank <strong>{{player.NationalRanking}}</strong>.</li>
+                                        </ul>
+                                    </div>
+                                    <div *ngIf="player.TotalPlayedMatches<=0" class="player-activity-summary">
+                                        {{player.FirstName}} has no achievement yet.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 service-container">
+                            <div class="chat-box">
+                                <div class="feature-content">
+                                    <h4 class="service-heading"> Ranking
+                                    </h4>
+                                    <hr>
+                                    <div *ngIf="player.NationalRanking>0" class="player-activity-summary">
+                                        {{player.FirstName}} has ranking of
+                                        <ul class="list-group list-group-flush">
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.NationalRanking }}</strong> in Australia.</li>
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.NationalGenderRanking }}</strong> in {{player.Gender=="M"?"Male":"Female"}} group of Australia.</li>
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.StateRanking}}</strong> in {{player.State}}.</li>
+                                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.StateGenderRanking}}</strong>in {{player.Gender=="M"?"Male":"Female"}} group of {{player.State}}.</li>
+                                        </ul>
+                                    </div>
+                                    <div *ngIf="player.NationalRanking<=0" class="player-activity-summary">
+                                        {{player.FirstName}} has no ranking yet.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comment Sec Start -->
+                <h3 class="page-header-comment mt-5">{{player.FirstName}}'s History</h3>
+                <div class="comment-list blog_comment" *ngIf="matchesByEvent">
+                    <div class="comment_sec" *ngFor="let eventId of getEventIds()">
+                        <article class="row">
+                            <div class="col-12">
+                                <div class="blog_center">
+                                    <div class="blog_user arrow left">
+                                        <div class="panel-body">
+                                            <div class="text-left">
+                                                <div class="comment-user"><i class="fa fa-calendar"></i>
+                                                    <h6>{{getEventName(eventId)}}</h6>
+                                                </div>
+                                                <div class="comment-date"><i class="fa fa-clock-o"></i>
+                                                    <h6>{{getEventDate(eventId).toDate() | date:"dd/MM/yyyy"}}</h6>
+                                                </div>
+                                            </div>
+                                            <div class="comment-post">
+                                                <table *ngFor="let match of matchesByEvent[eventId]">
+                                                    <tr>
+                                                        <td class="match-player"><i class="fa fa-user m-r-10 "></i>{{player.FullName}} <i class="fa fa-trophy m-l-10 win" *ngIf="isPlayerWinner(match)"></i></td>
+                                                        <td>{{getPlayerSetWins(match)}}</td>
+                                                        <td>|</td>
+                                                        <td *ngFor="let score of getPlayerSetScores(match)">{{score}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="match-player"><i class="fa fa-user m-r-10"></i>{{getMatchOpponentPlayerName(match)}} <i class="fa fa-trophy m-l-10 win" *ngIf="isOpponentWinner(match)"></i></td>
+                                                        <td>{{getOpponentSetWins(match)}}</td>
+                                                        <td>|</td>
+                                                        <td *ngFor="let score of getOpponentSetScores(match)">{{score}}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <!-- Comment Sec End -->
+                
+            </div>
+            <div class="col-lg-3">
+                <app-sidebar></app-sidebar>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- section end -->
+
+
+<app-gym-footer></app-gym-footer>

@@ -102,6 +102,7 @@ namespace TtPlayers.Importer.Applications
                         {
                             //player already in the list, just add another team name
                             player.Team.Add(teamName);
+                            player.Division = GetLowerDivision((int)division, player);
                         }
                         else
                         {
@@ -140,6 +141,28 @@ namespace TtPlayers.Importer.Applications
                 var models = csvReader.GetRecords<TeamNameCsvModel>().ToList();
                 return models;
             }
+        }
+
+        private int GetLowerDivision(int div, Player player)
+        {
+            var stack = new Stack<int>();
+            stack.Push(99);
+            stack.Push(1);
+            stack.Push(2);
+            stack.Push(3);
+            stack.Push(4);
+            stack.Push(5);
+
+            while (stack.Peek() > 0)
+            {
+                var val = stack.Pop();
+                if(val == div || val == player.Division)
+                {
+                    return val;
+                }
+            }
+
+            return 0;
         }
     }
 }

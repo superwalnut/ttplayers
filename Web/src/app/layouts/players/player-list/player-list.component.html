@@ -56,17 +56,17 @@
 <section class="agency blog blog-sec blog-sidebar  blog-list sider pt-4">
     <div class="container">
         <div class="row pl-0 pr-0">
-            <div class="col-lg-9 order-lg-2">
+            <div class="col-lg-9">
                 <div class="row">
                     <div class="col-12 blog-sec blog-list" *ngFor="let player of players">
                         <div class="blog-agency">
                             <div class="row blog-contain pl-0 pr-0">
-                                <div class="col-xl-3 col-lg-4 col-lg-5 col-md-4 p-0">
+                                <div class="col-xl-2 col-lg-3 col-md-3 p-0">
                                     <div class="text-center init-img" [ngClass]="{'blue-bg': player.Gender == 'M', 'red-bg': player.Gender == 'F'}">
                                         {{toInitials(player)}}
                                     </div>
                                 </div>
-                                <div class="col-xl-9 col-lg-7 col-md-8 p-0">
+                                <div class="col-xl-10 col-lg-9 col-md-9 p-0">
                                     <div class="img-container center-content">
                                         <div>
                                             <div class="blog-info">
@@ -82,13 +82,40 @@
                                                         <h6 class="font-blog m-r-25" *ngIf="player.Division > 0">{{toDivision(player)}}</h6>
                                                     </div>
                                                 </div>
-                                                <h5 class="blog-head font-600"><span class="m-r-25">{{player.FullName}}</span><span class="text-muted">{{toRating(player)}}</span></h5>
-                                                <div class="para2">
-                                                    Rating Central ID: {{player.Id}} <br/>
-                                                    TTA ID: {{player.TtaId}}
+                                                <div class="container-fluid mt-2">
+                                                    <div class="row">
+                                                        <div class="col-xl-8 col-md-7">
+                                                            <h5 class="blog-head font-600"><span class="m-r-25">{{player.FullName}}</span><span class="text-muted">{{toRating(player)}}</span></h5>
+                                                        </div>
+                                                        <div class="col-xl-4 col-md-5 text-right align-middle rc-id">
+                                                            RC ID: {{player.Id}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xl-3 col-6">
+                                                            <h5 class="text-center"><i class="fa fa-trophy m-r-0" aria-hidden="true"></i></h5>
+                                                            <h4 class="text-center">{{player.TotalWins}}</h4>
+                                                            <h6 class="text-center">Match Wins</h6>
+                                                        </div>
+                                                        <div class="col-xl-3 col-6">
+                                                            <h5 class="text-center"><i class="fa fa-bar-chart m-r-0" aria-hidden="true"></i></h5>
+                                                            <h4 class="text-center">{{player.TotalWins / player.TotalPlayedMatches | percent }}</h4> 
+                                                            <h6 class="text-center">Winning</h6>
+                                                        </div>
+                                                        <div class="col-xl-3 col-6 counter-container">
+                                                            <h5 class="text-center"><i class="fa fa-list m-r-0" aria-hidden="true"></i></h5>
+                                                            <h4 class="text-center">{{player.TotalPlayedMatches}}</h4>
+                                                            <h6 class="text-center">Matches</h6>
+                                                        </div>
+                                                        <div class="col-xl-3 col-6 counter-container">
+                                                            <h5 class="text-center"><i class="fa fa-calendar-check-o m-r-0" aria-hidden="true"></i></h5>
+                                                            <h4 class="text-center">{{player.TotalPlayedEvents}}</h4>
+                                                            <h6 class="text-center">Tournaments</h6>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="btn-bottom m-t-20">
-                                                    <a href="/player-detail/{{player.Id}}" class="btn btn-default btn-white">View Details</a>
+                                                <div class="btn-bottom">
+                                                    <a href="/player/{{player.Id}}?keyword={{keyword}}" class="btn btn-default btn-white">View Details</a>
                                                 </div>
                                             </div>
                                         </div>

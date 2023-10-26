@@ -73,45 +73,50 @@ namespace TtPlayers.Importer.Applications
         {
             var players = await _playerRepository.FilterByAsync(x => x.RequireDeltaPush);
             _logger.LogInformation($"Pushing {players.Count} players to firebase");
-            foreach (var player in players)
-            {
-                await _firebasePlayerRepository.Update(player);
 
-                player.RequireDeltaPush = false;
-                player.LastDeltaPushDate = DateTime.Now;
-                await _playerRepository.UpsertAsync(player, x=>x.Id== player.Id);
-                _logger.LogInformation($"Pushing {player.FullName}:{player.Id} player to firebase");
-            }
+            await _firebasePlayerRepository.UpdateBulk(players);
+
+            players.ForEach(x =>
+            {
+                x.RequireDeltaPush = false;
+                x.LastDeltaPushDate = DateTime.Now;
+            });
+            
+            var result = await _playerRepository.UpsertManyAsync(players);
+            _logger.LogInformation($"Pushed player to firebase completed with status {result}");
         }
 
         public async Task PushPlayerHistories()
         {
             var histories = await _playerHistoryRepository.FilterByAsync(x => x.RequireDeltaPush);
             _logger.LogInformation($"Pushing {histories.Count} player-history to firebase");
-            foreach (var history in histories)
-            {
-                await _firebasePlayerHistoryRepository.Update(history);
 
-                history.RequireDeltaPush = false;
-                history.LastDeltaPushDate = DateTime.Now;
-                await _playerHistoryRepository.UpsertAsync(history, x => x.Id == history.Id);
-                _logger.LogInformation($"Pushing player:{history.Id} history to firebase");
-            }
+            await _firebasePlayerHistoryRepository.UpdateBulk(histories);
+
+            histories.ForEach(x =>
+            {
+                x.RequireDeltaPush = false;
+                x.LastDeltaPushDate = DateTime.Now;
+            });
+
+            var result = await _playerHistoryRepository.UpsertManyAsync(histories);
+            _logger.LogInformation($"Pushing player history to firebase completed with status {result}");
         }
 
         public async Task PushEvents()
         {
             var events = await _eventRepository.FilterByAsync(x => x.RequireDeltaPush);
             _logger.LogInformation($"Pushing {events.Count} events to firebase");
-            foreach (var evt in events)
-            {
-                await _firebaseEventRepository.Update(evt);
 
-                evt.RequireDeltaPush = false;
-                evt.LastDeltaPushDate = DateTime.Now;
-                await _eventRepository.UpsertAsync(evt, x => x.Id == evt.Id);
-                _logger.LogInformation($"Pushing event {evt.Name}:{evt.Id} to firebase");
-            }
+            await _firebaseEventRepository.UpdateBulk(events);
+
+            events.ForEach(x => {
+                x.RequireDeltaPush = false;
+                x.LastDeltaPushDate = DateTime.Now;
+            });
+
+            var result = await _eventRepository.UpsertManyAsync(events);
+            _logger.LogInformation($"Pushing event to firebase completed with status {result}");
         }
 
         public async Task PushEventMatches()
@@ -119,30 +124,31 @@ namespace TtPlayers.Importer.Applications
             var matches = await _matchRepository.FilterByAsync(x => x.RequireDeltaPush && x.MatchDate > DateTime.Now.AddMonths(-4));
             _logger.LogInformation($"Pushing {matches.Count} matches with match details to firebase");
 
-            foreach (var match in matches)
-            {
-                await _firebaseEventMatchesRepository.Update(match);
-                _logger.LogInformation($"Pushed event:{match.EventId} - match:{match.Id} - between {match.WinnerId}-vs-{match.LoserId}...");
+            await _firebaseEventMatchesRepository.UpdateBulk(matches);
 
-                match.RequireDeltaPush = false;
-                match.LastDeltaPushDate = DateTime.Now;
-                await _matchRepository.UpsertAsync(match, x=>x.Id == match.Id);
-                _logger.LogInformation($"Pushing event:{match.Id} matches to firebase");
-            }
+            matches.ForEach(x => {
+                x.RequireDeltaPush = false;
+                x.LastDeltaPushDate = DateTime.Now;
+            });
+
+            var result = await _matchRepository.UpsertManyAsync(matches);
+            _logger.LogInformation($"Pushing matches to firebase completed with status {result}");
         }
 
         public async Task PushClubs()
         {
             var clubs = await _clubRepository.FilterByAsync(x => x.RequireDeltaPush);
             _logger.LogInformation($"Pushing {clubs.Count} clubs to firebase");
-            foreach(var club in clubs)
-            {
-                await _firebaseClubRepository.Update(club);
-                club.RequireDeltaPush = false;
-                club.LastDeltaPushDate = DateTime.Now;
-                await _clubRepository.UpsertAsync(club, x => x.Id == club.Id);
-                _logger.LogInformation($"Pushed club:{club.Name}:{club.Id}...");
-            }
+
+            await _firebaseClubRepository.UpdateBulk(clubs);
+
+            clubs.ForEach(x => {
+                x.RequireDeltaPush = false;
+                x.LastDeltaPushDate = DateTime.Now;
+            });
+
+            var result = await _clubRepository.UpsertManyAsync(clubs);
+            _logger.LogInformation($"Pushed club to firebase completed with status {result}");
         }
 
         public async Task PushSndttaTeams()

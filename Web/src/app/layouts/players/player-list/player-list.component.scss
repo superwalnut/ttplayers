@@ -45,6 +45,14 @@
     font-size:1.5em;
 }
 
+.btn-bottom{
+    margin-top:50px !important;
+}
+
+.m-r-0 {
+    margin-right: 0 !important;
+}
+
 @media only screen and (max-width: 1600px) {
 
 }
@@ -77,7 +85,10 @@
 }
 
 @media only screen and (max-width: 991px)   {
-
+    .init-img{
+        font-weight: 600;
+        font-size:60px;
+    }
 }
 
 @media only screen and (min-width: 768px) {
@@ -102,6 +113,10 @@
         font-weight: 400;
         font-size:40px;
         }
+
+    .rc-id{
+        text-align: center !important;
+    }
 }
 
 @media only screen and (max-width: 480px) {

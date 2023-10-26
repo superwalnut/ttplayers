@@ -1,16 +1,11 @@
-﻿using MongoDB.Bson.Serialization;
-using MongoDB.Bson;
-using MongoDB.Driver.Linq;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using MongoDB.Driver.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using TtPlayers.Importer.Configurations;
-using TtPlayers.Importer.Domain.Models;
 using TtPlayers.Importer.Domain.Attributes;
+using TtPlayers.Importer.Domain.Models;
 
 namespace TtPlayers.Importer.Domain.Repositories
 {
@@ -129,6 +124,28 @@ namespace TtPlayers.Importer.Domain.Repositories
             return result.ModifiedCount > 0;
         }
 
+        public virtual async Task<bool> UpsertManyAsync(IList<TDocument> documents)
+        {
+            var batches = CreateBatches(documents);
+            long resultCount = 0;
+
+            foreach (var batch in batches)
+            {
+                var bulkWrites = new List<WriteModel<TDocument>>();
+                foreach (var document in batch.Value)
+                {
+                    var filter = Builders<TDocument>.Filter.Eq(p => p.Id, document.Id);
+                    var replaceOne = new ReplaceOneModel<TDocument>(filter, document);
+                    bulkWrites.Add(replaceOne);
+                }
+
+                var result = await _collection.BulkWriteAsync(bulkWrites);
+                resultCount += result.ModifiedCount;
+            }
+
+            return resultCount == documents.Count;
+        }
+
         public async Task DeleteOneAsync(Expression<Func<TDocument, bool>> filterExpression)
         {
             await _collection.FindOneAndDeleteAsync(filterExpression);
@@ -149,6 +166,21 @@ namespace TtPlayers.Importer.Domain.Repositories
         {
             var filter = Builders<TDocument>.Filter.Empty;
             await _collection.DeleteManyAsync(filter);
+        }
+
+        private Dictionary<int, IList<TDocument>> CreateBatches(IList<TDocument> documents)
+        {
+            var batches = new Dictionary<int, IList<TDocument>>();
+
+            int batchSize = 500;
+
+            for (int i = 0; i < documents.Count; i += batchSize)
+            {
+                IList<TDocument> batch = documents.Skip(i).Take(batchSize).ToList();
+                batches.Add(i, batch);
+            }
+
+            return batches;
         }
     }
 }

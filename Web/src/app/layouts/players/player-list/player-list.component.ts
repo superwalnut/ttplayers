@@ -11,23 +11,21 @@ import { PlayerService } from 'src/app/service/player.service';
 })
 export class PlayerListComponent implements OnInit {
   players: Player[] = [];
-
+  keyword:string;
 
   public checkoutForm: FormGroup;
   
   public blogData: any
   
   constructor(private fb: FormBuilder, private playerService:PlayerService, private route: ActivatedRoute) {
-    this.blogData = blogBasicDB.list;
     this.checkoutForm = this.fb.group({
       address: ['', [Validators.required, Validators.maxLength(50)]], 
     });
    }
 
   ngOnInit() {
-      var keyword = this.route.snapshot.params.keyword;
-      console.log('keyword', keyword);
-      this.playerService.searchPlayerByName(keyword).subscribe(players => {
+      this.keyword = this.route.snapshot.params.keyword;
+      this.playerService.searchPlayerByName(this.keyword).subscribe(players => {
         this.players = players;
         console.log(this.players);
       });
@@ -66,62 +64,3 @@ export class PlayerListComponent implements OnInit {
   }
 }
 
-
-export class blogBasicDB {
-  static list = [
-      {
-          Id: 1,
-          img: 'assets/images/agency/blog/6.jpg',
-          date:'June 19, 2018',
-          type:'Phonics ,Newyork',
-          title:'Twice profit than before you',
-          content:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimenbook...............',
-          btn:'read more'
-      },
-      {
-          Id: 2,
-          img: 'assets/images/agency/blog/2.jpg',
-          date:'June 19, 2018',
-          type:'Phonics ,Newyork',
-          title:'Twice profit than before you',
-          content:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimenbook...............',
-          btn:'read more'
-      },
-      {
-          Id: 3,
-          img: 'assets/images/agency/blog/3.png',
-          date:'June 19, 2018',
-          type:'Phonics ,Newyork',
-          title:'Twice profit than before you',
-          content:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimenbook...............',
-          btn:'read more'
-      },
-      {
-          Id: 4,
-          img: 'assets/images/agency/blog/4.jpg',
-          date:'June 19, 2018',
-          type:'Phonics ,Newyork',
-          title:'Twice profit than before you',
-          content:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimenbook...............',
-          btn:'read more'
-      },
-      {
-          Id: 5,
-          img: 'assets/images/agency/blog/6.jpg',
-          date:'June 19, 2018',
-          type:'Phonics ,Newyork',
-          title:'Twice profit than before you',
-          content:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimenbook...............',
-          btn:'read more'
-      },
-      {
-          Id: 6,
-          img: 'assets/images/agency/blog/2.jpg',
-          date:'June 19, 2018',
-          type:'Phonics ,Newyork',
-          title:'Twice profit than before you',
-          content:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimenbook...............',
-          btn:'read more'
-      }
-  ]
-}

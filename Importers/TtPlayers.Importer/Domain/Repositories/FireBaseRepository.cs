@@ -18,6 +18,9 @@ namespace TtPlayers.Importer.Domain.Repositories
     {
         Task<TDocument> Add(TDocument record);
         Task<bool> Update(TDocument record);
+
+        Task<bool> UpdateBulk(IList<TDocument> records);
+
         Task<bool> Delete(TDocument record);
         Task<TDocument> Get(TDocument record);
 
@@ -52,6 +55,27 @@ namespace TtPlayers.Importer.Domain.Repositories
             await recordRef.SetAsync(record, SetOptions.MergeAll);
             return true;
         }
+
+        public async Task<bool> UpdateBulk(IList<TDocument> records)
+        {
+            var batches = CreateBatches(records);
+            var resultCount = 0;
+
+            foreach (var batch in batches)
+            {
+                var operation = _fireStoreDb.StartBatch();
+                foreach (var record in batch.Value)
+                {
+                    DocumentReference recordRef = _collection.Document(record.Id);
+                    operation.Set(recordRef, record);
+                }
+                var result = await operation.CommitAsync();
+                resultCount += result.Count;
+            }
+
+            return resultCount == records.Count;
+        }
+
         public async Task<bool> Delete(TDocument record)
         {
             DocumentReference recordRef = _collection.Document(record.Id);
@@ -118,5 +142,19 @@ namespace TtPlayers.Importer.Domain.Repositories
                 .FirstOrDefault())?.CollectionName;
         }
 
+        private Dictionary<int, IList<TDocument>> CreateBatches(IList<TDocument> documents)
+        {
+            var batches = new Dictionary<int, IList<TDocument>>();
+
+            int batchSize = 500;
+
+            for (int i = 0; i < documents.Count; i += batchSize)
+            {
+                IList<TDocument> batch = documents.Skip(i).Take(batchSize).ToList();
+                batches.Add(i,batch);
+            }
+
+            return batches;
+        }
     }
 }
