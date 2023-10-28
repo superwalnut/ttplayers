@@ -9,7 +9,7 @@ namespace TtPlayers.Importer.Applications
         Task PushPlayers();
         Task PushPlayerHistories();
         Task PushEvents();
-        Task PushEventMatches();
+        Task PushEventMatches(string playerId = null);
 
         Task PushClubs();
 
@@ -119,9 +119,14 @@ namespace TtPlayers.Importer.Applications
             _logger.LogInformation($"Pushing event to firebase completed with status {result}");
         }
 
-        public async Task PushEventMatches()
+        public async Task PushEventMatches(string playerId = null)
         {
-            var matches = await _matchRepository.FilterByAsync(x => x.RequireDeltaPush && x.MatchDate > DateTime.Now.AddMonths(-4));
+            var matches = await _matchRepository.FilterByAsync(x => 
+                x.RequireDeltaPush && 
+                x.MatchDate > DateTime.Now.AddMonths(-4) &&
+                (string.IsNullOrEmpty(playerId) || (!string.IsNullOrEmpty(playerId) && x.PlayerIds.Contains(playerId)))
+                );
+
             _logger.LogInformation($"Pushing {matches.Count} matches with match details to firebase");
 
             await _firebaseEventMatchesRepository.UpdateBulk(matches);

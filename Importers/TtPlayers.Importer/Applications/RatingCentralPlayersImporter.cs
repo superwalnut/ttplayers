@@ -166,15 +166,15 @@ namespace TtPlayers.Importer.Applications
             var genderCount = players.Where(x => x.Gender == player.Gender && x.Rating > player.Rating).Count();
             
             //national ranking
-            player.NationalRanking = count;
-            player.NationalGenderRanking = genderCount;
+            player.NationalRanking = count+1;
+            player.NationalGenderRanking = genderCount+1;
 
             //state ranking
             var stateCount = players.Where(x => x.Rating > player.Rating && x.State == player.State).Count();
             var stateGenderCount = players.Where(x => x.Rating > player.Rating && x.Gender == player.Gender && x.State == player.State).Count();
 
-            player.StateRanking = stateCount;
-            player.StateGenderRanking = stateGenderCount;
+            player.StateRanking = stateCount + 1;
+            player.StateGenderRanking = stateGenderCount + 1;
         }
 
         private async Task UpdatePlayer(Player player)
@@ -188,22 +188,26 @@ namespace TtPlayers.Importer.Applications
         private async Task UpdatePlayerSummary(Player player)
         {
             var playerHistory = await _playerHistoryRepository.FindOneAsync(x => x.Id == player.Id);
-            if(playerHistory != null)
+            if(playerHistory != null && playerHistory.History.Any())
             {
                 var histories = playerHistory.History.OrderByDescending(x => x.EventDate);
 
                 // recent histories 6 months
-                var recentHistories = histories.Where(x => x.EventDate > DateTime.Now.AddMonths(-6)).OrderByDescending(x => x.EventDate);
-                player.PlayedEventsLast6Mth = recentHistories.Count();
-                player.RatingChangesLast6Mth = recentHistories.FirstOrDefault()?.FinalMean??0 - recentHistories.LastOrDefault()?.InitialMean??0;
-                player.LastPlayedEvent = recentHistories.FirstOrDefault()?.EventName;
-                player.LastPlayedEventRatingChange = recentHistories.FirstOrDefault()?.PointChange;
+                var recentHistories = histories.Where(x => x.EventDate >= DateTime.Now.AddMonths(-6)).OrderByDescending(x => x.EventDate);
+                if(recentHistories.Any())
+                {
+                    player.PlayedEventsLast6Mth = recentHistories.Count();
+                    player.RatingChangesLast6Mth = recentHistories.First().FinalMean - recentHistories.Last().InitialMean;
+                }
+                
+                player.LastPlayedEvent = histories.FirstOrDefault()?.EventName;
+                player.LastPlayedEventRatingChange = histories.FirstOrDefault()?.PointChange;
 
                 // total events
-                player.TotalPlayedEvents = playerHistory.History.Count;
+                player.TotalPlayedEvents = histories.Count();
 
                 // history first date
-                var firstHistory = histories.FirstOrDefault();
+                var firstHistory = histories.LastOrDefault();
                 if(firstHistory != null)
                 {
                     player.StartPlayingDate = firstHistory.EventDate;
@@ -220,11 +224,13 @@ namespace TtPlayers.Importer.Applications
             var matches = await _matchRepository.FilterByAsync(x => x.PlayerIds.Contains(player.Id));
             if(matches.Any())
             {
-                var matchPlayed = matches.Count(x => x.MatchDate > DateTime.Now.AddMonths(-6));
+                var matchPlayed = matches.Where(x => x.MatchDate >= DateTime.Now.AddMonths(-6));
+                player.PlayedMatchesLast6Mth = matchPlayed.Count();
+                player.MatchWinsLast6Mth = matchPlayed.Count(x=>x.WinnerId == player.Id);
+
                 var wins = matches.Count(x => x.WinnerId == player.Id);
                 var loses = matches.Count(x => x.LoserId == player.Id);
 
-                player.PlayedMatchesLast6Mth = matchPlayed;
                 player.TotalWins = wins;
                 player.TotalLoses = loses;
                 player.TotalPlayedMatches= matches.Count();
@@ -259,9 +265,19 @@ namespace TtPlayers.Importer.Applications
                 player.TotalOpponentCount = opponentIds.Count;
 
                 player.TotalBeatPlayersCount = loserOpponents.Distinct().Count();
+
+                var winsWithoutLosingSet = matches.Count(x => x.WinnerId == player.Id && WinAllSets(x.Score));
+                player.TotalWinsWithoutLosingAnySet = winsWithoutLosingSet;
             }
 
             _logger.LogInformation($"Updated player Summary...");
+        }
+
+        private bool WinAllSets(string score)
+        {
+            var (setWins,_, setLoses, _) =  score.GetSetWinsAndScores();
+
+            return setLoses == 0;
         }
 
         private double TryDivide(int first, int second)

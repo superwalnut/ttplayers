@@ -84,6 +84,9 @@ namespace TtPlayers.Importer.Domain.Models
         [FirestoreProperty]
         public int RatingChangesLast6Mth { get; set; }
 
+        [FirestoreProperty]
+        public int MatchWinsLast6Mth { get; set; }
+
 
         [FirestoreProperty]
         public int TotalPlayedEvents { get; set; }
@@ -121,6 +124,9 @@ namespace TtPlayers.Importer.Domain.Models
         public int TotalBeatPlayersCount { get; set; } // total beat distinct players
 
         [FirestoreProperty]
+        public int TotalWinsWithoutLosingAnySet { get; set; }
+
+        [FirestoreProperty]
         public string? LastPlayedEvent { get; set; }
         
         [FirestoreProperty]
@@ -143,6 +149,12 @@ namespace TtPlayers.Importer.Domain.Models
 
         [FirestoreProperty]
         public int StateGenderRanking { get; set; }
+
+        [FirestoreProperty] 
+        public int HighestRating { get; set; }
+
+        [FirestoreProperty] 
+        public int HighestRatingStDev { get; set; }
 
         [FirestoreProperty]
         public bool IsJunior { get; set; }

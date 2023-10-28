@@ -103,26 +103,6 @@ namespace TtPlayers.Importer.Applications
                     await _eventRepository.UpsertAsync(evt, x => x.Id == evt.Id);
 
                     index--;
-                        // if event is already imported, we want to check if anything changes for the events during the last 10 days
-                        //var lastWeekEvents = importedEvents.OrderByDescending(x=>x.Date > DateTime.Now.AddDays(-10));
-                        //var existedEvent = lastWeekEvents.FirstOrDefault(x => x.Id == evt.Id);
-                        //if(existedEvent != null)
-                        //{
-                        //    // import summary
-                        //    var ratings = ImportEventPlayerRatings(evt.Id);
-                        //    _logger.LogInformation($"Importing {ratings.Count} player ratings for event {evt.Name}:{evt.Id}...");
-
-                        //    Thread.Sleep(500);
-
-                        //    // update
-                        //    evt.PlayerRatings = ratings;
-                        //    evt.RequireDeltaPush = true;
-                        //    await _eventRepository.UpsertAsync(evt, x => x.Id == evt.Id);
-                        //    _logger.LogInformation($"event {evt.Name}:{evt.Id} within the last 10 days refreshed.");
-                        //}
-                        //else
-                        //{
-                        //}
                 }
                 _logger.LogInformation($"Finish upserting {pendingEvents.Count()} events.");
             }

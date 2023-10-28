@@ -12,6 +12,9 @@ namespace TtPlayers.Importer
     {
         public class Options
         {
+            [Option("player-id", Required = false, HelpText = "Only apply to player xxx.")]
+            public string PlayerId { get; set; }
+
             [Option('p', "player", Required = false, HelpText = "Import players.")]
             public bool PlayerImport { get; set; }
 
@@ -128,7 +131,7 @@ namespace TtPlayers.Importer
                        }
                        else if(o.PushEventMatches)
                        {
-                           firebasePusher.PushEventMatches().GetAwaiter().GetResult();
+                           firebasePusher.PushEventMatches(o.PlayerId).GetAwaiter().GetResult();
                        }
                        else if (o.PushSndttaTeam)
                        {

@@ -1,4 +1,6 @@
-﻿using MongoDB.Bson;
+﻿using Amazon.Runtime.Internal.Util;
+using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -12,9 +14,11 @@ namespace TtPlayers.Importer.Domain.Repositories
     public class MongoDbRepository<TDocument> : IDocumentRepository<TDocument> where TDocument : IDocument
     {
         private readonly IMongoCollection<TDocument> _collection;
+        private readonly ILogger<MongoDbRepository<TDocument>> _logger;
 
-        public MongoDbRepository(IMongoClient mongoClient, MongoDbSettings settings)
+        public MongoDbRepository(IMongoClient mongoClient, MongoDbSettings settings, ILogger<MongoDbRepository<TDocument>> logger)
         {
+            _logger = logger;
             var database = mongoClient.GetDatabase(settings.DatabaseName);
             _collection = database.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
         }
@@ -128,7 +132,8 @@ namespace TtPlayers.Importer.Domain.Repositories
         {
             var batches = CreateBatches(documents);
             long resultCount = 0;
-
+            var index = 0;
+            _logger.LogInformation($"UpsertMany {batches.Count} batches.");
             foreach (var batch in batches)
             {
                 var bulkWrites = new List<WriteModel<TDocument>>();
@@ -137,10 +142,13 @@ namespace TtPlayers.Importer.Domain.Repositories
                     var filter = Builders<TDocument>.Filter.Eq(p => p.Id, document.Id);
                     var replaceOne = new ReplaceOneModel<TDocument>(filter, document);
                     bulkWrites.Add(replaceOne);
+                    _logger.LogInformation($"Add document:{document.Id} to batch-{index}.");
                 }
 
                 var result = await _collection.BulkWriteAsync(bulkWrites);
                 resultCount += result.ModifiedCount;
+                _logger.LogInformation($"Finished bulk writting batch-{index}.");
+                index++;
             }
 
             return resultCount == documents.Count;
