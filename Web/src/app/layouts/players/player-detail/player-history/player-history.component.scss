@@ -1,0 +1,22 @@
+.table-borderless {
+    border: none;
+  }
+
+.win {
+    color:#357fef;
+
+    span{
+        background-color: #007bff !important;
+    }
+}
+
+.set-wins {
+    font-size:1.5em;
+    font-weight: 600;
+    width:100%;
+    color:#fff;
+}
+
+.set-scores {
+    vertical-align: middle;
+}

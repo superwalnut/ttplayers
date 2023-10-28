@@ -1,0 +1,21 @@
+<h5 class="blog-title mb-2">Club</h5>
+<div class="sidebar-container borders">
+    <h5>{{club.Name}}</h5>
+    <hr/>
+    <div>
+        <strong>Address:</strong><br/>
+        {{club.Address1}}, {{club.City}}, {{club.State}} {{club.PostalCode}}
+    </div>
+    <div>
+        <strong>Email:</strong><br/>
+        {{club.Email?club.Email:"N/A"}}
+    </div>
+    <div>
+        <strong>Phone:</strong><br/>
+        {{club.Phone?club.Phone:"N/A"}}
+    </div>
+    <div>
+        <strong>Website:</strong><br/>
+        {{club.Website?club.Website:"N/A"}}
+    </div>
+</div>

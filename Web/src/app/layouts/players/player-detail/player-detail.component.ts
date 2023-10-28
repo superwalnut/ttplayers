@@ -7,6 +7,11 @@ import { PlayerService } from 'src/app/service/player.service';
 import { MatchService } from './../../../service/match.service';
 import { Match } from 'src/app/models/match';
 import { PlayerMatchEvent } from 'src/app/models/player-match-event';
+import { ClubService } from './../../../service/club.service';
+import { SndttaTeamService } from './../../../service/sndtta-team.service';
+import { Club } from 'src/app/models/club';
+import { Team } from 'src/app/models/team';
+import { TeamPlayer } from 'src/app/models/team-player';
 
 @Component({
   selector: 'app-player-detail',
@@ -17,15 +22,15 @@ import { PlayerMatchEvent } from 'src/app/models/player-match-event';
 export class PlayerDetailComponent implements OnInit {
   player:Player;
   histories:PlayerHistoryEntry[];
-  //matches:Match[];
+  club:Club;
+  teamPlayers:TeamPlayer[] = [];
 
   matchesByEvent: { [eventId: string]: Match[] } = {};
 
   keyword:string;
-  blogData=blogDetailDB.Details;
 
   constructor(private route: ActivatedRoute,
-    private title: Title, private playerService:PlayerService, private matchService:MatchService) { }
+    private title: Title, private playerService:PlayerService, private matchService:MatchService, private clubService:ClubService, private sndttaTeamService:SndttaTeamService) { }
 
   ngOnInit() {
     this.title.setTitle(this.route.snapshot.data['title']);
@@ -37,11 +42,14 @@ export class PlayerDetailComponent implements OnInit {
       console.log(this.player);
 
       this.playerService.getPlayerHistory(playerId).subscribe(history =>{
-        this.histories = history.History;
+        if(history && history.History){
+          this.histories = history.History;
+        }
       });
 
       this.matchService.searchMatches(playerId).subscribe(matches =>{
         console.log('matches', matches);
+        this.matchesByEvent = {};
 
         matches.forEach((match) => {
           if (!this.matchesByEvent[match.EventId]) {
@@ -51,110 +59,36 @@ export class PlayerDetailComponent implements OnInit {
         });
 
         console.log('matchesByEvent', this.matchesByEvent);
-
-        //this.matches = m;
       });
+
+      if(player.PrimaryClubId){
+        this.clubService.getClub(player.PrimaryClubId).subscribe(club =>{
+          this.club = club;
+        });
+      }
+
+      if(player.Team) {
+        console.log('calling team', player.Team);
+
+        this.sndttaTeamService.searchTeams(player.Team).subscribe(teams =>{
+          console.log('teams', teams);
+
+          for(var i=0;i<teams.length;i++){
+            for(var j=0;j<teams[i].Players.length;j++){
+              var player = teams[i].Players[j];
+              if(player){
+                this.teamPlayers.push({
+                  Id: player.Id,
+                  Rating: player.Rating,
+                  Team: teams[i].Id,
+                  FullName: player.FullName
+                });
+              }
+            }
+          }
+        });
+      }
     });
-  }
-
-  getEventIds() {
-    return Object.keys(this.matchesByEvent);
-  }
-
-  getEventName(eventId:string) {
-    return this.matchesByEvent[eventId][0].EventName;
-  }
-
-  getEventDate(eventId:string){
-    return this.matchesByEvent[eventId][0].MatchDate;
-  }
-
-  getMatchOpponentPlayerName(match:Match) {
-    if(match.WinnerId == this.player.Id){
-      // I am winner
-      return match.LoserName;
-    }
-    if(match.LoserId == this.player.Id){
-      // I am loser
-      return match.WinnerName;
-    }
-  }
-
-  getMatchOpponentPlayerId(match:Match) {
-    if(match.WinnerId == this.player.Id){
-      // I am winner
-      return match.LoserId;
-    }
-    if(match.LoserId == this.player.Id){
-      // I am loser
-      return match.WinnerId;
-    }
-  }
-
-  getPlayerSetWins(match:Match) {
-    if(match.WinnerId == this.player.Id){
-      // I am winner
-      return match.WinnerSetWins;
-    }
-    if(match.LoserId == this.player.Id){
-      // I am loser
-      return match.LoserSetWins;
-    }
-  }
-
-  getOpponentSetWins(match:Match) {
-    if(match.WinnerId == this.player.Id){
-      // Opponent is loser
-      return match.LoserSetWins;
-    }
-    if(match.LoserId == this.player.Id){
-      // Opponent is winner
-      return match.WinnerSetWins;
-    }
-  }
-
-  getPlayerSetScores(match:Match) {
-    if(match.WinnerId == this.player.Id){
-      // I am winner
-      return match.WinnerSetScores;
-    }
-    if(match.LoserId == this.player.Id){
-      // I am loser
-      return match.LoserSetScores;
-    }
-  }
-
-  getOpponentSetScores(match:Match) {
-    if(match.WinnerId == this.player.Id){
-      // Opponent is loser
-      return match.LoserSetScores;
-    }
-    if(match.LoserId == this.player.Id){
-      // Opponent is winner
-      return match.WinnerSetScores;
-    }
-  }
-
-  isPlayerWinner(match:Match){
-    if(match.WinnerId == this.player.Id){
-      // I am winner
-      return true;
-    }
-    if(match.LoserId == this.player.Id){
-      // I am loser
-      return false;
-    }
-  }
-  
-  isOpponentWinner(match:Match){
-    if(match.WinnerId == this.player.Id){
-      // I am winner
-      return false;
-    }
-    if(match.LoserId == this.player.Id){
-      // I am loser
-      return true;
-    }
   }
 
   toRating(player:Player)
@@ -162,54 +96,57 @@ export class PlayerDetailComponent implements OnInit {
     return `${player.Rating}±${player.StDev}`;
   }
 
-}
+  totalPlayedTime(player:Player) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-export class blogDetailDB {
-  static Details =
-      {
-          date:'July, 24th 2018',
-          title:'Sandford Stadium Improvements',
-          detail1:'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting,remaining essentially unchanged.It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-          detail2:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-          name:'Mark jkcno',
-          like:'10',
-          comment:', 50',
-          section:'Comments :',
-          commentSection:[
-              {
-                  Id:1,
-                  commentImg:'assets/images/app_landing2/team/1.png',
-                  commentName:'That Guy',
-                  commentDate:'Dec 16,2014',
-                  commentDescription:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                  commentReplayTag:'reply'        
-              },
-              {
-                  Id:2,
-                  commentImg:'assets/images/app_landing2/team/2.png',
-                  commentName:'That Guy',
-                  commentDate:'Dec 16,2014',
-                  commentDescription:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                  commentReplayTag:'reply'        
-              },
-              {
-                  Id:3,
-                  commentImg:'assets/images/app_landing2/team/3.png',
-                  commentName:'That Guy',
-                  commentDate:'Dec 16,2014',
-                  commentDescription:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                  commentReplayTag:'reply'        
-              },
-              {
-                  Id:4,
-                  commentImg:'assets/images/app_landing2/team/4.png',
-                  commentName:'That Guy',
-                  commentDate:'Dec 16,2014',
-                  commentDescription:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                  commentReplayTag:'reply'        
-              }
+    const timeDifference = today.getTime() - player.StartPlayingDate.toDate().getTime();
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+    const millisecondsInMonth = millisecondsInDay * 30.44; // Approximate average number of days in a month
 
-          ]
-          
+    const years = Math.floor(timeDifference / (millisecondsInDay * 365));
+    const months = Math.floor((timeDifference % (millisecondsInDay * 365)) / millisecondsInMonth);
+    const days = Math.floor((timeDifference % millisecondsInMonth) / millisecondsInDay);
+
+    let result = "";
+
+    if (years > 0) {
+      result += `${years} ${years === 1 ? 'Yr' : 'Yrs'}`;
+    }
+
+    if (months > 0) {
+      if (result) {
+        result += ", ";
       }
+      result += `${months} ${months === 1 ? 'Mth' : 'Mths'}`;
+    }
+
+    // if (days > 0) {
+    //   if (result) {
+    //     result += ", ";
+    //   }
+    //   result += `${days} ${days === 1 ? 'day' : 'Days'}`;
+    // }
+
+    return result;
   }
+
+  getDivision(player:Player){
+    if(player.Division <= 0){
+      return "";
+    }
+
+    if(player.Division == 99) {
+      return "Premier";
+    } else{
+      return `Div ${player.Division}`;
+    }
+  }
+
+  toInitials(player:Player)
+  {
+      const firstInitial = player.FirstName.charAt(0);
+      const lastInitial = player.LastName.charAt(0);
+      return `${firstInitial}${lastInitial}`;
+  }
+}

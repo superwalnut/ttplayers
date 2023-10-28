@@ -45,15 +45,23 @@ h1 span{
     font-weight: 500;
 }
 
-.match-player{
-    .win {
-        color:#357fef;
-    }
+
+
+
+
+.init-img {
+    font-weight: 400;
+    font-size:80px;    
+    display: flex;
+    align-items: center; /* Vertical centering */
+    justify-content: center; /* Horizontal centering */
 }
 
-.player-activity-summary {
-    strong {
-        font-size:1.1em;
-        color:#357fef;
-    }
+.division-number {
+    font-size:1.2em;
+}
+
+.rc-id {
+    font-size:0.5em !important;
+    padding-left:10px;
 }

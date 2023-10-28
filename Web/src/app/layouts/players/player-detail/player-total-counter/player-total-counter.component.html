@@ -1,0 +1,49 @@
+<!-- Overall Statistics -->
+<div class="container counter bg-light-inner p-4 mt-4" *ngIf="player">
+    <div class="row">
+        <div class="col-md-3 col-6 counter-container">
+            <div class="counters">
+                <i class="fa fa-calendar img-fluid counter-img" aria-hidden="true"></i>
+                <div class="counter-text">
+                    <div class="count-number">
+                        <h2 class="counts text-center">{{player.TotalPlayedEvents}}</h2>
+                    </div>
+                    <h6 class="count-desc text-center">Total Events</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 counter-container">
+            <div class="counters">
+                <i class="fa fa-gamepad img-fluid counter-img" aria-hidden="true"></i>
+                <div class="counter-text">
+                    <div class="count-number">
+                        <h2 class="counts text-center">{{player.TotalPlayedMatches}}</h2>
+                    </div>
+                    <h6 class="count-desc text-center">Total Matches</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 counter-container">
+            <div class="counters">
+                <i class="fa fa-trophy img-fluid counter-img" aria-hidden="true"></i>
+                <div class="counter-text">
+                    <div class="count-number">
+                        <h2 class="counts text-center">{{player.TotalWins}}</h2>
+                    </div>
+                    <h6 class="count-desc text-center">Total Wins</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 counter-container">
+            <div class="counters">
+                <i class="fa fa-user img-fluid counter-img" aria-hidden="true"></i>
+                <div class="counter-text">
+                    <div class="count-number">
+                        <h2 class="counts text-center">{{player.TotalOpponentCount??"56"}}</h2>
+                    </div>
+                    <h6 class="count-desc text-center">Total Opponents</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

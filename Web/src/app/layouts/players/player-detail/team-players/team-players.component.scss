@@ -1,0 +1,17 @@
+.sidebar-container {
+    width:inherit;
+}
+
+.post-container {
+    width:inherit;
+}
+
+.text-nowrap {
+    white-space: nowrap;   /* Prevent line breaks */
+    overflow: hidden;      /* Hide overflowing text */
+    text-overflow: ellipsis; /* Display an ellipsis (...) when text overflows */
+}
+
+.btn-sm {
+    padding: 7px 17px;
+}

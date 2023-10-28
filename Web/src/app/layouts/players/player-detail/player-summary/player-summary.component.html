@@ -1,0 +1,90 @@
+<div class="container mt-4" *ngIf="player">
+    <div class="row">
+        <div class="col-md-6 col-sm-6 service-container">
+            <div class="chat-box">
+                <div class="feature-content mb-4">
+                    <h4 class="service-heading"> Recent Activities
+                    </h4>
+                    <hr>
+                    <div *ngIf="player.PlayedEventsLast6Mth>0" class="player-activity-summary">
+                        In last <strong>6</strong> months, {{player.FirstName}} 
+                        <ul class="list-group list-group-flush">
+                            <li *ngIf="player.PlayedEventsLast6Mth>0"><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>Participated <strong>{{player.PlayedEventsLast6Mth}}</strong> events.</li>
+                            <li *ngIf="player.PlayedMatchesLast6Mth>0"><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>played <strong>{{player.PlayedMatchesLast6Mth}}</strong> matches.</li>
+                            <li *ngIf="player.MatchWinsLast6Mth>0"><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>won <strong>{{player.MatchWinsLast6Mth}}</strong> matches.</li>
+                            <li *ngIf="player.RatingChangesLast6Mth>0"><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>{{player.RatingChangesLast6Mth>0?"gained":"lost"}} <strong>{{player.RatingChangesLast6Mth}}</strong> points.</li>
+                        </ul>
+                    </div>
+                    <div *ngIf="player.PlayedEventsLast6Mth<=0" class="player-activity-summary">
+                        In last <strong>6</strong> months, {{player.FirstName}} has been very quiet.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6 service-container">
+            <div class="chat-box">
+                <div class="feature-content mb-4">
+                    <h4 class="service-heading"> Experiences
+                    </h4>
+                    <hr>
+                    <div *ngIf="player.TotalPlayedMatches>0" class="player-activity-summary">
+                        Since {{player.StartPlayingDate.toDate() | date:"dd/MM/yyyy"}}, {{player.FirstName}}
+                        <ul class="list-group list-group-flush">
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>played <strong>{{player.TotalPlayedMatches}}</strong> matches.</li>
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>played against <strong>{{player.TotalOpponentCount}}</strong> different players.</li>
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>won <strong>{{player.TotalWins}}</strong> matches.</li>
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>lost <strong>{{player.TotalLoses}}</strong> matches.</li>
+                        </ul>
+                    </div>
+                    <div *ngIf="player.TotalPlayedMatches<=0" class="player-activity-summary">
+                        {{player.FirstName}} has been very quiet since {{player.StartPlayingDate.toDate() | date:'dd/MM/yyyy'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 service-container">
+            <div class="chat-box">
+                <div class="feature-content mb-4">
+                    <h4 class="service-heading"> Achievements
+                    </h4>
+                    <hr>
+                    <div *ngIf="player.TotalPlayedMatches>0" class="player-activity-summary">
+                        {{player.FirstName}} has achieved
+                        <ul class="list-group list-group-flush">
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>winning rate of <strong>{{player.TotalWins / player.TotalPlayedMatches | percent }}</strong>.</li>
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>total defeated <strong>{{player.TotalBeatPlayersCount}}</strong> players.</li>
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>defeated <strong>{{player.TotalBeatHigherRatingPlayers}}</strong> players with higher ratings.</li>
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>won <strong>{{player.TotalWinsWithoutLosingAnySet}}</strong> matches without losing a single set.</li>
+                        </ul>
+                    </div>
+                    <div *ngIf="player.TotalPlayedMatches<=0" class="player-activity-summary">
+                        {{player.FirstName}} has no achievement yet.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6 service-container">
+            <div class="chat-box">
+                <div class="feature-content mb-4">
+                    <h4 class="service-heading"> Ranking
+                    </h4>
+                    <hr>
+                    <div *ngIf="player.NationalRanking>0" class="player-activity-summary">
+                        {{player.FirstName}} has ranking of
+                        <ul class="list-group list-group-flush">
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.NationalRanking }}</strong> in Australia.</li>
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.NationalGenderRanking }}</strong> in {{player.Gender=="M"?"Men":"Women"}} of Australia.</li>
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.StateRanking}}</strong> in {{player.State}}.</li>
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.StateGenderRanking}}</strong> in {{player.Gender=="M"?"Men":"Women"}} of {{player.State}}.</li>
+                        </ul>
+                    </div>
+                    <div *ngIf="player.NationalRanking<=0" class="player-activity-summary">
+                        {{player.FirstName}} has no ranking yet.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="container counter bg-light-inner p-4 mt-4" *ngIf="player.WinRateFirstGame || player.WinRateSecondGame || player.WinRateThirdGame || player.WinRateFourthGame || player.WinRateFifthGame">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="match-statistics">Match statistics - <span class="small text-muted">Winning rating of each set</span> </h3>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-2 col-sm-6 counter-container">
+            <div class="counters">
+                <div class="counter-text">
+                    <div class="count-number">
+                        <h2 class="counts text-center">{{player.WinRateFirstGame | percent }}</h2>
+                    </div>
+                    <h6 class="count-desc text-center">First Set</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-6 counter-container">
+            <div class="counters">
+                <div class="counter-text">
+                    <div class="count-number">
+                        <h2 class="counts text-center">{{player.WinRateSecondGame | percent }}</h2>
+                    </div>
+                    <h6 class="count-desc text-center">Second Set</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-6 counter-container">
+            <div class="counters">
+                <div class="counter-text">
+                    <div class="count-number">
+                        <h2 class="counts text-center">{{player.WinRateThirdGame | percent }}</h2>
+                    </div>
+                    <h6 class="count-desc text-center">Third Set</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-6 counter-container">
+            <div class="counters">
+                <div class="counter-text">
+                    <div class="count-number">
+                        <h2 class="counts text-center">{{player.WinRateFourthGame | percent }}</h2>
+                    </div>
+                    <h6 class="count-desc text-center">Fourth Set</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-6 counter-container">
+            <div class="counters">
+                <div class="counter-text">
+                    <div class="count-number">
+                        <h2 class="counts text-center">{{player.WinRateFifthGame | percent }}</h2>
+                    </div>
+                    <h6 class="count-desc text-center">Fifth Set</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
