@@ -23,11 +23,18 @@ import { PlayerDetailComponent } from './players/player-detail/player-detail.com
 import { PlayerListComponent } from './players/player-list/player-list.component';
 import { SidebarComponent } from './players/player-list/sidebar/sidebar.component';
 import { GymHeaderComponent} from './gym/gym-header/gym-header.component';
+import { PlayerHistoryComponent } from './players/player-detail/player-history/player-history.component';
+import { PlayerTotalCounterComponent } from './players/player-detail/player-total-counter/player-total-counter.component';
+import { PlayerSummaryComponent } from './players/player-detail/player-summary/player-summary.component';
+import { PlayerSetsStatisticsComponent } from './players/player-detail/player-sets-statistics/player-sets-statistics.component';
+import { ClubDetailComponent } from './players/player-detail/club-detail/club-detail.component';
+import { TeamPlayersComponent } from './players/player-detail/team-players/team-players.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     GymComponent, GymAboutComponent, GymScheduleComponent, GymWorkoutAboutComponent, GymCounterComponent, GymTrainerComponent, GymTestimonialComponent, GymPricingComponent, GymBMIComponent, GymBrandComponent, GymCopyrightComponent, 
-    PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent
+    PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent, PlayerHistoryComponent, PlayerTotalCounterComponent, PlayerSummaryComponent, PlayerSetsStatisticsComponent, ClubDetailComponent, TeamPlayersComponent, HomeComponent
   ],
   imports: [
     CommonModule,

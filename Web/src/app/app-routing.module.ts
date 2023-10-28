@@ -3,12 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { GymComponent } from './layouts/gym/gym.component';
 import { PlayerListComponent } from './layouts/players/player-list/player-list.component';
 import { PlayerDetailComponent } from './layouts/players/player-detail/player-detail.component';
+import { HomeComponent } from './layouts/home/home.component';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'gym',
-    pathMatch: 'full',
+    component: HomeComponent
   },
   {
     path: 'gym',

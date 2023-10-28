@@ -12,6 +12,7 @@ export class GymBrandComponent implements OnInit {
   ngOnInit() {
   }
   brands = [
+    { img: "assets/images/gym/brand/tt-au-logo.png" },
     { img: "assets/images/gym/brand/tt-nsw-logo.png" },
     { img: "assets/images/gym/brand/tt-vic-logo.png" },
     { img: "assets/images/gym/brand/tt-sa-logo.png" },
