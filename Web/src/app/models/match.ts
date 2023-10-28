@@ -1,14 +1,16 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface Match {
     EventId:string;
     EventName:string;
     Id:string;
-    LastUpdated:Date;
+    LastUpdated:Timestamp;
     LoserDelta:number;
     LoserId:string;
     LoserName:string;
     LoserOpponentMean:number;
     LoserOpponentStDev:number;
-    MatchDate:Date;
+    MatchDate:Timestamp;
     MatchesPairPlayed:number;
     Score:string;
     WinnerDelta:number;

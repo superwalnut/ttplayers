@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface Player {
     Id: string;
     FullName: string;
@@ -11,14 +13,15 @@ export interface Player {
     Country: string;
     Gender: string;
     TtaId: string;
-    LastPlayed: Date;
-    Team: string | null;
+    LastPlayed: Timestamp;
+    Team: string[] | null;
     Division: number;
     IsSndtta: boolean;
 
     PlayedEventsLast6Mth:number;
     PlayedMatchesLast6Mth:number;
     RatingChangesLast6Mth:number;
+    MatchWinsLast6Mth:number;
 
     TotalPlayedEvents:number;
     TotalPlayedMatches:number;
@@ -33,14 +36,17 @@ export interface Player {
 
     TotalBeatHigherRatingPlayers:number;
     TotalLostLowerRatingPlayers:number;
+    TotalWinsWithoutLosingAnySet:number;
 
     LastEventId: number;
     LastPlayedEvent:string;
     LastPlayedEventRatingChange:number;
 
-    StartPlayingDate:Date;
+    StartPlayingDate:Timestamp;
 
     TotalOpponentCount:number;
+    TotalBeatPlayersCount:number;
+
     NationalRanking:number;
     NationalGenderRanking:number;
     StateRanking:number;
