@@ -138,6 +138,9 @@ namespace TtPlayers.Importer.Domain.Models
         [FirestoreProperty]
         public int TotalOpponentCount { get; set; } // total distinct opponents
 
+
+        //Ranking
+
         [FirestoreProperty]
         public int NationalRanking { get; set; }
 
@@ -149,6 +152,22 @@ namespace TtPlayers.Importer.Domain.Models
 
         [FirestoreProperty]
         public int StateGenderRanking { get; set; }
+
+        // Win rate ranking
+
+        [FirestoreProperty]
+        public int WinRateNationalRanking { get; set; }
+
+        [FirestoreProperty]
+        public int WinRateNationalGenderRanking { get; set; }
+
+        [FirestoreProperty]
+        public int WinRateStateRanking { get; set; }
+
+        [FirestoreProperty]
+        public int WinRateStateGenderRanking { get; set; }
+
+
 
         [FirestoreProperty] 
         public int HighestRating { get; set; }

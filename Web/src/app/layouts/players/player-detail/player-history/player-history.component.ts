@@ -15,8 +15,6 @@ export class PlayerHistoryComponent {
    *
    */
   constructor() {
-    console.log('player', this.player);
-    console.log('matchesByEvent', this.matchesByEvent);
   }
 
   
@@ -29,7 +27,9 @@ export class PlayerHistoryComponent {
   }
 
   getEventIds() {
-    return Object.keys(this.matchesByEvent);
+    var keys = Object.keys(this.matchesByEvent);
+    const sortedArray = keys.sort((a, b) => b.localeCompare(a));
+    return sortedArray;
   }
 
   getMatchOpponentPlayerName(match:Match) {
@@ -81,7 +81,7 @@ export class PlayerHistoryComponent {
     if(match.WinnerId == this.player.Id){
       // I am winner
       for(var i=0;i<7;i++){
-        if(i < match.WinnerSetScores.length)
+        if(match.WinnerSetScores && i < match.WinnerSetScores.length)
         {
           sets.push(match.WinnerSetScores[i]);
         } else {
@@ -92,7 +92,7 @@ export class PlayerHistoryComponent {
     if(match.LoserId == this.player.Id){
       // I am loser
       for(var i=0;i<7;i++){
-        if(i < match.LoserSetScores.length)
+        if(match.LoserSetScores && i < match.LoserSetScores.length)
         {
           sets.push(match.LoserSetScores[i]);
         } else {
@@ -108,7 +108,7 @@ export class PlayerHistoryComponent {
     if(match.WinnerId == this.player.Id){
       // Opponent is loser
       for(var i=0;i<7;i++){
-        if(i < match.LoserSetScores.length)
+        if(match.LoserSetScores && i < match.LoserSetScores.length)
         {
           sets.push(match.LoserSetScores[i]);
         } else {
@@ -120,7 +120,7 @@ export class PlayerHistoryComponent {
     if(match.LoserId == this.player.Id){
       // Opponent is winner
       for(var i=0;i<7;i++){
-        if(i < match.WinnerSetScores.length)
+        if(match.WinnerSetScores && i < match.WinnerSetScores.length)
         {
           sets.push(match.WinnerSetScores[i]);
         } else {

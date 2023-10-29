@@ -26,4 +26,11 @@ export class TeamPlayersComponent implements OnInit{
   loadMore() {
     this.count += 5;
   }
+
+  toInitials(player:TeamPlayer)
+  {
+      const firstInitial = player.FirstName.charAt(0);
+      const lastInitial = player.LastName.charAt(0);
+      return `${firstInitial}${lastInitial}`;
+  }
 }

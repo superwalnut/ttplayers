@@ -3,11 +3,11 @@
     <div class="container post-container p-0" *ngFor="let teamPlayer of teamPlayers;let i = index">
         <div class="row m-l-0" *ngIf="i<count">
             <div class="col-5 p-0">
-                <img src="assets/images/inner-page/side-img/4.jpg" alt="" class="img-fluid">
+                <div class="img-fluid team-player-ico border-around overflow-hide">{{toInitials(teamPlayer)}}</div>
                 <div class="badge badge-blue">{{teamPlayer.Rating}}</div>    
             </div>
             <div class="col-7">
-                <h5 class="post-head text-nowrap">{{teamPlayer.FullName}}</h5>                                     
+                <h5 class="post-head text-nowrap"><a href="/player/{{teamPlayer.Id}}" title="{{teamPlayer.FullName}}">{{teamPlayer.FullName}}</a></h5>
                 <h6 class="date">{{teamPlayer.Team}}</h6>
             </div>
         </div>

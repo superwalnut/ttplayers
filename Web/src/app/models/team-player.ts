@@ -3,4 +3,6 @@ export interface TeamPlayer {
     FullName:string;
     Team:string;
     Rating:number;
+    FirstName:string;
+    LastName:string;
 }

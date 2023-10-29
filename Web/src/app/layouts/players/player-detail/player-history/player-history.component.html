@@ -37,7 +37,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="match-player" [ngClass]="getOpponentWinnerClass(match)"><i class="fa fa-user m-r-10" ></i>{{getMatchOpponentPlayerName(match)}}</td>
+                                                <td class="match-player" [ngClass]="getOpponentWinnerClass(match)"><i class="fa fa-user m-r-10" ></i><a href="/player/{{getMatchOpponentPlayerId(match)}}">{{getMatchOpponentPlayerName(match)}}</a></td>
                                                 <td class="match-set-wins" [ngClass]="getOpponentWinnerClass(match)"><span class="badge bg-secondary set-wins">{{getOpponentSetWins(match)}}</span></td>
                                                 <td class="text-center set-scores" *ngFor="let score of getOpponentSetScores(match)">
                                                     {{score>=0?score:"-"}}

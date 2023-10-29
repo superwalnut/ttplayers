@@ -123,7 +123,6 @@ namespace TtPlayers.Importer.Applications
         {
             var matches = await _matchRepository.FilterByAsync(x => 
                 x.RequireDeltaPush && 
-                x.MatchDate > DateTime.Now.AddMonths(-4) &&
                 (string.IsNullOrEmpty(playerId) || (!string.IsNullOrEmpty(playerId) && x.PlayerIds.Contains(playerId)))
                 );
 

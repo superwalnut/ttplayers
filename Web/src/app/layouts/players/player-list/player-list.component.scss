@@ -10,7 +10,7 @@
     height:100%;
     width:100%;
     font-weight: 400;
-    font-size:80px;    
+    font-size:70px;    
 
     display: flex;
     align-items: center; /* Vertical centering */
@@ -51,6 +51,24 @@
 
 .m-r-0 {
     margin-right: 0 !important;
+}
+
+.search-form {
+    input {
+        padding: 16px 36px 16px 16px;
+        border:solid 1px #c2c2c2;
+    }
+    .button-primary {
+        right:0%;
+        margin-right:2px;
+        button {
+            padding: 14px 35px;
+        }
+    }
+}
+
+.empty-cart-cls {
+    height:100%;
 }
 
 @media only screen and (max-width: 1600px) {

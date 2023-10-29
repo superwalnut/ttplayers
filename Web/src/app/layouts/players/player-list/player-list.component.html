@@ -29,37 +29,35 @@
 </section>
 <!-- Breadcrumb end -->
 
-<section class="search pt-0 pb-0">
-    <div class="container padding-cls">
-        <div class="checkout-page">
-            <div class="checkout-form">
-                <form>
-                    <div class="row">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                            <div class="field-label">Address</div>
-                            <input type="text" name="address" [formControl]="checkoutForm.controls['address']" value="" placeholder="" autocomplete="off">
-                            <div *ngIf="checkoutForm.controls.address.touched && checkoutForm.controls.address.errors?.required" class="text text-danger">
-                            Address is required
-                            </div>
-                            <div *ngIf="checkoutForm.controls.address.touched && checkoutForm.controls.address.errors?.maxlength" class="text text-danger">
-                            Maximum 50 character
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- section start -->
 <section class="agency blog blog-sec blog-sidebar  blog-list sider pt-4">
     <div class="container">
         <div class="row pl-0 pr-0">
             <div class="col-lg-9">
                 <div class="row">
-                    <div class="col-12 blog-sec blog-list" *ngFor="let player of players">
-                        <div class="blog-agency">
+                    <div class="col-12 blog-sec blog-list" >
+                        <div class="subscribe">
+                            <div class="center-content">
+                                <div class="form-group">
+                                    <div class="flex search-form">
+                                        <input type="text" (keyup.enter)="search()" [(ngModel)]="keyword" class="form-control text-capitalize"
+                                               placeholder="Please Enter a player's name" id="username" name="username">
+                                        <div class="button-primary">
+                                            <button type="button" (click)="search()"
+                                                    class=" btn btn-default primary-btn text-white text-capitalize">
+                                                Search
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 empty-cart-cls text-center mt-5" *ngIf='!keyword || players.length <=0'>
+                            <img src="assets/images/empty-wishlist.png" alt="Empty cart" title="No Players Found">
+                            <h3 class="mt-4"><b>No Players Found</b></h3>
+                            <h4>Please try another search.</h4>
+                        </div>
+                        <div class="blog-agency" *ngFor="let player of players">
                             <div class="row blog-contain pl-0 pr-0">
                                 <div class="col-xl-2 col-lg-3 col-md-3 p-0">
                                     <div class="text-center init-img" [ngClass]="{'blue-bg': player.Gender == 'M', 'red-bg': player.Gender == 'F'}">

@@ -37,21 +37,18 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-3">
-                            <div class="border-around overflow-hide m-auto">
-                                <div class="set-relative overflow-hide">
-                                    <div class="text-center init-img">{{toInitials(player)}}</div>
-                                    <!-- <img src="assets/images/gym/1.png" alt="" class="img-fluid team"> -->
-                                </div>
+                            <div class="border-around overflow-hide">
+                                <div class="init-img">{{toInitials(player)}}</div>
                             </div>
                         </div>
                         <div class="col-lg-9">
                             <div class="portfolio-detail" *ngIf="player">
                                 <div class="container">
                                     <div class="row">
-                                        <div class="col-9 p-0 m-0">
-                                            <h1>{{player.FullName}}<span class="p-l-10 rc-id">(RC ID:{{player.Id}})</span></h1>
+                                        <div class="col-11 p-0 m-0">
+                                            <h1>{{player.FullName}}<span class="p-l-10 rc-id">(<a href="https://www.ratingscentral.com/PlayerHistory.php?PlayerID={{player.Id}}" target="_blank" rel="nofollow">RC ID: {{player.Id}}</a>)</span></h1>
                                         </div>
-                                        <div class="col-3 p-0 m-0 text-right">
+                                        <div class="col-1 p-0 m-0 text-right">
                                             <button class="btn btn-outline-danger btn-sm">
                                                 <i class="fa fa-heart"></i>
                                             </button>
@@ -127,9 +124,13 @@
                 <app-player-sets-statistics [player]="player"></app-player-sets-statistics>
 
                 <!-- Comment Sec Start -->
-                <app-player-history [player]="player" [matchesByEvent]="matchesByEvent"></app-player-history>
+                <app-player-history [player]="player" [matchesByEvent]="matchesByEvent" *ngIf="matchesByEvent"></app-player-history>
                 <!-- Comment Sec End -->
                 
+                <div class="text-center" *ngIf="lastMatch">
+                    <a (click)="loadMoreMatches()" class="btn btn-default btn-white btn-sm">Load more</a>
+                </div>
+
             </div>
             <div class="col-lg-3">
                 <!-- Side bar -->
@@ -137,7 +138,7 @@
                     <div *ngIf="player.Division > 0">
                         <h5 class="blog-title">Division</h5>
                         <div class="sidebar-container borders">
-                            <h3><span class="badge rounded-pill bg-primary division-number text-white p-25">{{getDivision(player)}}</span></h3>
+                            <h3><span class="badge rounded-pill bg-primary division-number text-white">{{getDivision(player)}}</span></h3>
                         </div>
                     </div>
 

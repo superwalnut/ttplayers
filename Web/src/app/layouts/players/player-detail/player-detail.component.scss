@@ -45,20 +45,23 @@ h1 span{
     font-weight: 500;
 }
 
-
-
-
-
 .init-img {
+    width:100px;
+    height:150px;
+    position:relative;
+    left:12px;
+    top:15px;
     font-weight: 400;
-    font-size:80px;    
-    display: flex;
+    font-size:60px;    
+    display: inline-block;
     align-items: center; /* Vertical centering */
+    text-align: center;
     justify-content: center; /* Horizontal centering */
 }
 
 .division-number {
     font-size:1.2em;
+    padding:10px 25px;
 }
 
 .rc-id {

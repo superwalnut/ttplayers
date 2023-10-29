@@ -12,10 +12,12 @@
     </div>
     <div>
         <strong>Phone:</strong><br/>
-        {{club.Phone?club.Phone:"N/A"}}
+        <a *ngIf="club.Phone" href="tel:{{club.Phone}}">{{club.Phone}}</a>
+        <span *ngIf="!club.Phone">N/A</span>
     </div>
     <div>
         <strong>Website:</strong><br/>
-        {{club.Website?club.Website:"N/A"}}
+        <a *ngIf="club.Website" href="{{club.Website}}" target="_blank" rel="nofollow" class="website">{{club.Website.toLowerCase()}}</a>
+        <span *ngIf="!club.Website">N/A</span>
     </div>
 </div>

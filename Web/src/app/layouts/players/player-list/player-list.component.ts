@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Player } from 'src/app/models/player';
 import { PlayerService } from 'src/app/service/player.service';
 
@@ -17,18 +17,30 @@ export class PlayerListComponent implements OnInit {
   
   public blogData: any
   
-  constructor(private fb: FormBuilder, private playerService:PlayerService, private route: ActivatedRoute) {
+  constructor(private fb: FormBuilder, private playerService:PlayerService, private route: ActivatedRoute, private router:Router) {
     this.checkoutForm = this.fb.group({
       address: ['', [Validators.required, Validators.maxLength(50)]], 
     });
    }
 
   ngOnInit() {
-      this.keyword = this.route.snapshot.params.keyword;
-      this.playerService.searchPlayerByName(this.keyword).subscribe(players => {
-        this.players = players;
-        console.log(this.players);
-      });
+      var keyword = this.route.snapshot.params.keyword;
+      if(keyword){
+        this.keyword = keyword;
+        this.playerService.searchPlayerByName(this.keyword).subscribe(players => {
+          this.players = players;
+          console.log(this.players);
+        });
+      }
+  }
+  
+  search() {
+    console.log(this.keyword);
+
+    this.playerService.searchPlayerByName(this.keyword).subscribe(players => {
+      this.players = players;
+      console.log(this.players);
+    });
   }
 
   toInitials(player:Player)

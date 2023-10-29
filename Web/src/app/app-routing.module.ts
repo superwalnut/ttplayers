@@ -19,6 +19,10 @@ export const routes: Routes = [
     component: PlayerListComponent
   },
   {
+    path: 'players',
+    component: PlayerListComponent
+  },
+  {
     path: 'player/:id',
     component: PlayerDetailComponent
   }

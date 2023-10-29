@@ -21,13 +21,15 @@ import { TeamPlayer } from 'src/app/models/team-player';
 
 export class PlayerDetailComponent implements OnInit {
   player:Player;
-  histories:PlayerHistoryEntry[];
+  //histories:PlayerHistoryEntry[];
   club:Club;
   teamPlayers:TeamPlayer[] = [];
 
   matchesByEvent: { [eventId: string]: Match[] } = {};
 
   keyword:string;
+
+  lastMatch:Match = null;
 
   constructor(private route: ActivatedRoute,
     private title: Title, private playerService:PlayerService, private matchService:MatchService, private clubService:ClubService, private sndttaTeamService:SndttaTeamService) { }
@@ -37,57 +39,82 @@ export class PlayerDetailComponent implements OnInit {
     var playerId = this.route.snapshot.params.id;
     this.keyword = this.route.snapshot.queryParams.keyword;
 
+    // load player info
     this.playerService.getPlayer(playerId).subscribe(player => {
       this.player = player;
       console.log(this.player);
 
-      this.playerService.getPlayerHistory(playerId).subscribe(history =>{
-        if(history && history.History){
-          this.histories = history.History;
-        }
-      });
+      // this.playerService.getPlayerHistory(playerId).subscribe(history =>{
+      //   if(history && history.History){
+      //     this.histories = history.History;
+      //   }
+      // });
 
+      // load matches info
       this.matchService.searchMatches(playerId).subscribe(matches =>{
         console.log('matches', matches);
+
         this.matchesByEvent = {};
 
-        matches.forEach((match) => {
+        matches.forEach((match, index) => {
           if (!this.matchesByEvent[match.EventId]) {
             this.matchesByEvent[match.EventId] = [];
           }
           this.matchesByEvent[match.EventId].push(match);
         });
 
-        console.log('matchesByEvent', this.matchesByEvent);
+        this.lastMatch = matches[matches.length-1];
       });
 
+      // load club info
       if(player.PrimaryClubId){
         this.clubService.getClub(player.PrimaryClubId).subscribe(club =>{
           this.club = club;
         });
       }
 
+      // load team and team players
       if(player.Team) {
-        console.log('calling team', player.Team);
-
         this.sndttaTeamService.searchTeams(player.Team).subscribe(teams =>{
-          console.log('teams', teams);
-
           for(var i=0;i<teams.length;i++){
             for(var j=0;j<teams[i].Players.length;j++){
               var player = teams[i].Players[j];
-              if(player){
+
+              // get all other team mates, other than yourself
+              if(player && player.Id != this.player.Id){
                 this.teamPlayers.push({
                   Id: player.Id,
                   Rating: player.Rating,
                   Team: teams[i].Id,
-                  FullName: player.FullName
+                  FullName: player.FullName.trim(),
+                  FirstName: player.FirstName.trim(),
+                  LastName: player.LastName.trim()
                 });
               }
             }
           }
         });
       }
+    });
+  }
+
+  loadMoreMatches() {
+    console.log('click!');
+    this.matchService.searchMatchesWithPaging(this.player.Id, this.lastMatch).subscribe(matches =>{
+      console.log('response with paging', matches);
+
+      if(matches.length<=0){
+        this.lastMatch = null;
+      }
+
+      matches.forEach((match, index) => {
+        if (!this.matchesByEvent[match.EventId]) {
+          this.matchesByEvent[match.EventId] = [];
+        }
+        this.matchesByEvent[match.EventId].push(match);
+      });
+
+      this.lastMatch = matches[matches.length-1];
     });
   }
 
