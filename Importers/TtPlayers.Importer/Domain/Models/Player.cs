@@ -95,6 +95,12 @@ namespace TtPlayers.Importer.Domain.Models
         public int TotalPlayedMatches { get; set; }
 
         [FirestoreProperty]
+        public int YearToDateWins { get; set; }
+
+        [FirestoreProperty]
+        public int YearToDateLoses { get; set; }
+
+        [FirestoreProperty]
         public int TotalWins { get; set; }
         [FirestoreProperty]
         public int TotalLoses { get; set; }
@@ -155,17 +161,17 @@ namespace TtPlayers.Importer.Domain.Models
 
         // Win rate ranking
 
-        [FirestoreProperty]
-        public int WinRateNationalRanking { get; set; }
+        //[FirestoreProperty]
+        //public int YeatToDateWinRateNationalRanking { get; set; }
 
-        [FirestoreProperty]
-        public int WinRateNationalGenderRanking { get; set; }
+        //[FirestoreProperty]
+        //public int YeatToDateWinRateNationalGenderRanking { get; set; }
 
-        [FirestoreProperty]
-        public int WinRateStateRanking { get; set; }
+        //[FirestoreProperty]
+        //public int YeatToDateWinRateStateRanking { get; set; }
 
-        [FirestoreProperty]
-        public int WinRateStateGenderRanking { get; set; }
+        //[FirestoreProperty]
+        //public int YeatToDateWinRateStateGenderRanking { get; set; }
 
 
 

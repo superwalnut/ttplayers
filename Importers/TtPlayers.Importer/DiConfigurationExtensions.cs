@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TtPlayers.Importer.Applications;
+using TtPlayers.Importer.Applications.Scraper;
 using TtPlayers.Importer.Configurations;
 using TtPlayers.Importer.Domain.Repositories;
 using TtPlayers.Importer.Infrastructure;

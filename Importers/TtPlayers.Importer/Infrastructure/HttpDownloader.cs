@@ -13,7 +13,7 @@ namespace TtPlayers.Importer.Infrastructure
     {
         void DownloadFile(string url, string filePath);
         string DownloadJsonByPost(string url, string body, string cookie = null);
-        string DownloadByGet(string url);
+        Task<string> DownloadByGet(string url);
         void DownloadImage(string imageUrl, string fileName);
     }
 
@@ -73,12 +73,12 @@ namespace TtPlayers.Importer.Infrastructure
             return json;
         }
 
-        public string DownloadByGet(string url)
+        public async Task<string> DownloadByGet(string url)
         {
             string json = "";
             var client = new RestClient();
             var request = new RestRequest(url, Method.Get);
-            var response = client.Execute(request);
+            var response = await client.ExecuteAsync(request);
 
             if (response.IsSuccessful)
             {

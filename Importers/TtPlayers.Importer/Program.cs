@@ -12,8 +12,20 @@ namespace TtPlayers.Importer
     {
         public class Options
         {
+            // import all
+            [Option('a', "all", Required = false, HelpText = "Import all.")]
+            public bool AllImport { get; set; }
+
+            // import by actions
+
             [Option("player-id", Required = false, HelpText = "Only apply to player xxx.")]
             public string PlayerId { get; set; }
+
+            [Option("action-count", Required = false, HelpText = "Only apply to number of items.")]
+            public int? ActionCount { get; set; }
+
+            [Option("force-all", Required = false, HelpText = "force to apply to all!.")]
+            public bool ForceAll { get; set; } = false;
 
             [Option('p', "player", Required = false, HelpText = "Import players.")]
             public bool PlayerImport { get; set; }
@@ -30,15 +42,13 @@ namespace TtPlayers.Importer
             [Option('c', "club", Required = false, HelpText = "Import clubs.")]
             public bool ClubImport { get; set; }
 
-
             [Option('t', "transform-match", Required = false, HelpText = "Transform tt matches.")]
             public bool EventMatchesTransform { get; set; }
 
-            [Option('s', "sndtta-player", Required = false, HelpText = "Import sndtta players.")]
-            public bool SndttaPlayerImport { get; set; }
-
             [Option('u', "sndtta-upcoming", Required = false, HelpText = "Import sndtta upcoming events.")]
             public bool SndttaUpcomingEvent { get; set; }
+
+            // pushing to firestore
 
             [Option("push-player", Required = false, HelpText = "Push players.")]
             public bool PushPlayers { get; set; }
@@ -83,16 +93,22 @@ namespace TtPlayers.Importer
                 Parser.Default.ParseArguments<Options>(args)
                    .WithParsed<Options>(o =>
                    {
+                       if (o.AllImport)
+                       {
+                           // import events, also discover player changes 
+                           eventImporter.ImportEvents().GetAwaiter().GetResult();
+                           // import event-matches
+                           eventImporter.ImportEventMatches().GetAwaiter().GetResult();
+                           // transform matches
+                           matchTransformer.TransformMatches(o.ForceAll).GetAwaiter().GetResult();
+                           // import players (include import player-history)
+                           playerImporter.Import(o.ForceAll).GetAwaiter().GetResult();
+                       }
                        if (o.PlayerImport)
                        {
                            // players need to be updated regularly
-                           playerImporter.Import().GetAwaiter().GetResult();
+                           playerImporter.Import(o.ForceAll).GetAwaiter().GetResult();
                        } 
-                       else if(o.SndttaPlayerImport)
-                       {
-                           // sndtta players need to be updated regularly after playersImport
-                           sndttaPlayerImporter.Import().GetAwaiter().GetResult();
-                       }
                        else if (o.SndttaPlayerHistoryImport)
                        {
                            // sndtta players need to be updated regularly after sndtta players import
@@ -110,7 +126,7 @@ namespace TtPlayers.Importer
                        }
                        else if (o.EventMatchesTransform)
                        {
-                           matchTransformer.TransformMatches().GetAwaiter().GetResult();
+                           matchTransformer.TransformMatches(o.ForceAll).GetAwaiter().GetResult();
                        }
                        else if(o.SndttaUpcomingEvent)
                        {
@@ -131,7 +147,7 @@ namespace TtPlayers.Importer
                        }
                        else if(o.PushEventMatches)
                        {
-                           firebasePusher.PushEventMatches(o.PlayerId).GetAwaiter().GetResult();
+                           firebasePusher.PushEventMatches(o.PlayerId, o.ActionCount).GetAwaiter().GetResult();
                        }
                        else if (o.PushSndttaTeam)
                        {

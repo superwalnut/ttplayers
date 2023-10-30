@@ -4,6 +4,8 @@ import { GymComponent } from './layouts/gym/gym.component';
 import { PlayerListComponent } from './layouts/players/player-list/player-list.component';
 import { PlayerDetailComponent } from './layouts/players/player-detail/player-detail.component';
 import { HomeComponent } from './layouts/home/home.component';
+import { ClubListComponent } from './layouts/clubs/club-list/club-list.component';
+import { EventListComponent } from './layouts/events/event-list/event-list.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +27,14 @@ export const routes: Routes = [
   {
     path: 'player/:id',
     component: PlayerDetailComponent
+  },
+  {
+    path: 'clubs',
+    component: ClubListComponent
+  },
+  {
+    path: 'events',
+    component: EventListComponent
   }
 ];
 

@@ -14,18 +14,19 @@ namespace TtPlayers.Importer.Applications
         Task Import();
     }
 
+    [Obsolete]
     public class RatingCentralPlayerHistoryImporter: RatingCentralImporterBase, IRatingCentralPlayerHistoryImporter
     {
         private readonly SndttaSettings _settings;
         private readonly ILogger<RatingCentralPlayerHistoryImporter> _logger;
         private readonly IDocumentRepository<PlayerHistory> _playerHistoryRepository;
-        private readonly IDocumentRepository<Player> _playerRepository;
+        private readonly IDocumentRepository<PlayerUpdate> _playerUpdateRepository;
         private readonly ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> _playerHistoryCsvService;
         private readonly ICsvService<PlayerCsvModel, PlayerCsvMapping> _csvPlayerService;
 
         public RatingCentralPlayerHistoryImporter(IOptions<SndttaSettings> settings,
             IDocumentRepository<PlayerHistory> playerHistoryRepository,
-            IDocumentRepository<Player> playerRepository,
+            IDocumentRepository<PlayerUpdate> playerUpdateRepository,
             ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> playerHistoryCsvService,
             ICsvService<PlayerCsvModel, PlayerCsvMapping> csvPlayerService,
             ILogger<RatingCentralPlayerHistoryImporter> logger)
@@ -33,7 +34,7 @@ namespace TtPlayers.Importer.Applications
         {
             _settings = settings.Value;
             _playerHistoryRepository = playerHistoryRepository;
-            _playerRepository = playerRepository;
+            _playerUpdateRepository = playerUpdateRepository;
             _playerHistoryCsvService= playerHistoryCsvService;
             _csvPlayerService = csvPlayerService;
             _logger = logger;
@@ -42,15 +43,23 @@ namespace TtPlayers.Importer.Applications
         public async Task Import()
         {
             var url = _settings.RcAusPlayerListUrl;
-            var csvPlayers = _csvPlayerService.DownloadCsv(url);
+            var csvPlayers = await _csvPlayerService.DownloadCsvAsync(url);
 
-            _logger.LogInformation($"Found {csvPlayers.Count} players to import.");
-            var index = csvPlayers.Count;
 
-            foreach (var player in csvPlayers)
+            var playerRequireUpdates = await _playerUpdateRepository.FilterByAsync(x => true);
+            var requiredPlayerIds = playerRequireUpdates.Select(x => x.Id).ToList();
+
+            var pendingPlayers = csvPlayers.Where(x => requiredPlayerIds.Contains(x.Id)).ToList();
+            _logger.LogInformation($"Found {pendingPlayers.Count} players to import.");
+            var index = pendingPlayers.Count;
+
+            foreach (var player in pendingPlayers)
             {
                 _logger.LogInformation($"{index} - Importing {player.Name}:{player.Id} history...");
                 await ImportSinglePlayerHistory(player.Id);
+                // remove from player-update table
+                await _playerUpdateRepository.DeleteByIdAsync(player.Id);
+
                 Thread.Sleep(100);
                 index--;
             }
@@ -60,7 +69,7 @@ namespace TtPlayers.Importer.Applications
         {
             // download player history json
             var url = _settings.RcPlayerHistoryUrl.Replace("{0}", playerId);
-            var entries = _playerHistoryCsvService.DownloadCsv(url);
+            var entries = await _playerHistoryCsvService.DownloadCsvAsync(url);
             var history = new PlayerHistory
             {
                 Id = playerId,

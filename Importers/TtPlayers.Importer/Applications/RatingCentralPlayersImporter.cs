@@ -1,13 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using TtPlayers.Importer.Applications.Base;
+using TtPlayers.Importer.Applications.Scraper;
 using TtPlayers.Importer.Configurations;
 using TtPlayers.Importer.Domain.CsvMapping;
 using TtPlayers.Importer.Domain.Models;
@@ -19,7 +15,7 @@ namespace TtPlayers.Importer.Applications
 {
     public interface IRatingCentralPlayersImporter
     {
-        Task Import();
+        Task Import(bool forceAll = false);
     }
 
     public class RatingCentralPlayersImporter : RatingCentralImporterBase, IRatingCentralPlayersImporter
@@ -28,63 +24,50 @@ namespace TtPlayers.Importer.Applications
         private readonly ILogger<RatingCentralPlayersImporter> _logger;
         private readonly IDocumentRepository<Player> _playerRepository;
         private readonly IDocumentRepository<PlayerHistory> _playerHistoryRepository;
+        private readonly IDocumentRepository<PlayerUpdate> _playerUpdateRepository;
         private readonly IDocumentRepository<Match> _matchRepository;
-        private readonly ICsvService<PlayerCsvModel, PlayerCsvMapping> _csvPlayerService;
         private readonly ISndttaPlayerScraper _sndttaScraper;
-        private readonly ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> _playerHistoryCsvService;
-
-        static int ProcessedIndex = 0;
+        private readonly IRatingCentralScraper _rcScraper;
 
         public RatingCentralPlayersImporter(IOptions<SndttaSettings> settings, 
             IDocumentRepository<Player> playerRepository,
             IDocumentRepository<PlayerHistory> playerHistoryRepository,
             IDocumentRepository<Match> matchRepository,
-            ICsvService<PlayerCsvModel, PlayerCsvMapping> csvPlayerService,
             ISndttaPlayerScraper sndttaScraper,
             ILogger<RatingCentralPlayersImporter> logger,
-            ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> playerHistoryCsvService)
+            IDocumentRepository<PlayerUpdate> playerUpdateRepository,
+            IRatingCentralScraper rcScraper)
             : base(logger)
         {
             _settings = settings.Value;
             _playerRepository = playerRepository;
             _playerHistoryRepository = playerHistoryRepository;
             _matchRepository = matchRepository;
-            _csvPlayerService = csvPlayerService;
             _sndttaScraper = sndttaScraper;
+            _rcScraper = rcScraper;
             _logger = logger;
-            _playerHistoryCsvService = playerHistoryCsvService;
+            _playerUpdateRepository = playerUpdateRepository;
         }
 
-        public async Task Import()
+        public async Task Import(bool forceAll = false)
         {
-            var url = _settings.RcAusPlayerListUrl;
-            var csvPlayers = _csvPlayerService.DownloadCsv(url);
-
-            var players = csvPlayers.Select(x => new Player
-            {
-                Id= x.Id,
-                FirstName = x.Name.ToFirstName().Trim(),
-                LastName = x.Name.ToLastName().Trim(),
-                FullName = x.Name.ToFirstLastName().Trim(),
-                Rating = x.Rating,
-                StDev= x.StDev,
-                PrimaryClubId = x.PrimaryClubId,
-                State = x.Province,
-                Country= x.Country,
-                Gender = x.Sex,
-                TtaId = x.TTA_ID,
-                LastPlayed = x.LastPlayed,
-                LastEventId = x.LastEventId,
-                LastUpdated = DateTime.Now
-            });
+            var players = await _rcScraper.DownloadPlayersAsync();
 
             if (players.Any())
             {
+                // filter players
+                var pendingPlayers = new List<Player>();
+                if (!forceAll)
+                {
+                    var requiredPlayers = await _playerUpdateRepository.FilterByAsync(x => true);
+                    var requiredPlayerIds = requiredPlayers.Select(x => x.Id).Distinct().ToList();
+                    pendingPlayers = players.Where(x => requiredPlayerIds.Contains(x.Id)).ToList();
+                }
 
                 // update sndtta player division & teams
                 _logger.LogInformation($"Updating Divisions & Teams & Rankings.");
 
-                var sndttaPlayers = _sndttaScraper.GetPlayers();
+                var sndttaData = await _sndttaScraper.GetPlayersAsync();
                
                 var sw = new Stopwatch();
                 sw.Start();
@@ -95,7 +78,7 @@ namespace TtPlayers.Importer.Applications
 
                 for (int i = 0; i < numThreads; i++)
                 {
-                    importTasks.Add(ImportPlayersAsync(players.ToList(), i, numThreads, sndttaPlayers));
+                    importTasks.Add(ImportPlayersAsync(pendingPlayers.ToList(), i, numThreads, sndttaData));
                 }
 
                 await Task.WhenAll(importTasks);
@@ -105,24 +88,24 @@ namespace TtPlayers.Importer.Applications
             }
         }
 
-        private async Task ImportPlayersAsync(List<Player> players, int startIndex, int step, List<Player> sndttaPlayers)
+        private async Task ImportPlayersAsync(List<Player> players, int startIndex, int step, List<Player> sndttaData)
         {
             for (int i = startIndex; i < players.Count; i += step)
             {
                 Player player = players[i];
-                UpdateTeamAndDivision(player, sndttaPlayers);
+                UpdateTeamAndDivision(player, sndttaData);
                 UpdatePlayerRanking(player, players);
-                //await ImportSinglePlayerHistory(player.Id);
+                await ImportSinglePlayerHistory(player.Id);
                 await UpdatePlayerSummary(player);
                 await UpdatePlayer(player);
                 _logger.LogInformation($"Index:{i} Imported player: {player.FullName}:{player.Id}");
             }
         }
 
-        private void UpdateTeamAndDivision(Player player, List<Player> sndttaPlayers)
+        private void UpdateTeamAndDivision(Player player, List<Player> sndttaData)
         {
             //if it is sndtta player, update team & division
-            var sndtta = sndttaPlayers.FirstOrDefault(x => x.Id == player.Id);
+            var sndtta = sndttaData.FirstOrDefault(x => x.Id == player.Id);
             if (sndtta != null)
             {
                 player.IsSndtta = true;
@@ -134,23 +117,16 @@ namespace TtPlayers.Importer.Applications
         private async Task ImportSinglePlayerHistory(string playerId)
         {
             // download player history json
-            var url = _settings.RcPlayerHistoryUrl.Replace("{0}", playerId);
-            var entries = _playerHistoryCsvService.DownloadCsv(url);
-            var history = new PlayerHistory
-            {
-                Id = playerId,
-                History = entries,
-                LastUpdated = DateTime.Now
-            };
+            var history = await _rcScraper.DownloadPlayerHistoriesAsync(playerId);
 
             var importedPlayerHistory = await _playerHistoryRepository.FindOneAsync(x => x.Id == playerId);
 
-            if (importedPlayerHistory == null || importedPlayerHistory.History.Count != entries.Count)
+            if (importedPlayerHistory == null || importedPlayerHistory.History.Count != history.History.Count)
             {
                 // if never imported before OR imported history != current history, do an update
                 history.RequireDeltaPush = true;
                 await _playerHistoryRepository.UpsertAsync(history, x => x.Id == playerId);
-                _logger.LogInformation($"Imported {entries.Count} match records for player:{playerId}.");
+                _logger.LogInformation($"Imported {history.History.Count} match records for player:{playerId}.");
             }
             else
             {
@@ -191,6 +167,11 @@ namespace TtPlayers.Importer.Applications
             if(playerHistory != null && playerHistory.History.Any())
             {
                 var histories = playerHistory.History.OrderByDescending(x => x.EventDate);
+
+                //highest rating
+                var highestRatingHistory = histories.OrderByDescending(x => x.FinalMean).FirstOrDefault();
+                player.HighestRating = highestRatingHistory.FinalMean;
+                player.HighestRatingStDev = highestRatingHistory.FinalStDev;
 
                 // recent histories 6 months
                 var recentHistories = histories.Where(x => x.EventDate >= DateTime.Now.AddMonths(-6)).OrderByDescending(x => x.EventDate);
@@ -234,6 +215,12 @@ namespace TtPlayers.Importer.Applications
                 player.TotalWins = wins;
                 player.TotalLoses = loses;
                 player.TotalPlayedMatches= matches.Count();
+
+
+                //year to date
+                var yearToDateMatches = matches.Where(x => x.MatchDate >= new DateTime(DateTime.Now.Year, 1, 1));
+                player.YearToDateWins = yearToDateMatches.Count(x=>x.WinnerId == player.Id);
+                player.YearToDateLoses = yearToDateMatches.Count(x => x.LoserId == player.Id);
 
                 // first - fifth games
                 var firstGameWins = matches.Select(x => WinGame(0, player.Id, x));

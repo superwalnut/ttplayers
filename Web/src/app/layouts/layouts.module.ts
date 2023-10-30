@@ -30,11 +30,13 @@ import { PlayerSetsStatisticsComponent } from './players/player-detail/player-se
 import { ClubDetailComponent } from './players/player-detail/club-detail/club-detail.component';
 import { TeamPlayersComponent } from './players/player-detail/team-players/team-players.component';
 import { HomeComponent } from './home/home.component';
+import { ClubListComponent } from './clubs/club-list/club-list.component';
+import { EventListComponent } from './events/event-list/event-list.component';
 
 @NgModule({
   declarations: [
     GymComponent, GymAboutComponent, GymScheduleComponent, GymWorkoutAboutComponent, GymCounterComponent, GymTrainerComponent, GymTestimonialComponent, GymPricingComponent, GymBMIComponent, GymBrandComponent, GymCopyrightComponent, 
-    PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent, PlayerHistoryComponent, PlayerTotalCounterComponent, PlayerSummaryComponent, PlayerSetsStatisticsComponent, ClubDetailComponent, TeamPlayersComponent, HomeComponent
+    PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent, PlayerHistoryComponent, PlayerTotalCounterComponent, PlayerSummaryComponent, PlayerSetsStatisticsComponent, ClubDetailComponent, TeamPlayersComponent, HomeComponent, ClubListComponent, EventListComponent
   ],
   imports: [
     CommonModule,

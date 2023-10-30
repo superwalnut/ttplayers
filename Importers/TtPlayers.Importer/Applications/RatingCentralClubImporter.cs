@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using TtPlayers.Importer.Applications.Scraper;
 using TtPlayers.Importer.Configurations;
 using TtPlayers.Importer.Domain.CsvMapping;
 using TtPlayers.Importer.Domain.Models;
@@ -20,25 +21,22 @@ namespace TtPlayers.Importer.Applications
 
     public class RatingCentralClubImporter : IRatingCentralClubImporter
     {
-        private readonly SndttaSettings _settings;
         private readonly ILogger<RatingCentralClubImporter> _logger;
-        private readonly ICsvService<Club, ClubCsvMapping> _clubCsvService;
         private readonly IDocumentRepository<Club> _clubRepository;
+        private readonly IRatingCentralScraper _rcScraper;
 
-        public RatingCentralClubImporter(SndttaSettings settings, ILogger<RatingCentralClubImporter> logger,
-            ICsvService<Club, ClubCsvMapping> clubCsvService,
+        public RatingCentralClubImporter(ILogger<RatingCentralClubImporter> logger,
+            IRatingCentralScraper rcScraper,
             IDocumentRepository<Club> clubRepository)
         {
-            _clubCsvService= clubCsvService;
             _logger = logger;
             _clubRepository = clubRepository;
-            _settings = settings;
+            _rcScraper = rcScraper;
         }
 
         public async Task Import()
         {
-            var url = _settings.RcClubListUrl;
-            var clubs = _clubCsvService.DownloadCsv(url);
+            var clubs = await _rcScraper.DownloadClubsAsync();
 
             if (clubs.Any())
             {

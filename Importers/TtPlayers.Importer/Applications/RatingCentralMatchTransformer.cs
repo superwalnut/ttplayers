@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using TtPlayers.Importer.Applications.Scraper;
 using TtPlayers.Importer.Domain.Models;
 using TtPlayers.Importer.Domain.Repositories;
 using TtPlayers.Importer.Extensions;
@@ -8,7 +9,7 @@ namespace TtPlayers.Importer.Applications
 {
     public interface IRatingCentralMatchTransformer
     {
-        Task TransformMatches();
+        Task TransformMatches(bool forceAll = false);
     }
 
     public class RatingCentralMatchTransformer : IRatingCentralMatchTransformer
@@ -17,25 +18,26 @@ namespace TtPlayers.Importer.Applications
         private readonly IDocumentRepository<TtEventMatches> _eventMatchesRepository;
         private readonly IDocumentRepository<Match> _matchRepository;
         private readonly IDocumentRepository<TtEvent> _eventRepository;
-        private readonly IDocumentRepository<Player> _playerRepository;
+        private readonly IRatingCentralScraper _rcScraper;
+
         public RatingCentralMatchTransformer(IDocumentRepository<TtEventMatches> eventMatchesRepository,
             IDocumentRepository<Match> matchRepository,
             IDocumentRepository<TtEvent> eventRepository,
-            IDocumentRepository<Player> playerRepository,
-            ILogger<RatingCentralMatchTransformer> logger)
+            ILogger<RatingCentralMatchTransformer> logger,
+            IRatingCentralScraper rcScraper)
         {
             _eventMatchesRepository= eventMatchesRepository;
             _matchRepository = matchRepository;
             _eventRepository= eventRepository;
-            _playerRepository= playerRepository;
+            _rcScraper = rcScraper;
             _logger= logger;
         }
 
-        public async Task TransformMatches()
+        public async Task TransformMatches(bool forceAll = false)
         {
             var eventMatches = await _eventMatchesRepository.FilterByAsync(x => true);//x.RequireTransform);
             var events = await _eventRepository.FilterByAsync(x => true);
-            var players = await _playerRepository.FilterByAsync(x => true);
+            var players = await _rcScraper.DownloadPlayersAsync();
 
             _logger.LogInformation($"===== Transforming {eventMatches.Count} events with match details =====");
 
@@ -46,19 +48,28 @@ namespace TtPlayers.Importer.Applications
             List<Task> importTasks = new List<Task>();
             for (int i = 0; i < numThreads; i++)
             {
-                importTasks.Add(TransformEventMatches(eventMatches.ToList(), i, numThreads, events, players));
+                importTasks.Add(TransformEventMatches(eventMatches.ToList(), i, numThreads, events, players, forceAll));
             }
             await Task.WhenAll(importTasks);
             sw.Stop();
         }
 
-
-        private async Task TransformEventMatches(List<TtEventMatches> eventMatches, int startIndex, int step, List<TtEvent> events, List<Player> players)
+        private async Task TransformEventMatches(List<TtEventMatches> eventMatches, int startIndex, int step, List<TtEvent> events, IList<Player> players, bool forceAll = false)
         {
             for (int i = startIndex; i < eventMatches.Count; i += step)
             {
                 var evt = events.FirstOrDefault(e => e.Id == eventMatches[i].Id);
-                var matches = await TransformSingleEventMatches(evt, eventMatches[i], players, false);
+
+                if (!forceAll)
+                {
+                    var importedMatches = await _matchRepository.FilterByAsync(x => x.EventId == evt.Id);
+                    if (importedMatches.Count == eventMatches[i].Matches.Count)
+                    {
+                        continue;
+                    }
+                }
+
+                var matches = await TransformSingleEventMatches(evt, eventMatches[i], players);
                 await UpsertMatches(evt, matches, eventMatches[i]);
             }
         }
@@ -76,19 +87,9 @@ namespace TtPlayers.Importer.Applications
             _logger.LogInformation($"Upserted {evt.Name}:{evt.Id} matches");
         }
 
-        private async Task<List<Match>> TransformSingleEventMatches(TtEvent evt, TtEventMatches eventMatch, List<Player> players, bool forceAll = false)
+        private async Task<List<Match>> TransformSingleEventMatches(TtEvent evt, TtEventMatches eventMatch, IList<Player> players)
         {
             _logger.LogInformation($"Process {evt.Name}:{evt.Id} with {eventMatch.Matches.Count} matches...");
-
-            if (!forceAll)
-            {
-                var importedMatches = await _matchRepository.FilterByAsync(x => x.EventId == evt.Id);
-                if (importedMatches.Count == eventMatch.Matches.Count)
-                {
-                    //same matches found for the same event, no need to import
-                    return new List<Match>();
-                }
-            }
 
             var groups = eventMatch.Matches.GroupBy(x => new { WinnerId = x.WinnerID, LoserId = x.LoserID }, y => y);
 
@@ -130,12 +131,5 @@ namespace TtPlayers.Importer.Applications
 
             return matches;
         }
-
-        private async Task ImportTransformedMatches()
-        {
-
-        }
-
-        
     }
 }

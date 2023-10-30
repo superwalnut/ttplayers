@@ -8,7 +8,7 @@ using TtPlayers.Importer.Domain.Attributes;
 
 namespace TtPlayers.Importer.Domain.Models
 {
-    [BsonCollection("Players")]
+    [BsonCollection("PlayerUpdates")]
     public class PlayerUpdate : IDocument
     {
         [BsonElement("_id")]

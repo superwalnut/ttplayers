@@ -29,10 +29,16 @@ export class NavService {
     },
     {
 			title: 'Events', type: 'link', path:'/events',
+    },    
+    {
+         title: 'Rankings', type: 'link', path: '/rankings',
+    },
+    {
+         title: 'Clubs', type: 'link', path: '/clubs',
     },
     {
          title: 'Create Account', type:'link', path:'/register'
-    }
+    },
    //  {
 	// 		title: 'Pages', type: 'sub', children: [
    //          { path: '/404', title: '404',  type: 'link' },

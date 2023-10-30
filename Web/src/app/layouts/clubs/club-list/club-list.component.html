@@ -1,0 +1,52 @@
+<app-gym-nav></app-gym-nav>
+
+<!-- header Start-->
+<div class="header5-content">
+    <div class="player-list-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header3.jpg)'}">
+    </div>
+</div>
+<!-- header end-->
+
+
+<!-- section start -->
+<section class="agency blog blog-sec blog-list">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 blog-sec blog-list" *ngFor="let blog of blogData">
+                <div class="blog-agency">
+                    <div class="row blog-contain pl-0 pr-0">
+                        <div class="col-xl-3 col-lg-4 col-lg-5 col-md-6 p-0">
+                            <div class=" text-center">
+                                <img [src]="blog.img" alt="" class="img-fluid blog-img">
+                            </div>
+                        </div>
+                        <div class="col-xl-9 col-lg-7 col-md-6 p-0">
+                            <div class="img-container center-content">
+                                <div class="center-content">
+                                    <div class="blog-info">
+                                        <div class="m-b-20">
+                                            <div class="center-text">
+                                                <i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>
+                                                <h6 class="m-r-25 font-blog">{{blog.date}}</h6>
+                                                <i class="fa fa-map-marker m-r-10" aria-hidden="true"></i>
+                                                <h6 class="font-blog">{{blog.type}}</h6>
+                                            </div>
+                                        </div>
+                                        <h5 class="blog-head font-600">{{blog.title}}</h5>
+                                        <p class="para2">{{blog.content}}</p>
+                                        <div class="btn-bottom m-t-20">
+                                            <a href="#" class="text-uppercase">{{blog.btn}}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- section end-->
+
+<app-gym-footer></app-gym-footer>

@@ -15,11 +15,11 @@ using TtPlayers.Importer.Domain.Models;
 using TtPlayers.Importer.Domain.Repositories;
 using TtPlayers.Importer.Infrastructure;
 
-namespace TtPlayers.Importer.Applications
+namespace TtPlayers.Importer.Applications.Scraper
 {
     public interface ISndttaPlayerScraper
     {
-        List<Player> GetPlayers();
+        Task<List<Player>> GetPlayersAsync();
         List<TeamNameCsvModel> GetTeamNames();
     }
 
@@ -38,11 +38,11 @@ namespace TtPlayers.Importer.Applications
 
         }
 
-        public List<Player> GetPlayers()
+        public async Task<List<Player>> GetPlayersAsync()
         {
             var teamNameDict = GetTeamNames();
 
-            var playerHtml = _httpDownloader.DownloadByGet(_settings.PlayerListUrl);
+            var playerHtml = await _httpDownloader.DownloadByGet(_settings.PlayerListUrl);
             HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
             htmlDoc.LoadHtml(playerHtml);
 
@@ -70,7 +70,7 @@ namespace TtPlayers.Importer.Applications
                 {
                     // division row
                     var val = trNode.InnerText.Replace(" ", "").Trim();
-                    Enum.TryParse<Divisions>(val, out division);
+                    Enum.TryParse(val, out division);
                     continue;
                 }
 
@@ -156,7 +156,7 @@ namespace TtPlayers.Importer.Applications
             while (stack.Peek() > 0)
             {
                 var val = stack.Pop();
-                if(val == div || val == player.Division)
+                if (val == div || val == player.Division)
                 {
                     return val;
                 }

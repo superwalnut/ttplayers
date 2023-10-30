@@ -16,7 +16,7 @@ namespace TtPlayers.Importer.Infrastructure
         where TEntity : class
         where TMapping : ClassMap<TEntity>
     {
-        List<TEntity> DownloadCsv(string url);
+        Task<List<TEntity>> DownloadCsvAsync(string url);
     }
 
     public class CsvService<TEntity, TMapping> : ICsvService<TEntity, TMapping>
@@ -32,10 +32,10 @@ namespace TtPlayers.Importer.Infrastructure
             _logger = logger;
         }
 
-        public List<TEntity> DownloadCsv(string url)
+        public async Task<List<TEntity>> DownloadCsvAsync(string url)
         {
             //download json and convert models
-            var csv = _httpDownloader.DownloadByGet(url);
+            var csv = await _httpDownloader.DownloadByGet(url);
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
