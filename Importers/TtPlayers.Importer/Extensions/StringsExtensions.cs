@@ -207,5 +207,30 @@ namespace TtPlayers.Importer.Extensions
 
             return (FirstPlayerScores, SecondPlayerScores);
         }
+
+        public static string ToStateShortform(this string state)
+        {
+            switch(state)
+            {
+                case "New South Wales":
+                    return "NSW";
+                case "Tasmania":
+                    return "TAS";
+                case "Western Australia":
+                    return "WA";
+                case "Queensland":
+                    return "QLD";
+                case "Victoria":
+                    return "VIC";
+                case "South Australia":
+                    return "SA";
+                case "Northern Territory":
+                    return "NT";
+                case "Melbourne":
+                    return "VIC";
+            }
+
+            return state;
+        }
     }
 }

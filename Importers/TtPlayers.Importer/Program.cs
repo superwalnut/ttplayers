@@ -95,8 +95,10 @@ namespace TtPlayers.Importer
                    {
                        if (o.AllImport)
                        {
+                           // import clubs
+                           clubImporter.Import().GetAwaiter().GetResult();
                            // import events, also discover player changes 
-                           eventImporter.ImportEvents().GetAwaiter().GetResult();
+                           eventImporter.ImportEvents(o.ForceAll).GetAwaiter().GetResult();
                            // import event-matches
                            eventImporter.ImportEventMatches().GetAwaiter().GetResult();
                            // transform matches

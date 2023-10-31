@@ -56,7 +56,7 @@ namespace TtPlayers.Importer.Applications
             if (players.Any())
             {
                 // filter players
-                var pendingPlayers = new List<Player>();
+                var pendingPlayers = players;
                 if (!forceAll)
                 {
                     var requiredPlayers = await _playerUpdateRepository.FilterByAsync(x => true);

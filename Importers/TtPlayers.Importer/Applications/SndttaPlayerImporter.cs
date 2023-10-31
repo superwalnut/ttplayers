@@ -47,7 +47,7 @@ namespace TtPlayers.Importer.Applications
         {
             var teamNameDict = GetTeamNames();
 
-            var playerHtml = _httpDownloader.DownloadByGet(_settings.PlayerListUrl);
+            var playerHtml = await _httpDownloader.DownloadByGet(_settings.PlayerListUrl);
             HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
             htmlDoc.LoadHtml(playerHtml);
 
