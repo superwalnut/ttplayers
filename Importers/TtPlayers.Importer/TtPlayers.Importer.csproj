@@ -51,6 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Domain\AutoMapper\" />
     <Folder Include="FireStore\" />
   </ItemGroup>
 

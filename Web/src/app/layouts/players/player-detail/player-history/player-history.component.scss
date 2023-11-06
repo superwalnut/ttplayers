@@ -20,3 +20,17 @@
 .set-scores {
     vertical-align: middle;
 }
+
+.match-player {
+    a{
+        text-decoration: underline;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .match-player {
+        i{
+            display:none;
+        }
+    }
+}

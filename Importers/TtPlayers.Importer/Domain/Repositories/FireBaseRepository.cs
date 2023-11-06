@@ -1,6 +1,8 @@
 ﻿using Google.Cloud.Firestore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SharpCompress.Compressors.Xz;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,13 +36,16 @@ namespace TtPlayers.Importer.Domain.Repositories
         private const string ENV_APP_CREDENTIALS = "GOOGLE_APPLICATION_CREDENTIALS";
         private FirestoreDb _fireStoreDb;
         private CollectionReference _collection;
-        public FireBaseRepository(FireStoreSettings config)
+        private readonly ILogger<FireBaseRepository<TDocument>> _logger;
+
+        public FireBaseRepository(FireStoreSettings config, ILogger<FireBaseRepository<TDocument>> logger)
         {
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"FireStore", config.CertificateFilePath);
             Environment.SetEnvironmentVariable(ENV_APP_CREDENTIALS, path);
             _fireStoreDb = FirestoreDb.Create(config.ProjectId);
             var collectionName = GetCollectionName(typeof(TDocument));
             _collection = _fireStoreDb.Collection(collectionName);
+            _logger = logger;
         }
 
         public async Task<TDocument> Add(TDocument record)
@@ -60,7 +65,8 @@ namespace TtPlayers.Importer.Domain.Repositories
         {
             var batches = CreateBatches(records);
             var resultCount = 0;
-
+            var index = 0;
+            _logger.LogInformation($"UpsertMany {batches.Count} batches.");
             foreach (var batch in batches)
             {
                 var operation = _fireStoreDb.StartBatch();
@@ -68,9 +74,12 @@ namespace TtPlayers.Importer.Domain.Repositories
                 {
                     DocumentReference recordRef = _collection.Document(record.Id);
                     operation.Set(recordRef, record);
+                    _logger.LogInformation($"Add document:{record.Id} to batch-{index}.");
                 }
                 var result = await operation.CommitAsync();
                 resultCount += result.Count;
+                _logger.LogInformation($"Finished bulk writting batch-{index}.");
+                index++;
             }
 
             return resultCount == records.Count;

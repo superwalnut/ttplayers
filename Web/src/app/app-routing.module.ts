@@ -6,6 +6,8 @@ import { PlayerDetailComponent } from './layouts/players/player-detail/player-de
 import { HomeComponent } from './layouts/home/home.component';
 import { ClubListComponent } from './layouts/clubs/club-list/club-list.component';
 import { EventListComponent } from './layouts/events/event-list/event-list.component';
+import { EventDetailComponent } from './layouts/events/event-detail/event-detail.component';
+import { RankingComponent } from './layouts/players/ranking/ranking.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +37,14 @@ export const routes: Routes = [
   {
     path: 'events',
     component: EventListComponent
+  },
+  {
+    path: 'event/:id',
+    component: EventDetailComponent
+  },
+  {
+    path: 'rankings',
+    component: RankingComponent
   }
 ];
 

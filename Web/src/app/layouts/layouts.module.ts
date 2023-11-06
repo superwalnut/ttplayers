@@ -14,7 +14,7 @@ import { GymCounterComponent } from './gym/gym-counter/gym-counter.component';
 import { GymPricingComponent } from './gym/gym-pricing/gym-pricing.component';
 import { GymScheduleComponent } from './gym/gym-schedule/gym-schedule.component';
 import { GymTestimonialComponent } from './gym/gym-testimonial/gym-testimonial.component';
-import { GymTrainerComponent } from './gym/gym-trainer/gym-trainer.component';
+import { HomeEventsComponent } from './gym/home-events/home-events.component';
 import { GymWorkoutAboutComponent } from './gym/gym-workout-about/gym-workout-about.component';
 // Gym Layout
 import { GymComponent } from './gym/gym.component';
@@ -32,11 +32,13 @@ import { TeamPlayersComponent } from './players/player-detail/team-players/team-
 import { HomeComponent } from './home/home.component';
 import { ClubListComponent } from './clubs/club-list/club-list.component';
 import { EventListComponent } from './events/event-list/event-list.component';
+import { EventDetailComponent } from './events/event-detail/event-detail.component';
+import { RankingComponent } from './players/ranking/ranking.component';
 
 @NgModule({
   declarations: [
-    GymComponent, GymAboutComponent, GymScheduleComponent, GymWorkoutAboutComponent, GymCounterComponent, GymTrainerComponent, GymTestimonialComponent, GymPricingComponent, GymBMIComponent, GymBrandComponent, GymCopyrightComponent, 
-    PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent, PlayerHistoryComponent, PlayerTotalCounterComponent, PlayerSummaryComponent, PlayerSetsStatisticsComponent, ClubDetailComponent, TeamPlayersComponent, HomeComponent, ClubListComponent, EventListComponent
+    GymComponent, GymAboutComponent, GymScheduleComponent, GymWorkoutAboutComponent, GymCounterComponent, HomeEventsComponent, GymTestimonialComponent, GymPricingComponent, GymBMIComponent, GymBrandComponent, GymCopyrightComponent, 
+    PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent, PlayerHistoryComponent, PlayerTotalCounterComponent, PlayerSummaryComponent, PlayerSetsStatisticsComponent, ClubDetailComponent, TeamPlayersComponent, HomeComponent, ClubListComponent, EventListComponent, EventDetailComponent, RankingComponent
   ],
   imports: [
     CommonModule,

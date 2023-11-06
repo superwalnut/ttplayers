@@ -57,6 +57,12 @@ namespace TtPlayers.Importer.Domain.Repositories
             return await _collection.Find(filterExpression).ToListAsync();
         }
 
+        public virtual async Task<List<TDocument>> FilterByFilterDefinitionAsync(FilterDefinition<TDocument> filter)
+        {
+            // Find documents that match the filter
+            return await _collection.Find(filter).ToListAsync();
+        }
+
         public virtual async Task<List<TDocument>> FilterByAsyncOrderByDesending(Expression<Func<TDocument, bool>> filterExpression, Expression<Func<TDocument, object>> field, int skip =0, int limit = 50)
         {
             return await _collection.Find(filterExpression).SortByDescending(field).Skip(skip).Limit(limit).ToListAsync();
@@ -140,7 +146,10 @@ namespace TtPlayers.Importer.Domain.Repositories
                 foreach (var document in batch.Value)
                 {
                     var filter = Builders<TDocument>.Filter.Eq(p => p.Id, document.Id);
-                    var replaceOne = new ReplaceOneModel<TDocument>(filter, document);
+                    var replaceOne = new ReplaceOneModel<TDocument>(filter, document)
+                    {
+                        IsUpsert= true
+                    };
                     bulkWrites.Add(replaceOne);
                     _logger.LogInformation($"Add document:{document.Id} to batch-{index}.");
                 }

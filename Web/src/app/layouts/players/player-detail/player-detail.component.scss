@@ -15,13 +15,28 @@ h1 span{
     font-size:0.7em;
 }
 
+h5{
+    small{
+        font-size: 0.7em;
+    }
+}
+
 .border-around {
     border: 13px solid #fff;
     border-radius: 100%;
-    -webkit-box-shadow: 0 0 30px #e2e2e2;
-    box-shadow: 0 0 30px #e2e2e2;
+    -webkit-box-shadow: 0 0 10px #e2e2e2;
+    box-shadow: 0 0 10px #2691f7;
     height: 150px;
     width: 150px;
+    margin:0 auto;
+}
+
+.blue {
+    box-shadow: 0 0 30px #2691f7;
+}
+
+.red {
+    box-shadow: 0 0 30px #e3154f;
 }
 
 #gender-ico{
@@ -64,4 +79,10 @@ h1 span{
 .rc-id {
     font-size:0.5em !important;
     padding-left:10px;
+}
+
+@media only screen and (max-width: 575px) {
+    .border-around {
+        display:none;
+    }
 }

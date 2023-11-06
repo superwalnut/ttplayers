@@ -1,10 +1,17 @@
 ﻿using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
+using CsvHelper.Configuration;
+using CsvHelper;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Diagnostics;
+using System.Globalization;
+using System.Numerics;
 using TtPlayers.Importer.Applications.Base;
 using TtPlayers.Importer.Applications.Scraper;
 using TtPlayers.Importer.Configurations;
+using TtPlayers.Importer.data;
 using TtPlayers.Importer.Domain.CsvMapping;
 using TtPlayers.Importer.Domain.Models;
 using TtPlayers.Importer.Domain.Repositories;
@@ -15,7 +22,10 @@ namespace TtPlayers.Importer.Applications
 {
     public interface IRatingCentralPlayersImporter
     {
-        Task Import(bool forceAll = false);
+        Task ImportPlayer();
+        Task ImportSndttaTeam();
+        Task ImportPlayerRanking();
+        Task ImportPlayerSummary();
     }
 
     public class RatingCentralPlayersImporter : RatingCentralImporterBase, IRatingCentralPlayersImporter
@@ -23,241 +33,378 @@ namespace TtPlayers.Importer.Applications
         private readonly SndttaSettings _settings;
         private readonly ILogger<RatingCentralPlayersImporter> _logger;
         private readonly IDocumentRepository<Player> _playerRepository;
-        private readonly IDocumentRepository<PlayerHistory> _playerHistoryRepository;
+        //private readonly IDocumentRepository<PlayerHistory> _playerHistoryRepository;
         private readonly IDocumentRepository<PlayerUpdate> _playerUpdateRepository;
         private readonly IDocumentRepository<Match> _matchRepository;
+        private readonly IDocumentRepository<TtEventPlayer> _eventPlayerRepository;
         private readonly ISndttaPlayerScraper _sndttaScraper;
         private readonly IRatingCentralScraper _rcScraper;
+        private readonly IDocumentRepository<SndttaTeam> _teamRepository;
 
         public RatingCentralPlayersImporter(IOptions<SndttaSettings> settings, 
             IDocumentRepository<Player> playerRepository,
-            IDocumentRepository<PlayerHistory> playerHistoryRepository,
+            //IDocumentRepository<PlayerHistory> playerHistoryRepository,
             IDocumentRepository<Match> matchRepository,
             ISndttaPlayerScraper sndttaScraper,
             ILogger<RatingCentralPlayersImporter> logger,
             IDocumentRepository<PlayerUpdate> playerUpdateRepository,
+            IDocumentRepository<TtEventPlayer> eventPlayerRepository,
+            IDocumentRepository<SndttaTeam> teamRepository,
             IRatingCentralScraper rcScraper)
             : base(logger)
         {
             _settings = settings.Value;
             _playerRepository = playerRepository;
-            _playerHistoryRepository = playerHistoryRepository;
+            //_playerHistoryRepository = playerHistoryRepository;
             _matchRepository = matchRepository;
             _sndttaScraper = sndttaScraper;
             _rcScraper = rcScraper;
             _logger = logger;
             _playerUpdateRepository = playerUpdateRepository;
+            _eventPlayerRepository = eventPlayerRepository;
+            _teamRepository = teamRepository;
         }
 
-        public async Task Import(bool forceAll = false)
+        public async Task ImportPlayer()
         {
-            var players = await _rcScraper.DownloadPlayersAsync();
+            var csvPlayers = await _rcScraper.DownloadPlayersAsync();
+            var players = await _playerRepository.FilterByAsync(x => true);
 
-            if (players.Any())
+            var pendingPlayers = new List<Player>();
+            foreach(var csvPlayer in csvPlayers)
             {
-                // filter players
-                var pendingPlayers = players;
-                if (!forceAll)
+                var player = players.FirstOrDefault(x => x.Id == csvPlayer.Id);
+                if (player != null)
                 {
-                    var requiredPlayers = await _playerUpdateRepository.FilterByAsync(x => true);
-                    var requiredPlayerIds = requiredPlayers.Select(x => x.Id).Distinct().ToList();
-                    pendingPlayers = players.Where(x => requiredPlayerIds.Contains(x.Id)).ToList();
+                    //already exist, only update the fields related to RC
+                    player.FirstName = csvPlayer.FirstName;
+                    player.LastName = csvPlayer.LastName;
+                    player.FullName = csvPlayer.FullName;
+                    player.Rating = csvPlayer.Rating;
+                    player.StDev = csvPlayer.StDev;
+                    player.PrimaryClubId = csvPlayer.PrimaryClubId;
+                    player.State = csvPlayer.State;
+                    player.Country = csvPlayer.Country;
+                    player.Gender = csvPlayer.Gender;
+                    player.TtaId = csvPlayer.TtaId;
+                    player.LastPlayed = csvPlayer.LastPlayed;
+                    player.LastEventId = csvPlayer.LastEventId;
+                    player.LastUpdated = DateTime.Now;
+                    player.RequireDeltaPush = true;
+
+                    pendingPlayers.Add(player);
+                    _logger.LogInformation($"Update existing player {player.LastName}:{player.Id} info.");
                 }
-
-                // update sndtta player division & teams
-                _logger.LogInformation($"Updating Divisions & Teams & Rankings.");
-
-                var sndttaData = await _sndttaScraper.GetPlayersAsync();
-               
-                var sw = new Stopwatch();
-                sw.Start();
-
-                int numThreads = 10; // Number of threads for parallel importing
-
-                List<Task> importTasks = new List<Task>();
-
-                for (int i = 0; i < numThreads; i++)
+                else
                 {
-                    importTasks.Add(ImportPlayersAsync(pendingPlayers.ToList(), i, numThreads, sndttaData));
+                    //new player
+                    pendingPlayers.Add(csvPlayer);
+                    _logger.LogInformation($"Insert a new player {csvPlayer.LastName}:{csvPlayer.Id}.");
                 }
-
-                await Task.WhenAll(importTasks);
-                sw.Stop();
-                //load player-update action table
-                _logger.LogInformation($"Finish upserting {players.Count()} players in {sw.Elapsed.TotalMinutes} mins.");
             }
+
+            await _playerRepository.UpsertManyAsync(pendingPlayers);
+            _logger.LogInformation($"Finish importing {pendingPlayers.Count} players.");
         }
 
-        private async Task ImportPlayersAsync(List<Player> players, int startIndex, int step, List<Player> sndttaData)
+        public async Task ImportSndttaTeam()
         {
+            var sndttaData = await _sndttaScraper.GetPlayersAsync();
+            var players = await _playerRepository.FilterByAsync(x => true);
+
+            var pendingPlayers = new List<Player>();
+            foreach (var s in sndttaData)
+            {
+                //if it is sndtta player, update team & division
+                var player = players.FirstOrDefault(x => x.Id == s.Id);
+                if (player != null)
+                {
+                    _logger.LogInformation($"Update Sndtta team - {player.LastName}:{player.Id}.");
+
+                    player.IsSndtta = true;
+                    player.Division = s.Division;
+                    player.Team = s.Team;
+                    player.LastUpdated = DateTime.Now;
+                    player.RequireDeltaPush = true;
+                    pendingPlayers.Add(player);
+                }
+            }
+
+            await _playerRepository.UpsertManyAsync(pendingPlayers);
+            _logger.LogInformation($"Finish updating sndtta teams for {pendingPlayers.Count} players.");
+
+            // process teams
+            var teams = sndttaData.SelectMany(x => x.Team).Distinct().ToList();
+            var pendingTeams = new List<SndttaTeam>();
+
+            var teamNameDict = _sndttaScraper.GetTeamNames();
+            foreach (var team in teams)
+            {
+                var playerIds = sndttaData.Where(x=> x.Team.Contains(team)).Select(x=>x.Id).ToList();
+                var teamPlayers = players.Where(x => playerIds.Contains(x.Id)).Select(x=>new SndttaTeamPlayer { 
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    FullName = x.FullName,
+                    State= x.State,
+                    StDev = x.StDev,
+                    Division = x.Division,
+                    Gender = x.Gender,
+                    Rating = x.Rating,
+                    PrimaryClubId = x.PrimaryClubId,
+                    LastEventId = x.LastEventId,
+                    LastPlayed = x.LastPlayed,
+                    TtaId = x.TtaId
+                });
+                pendingTeams.Add(new SndttaTeam
+                {
+                    Id = team,
+                    LastUpdated = DateTime.Now,
+                    ShortName = teamNameDict?.FirstOrDefault(x => x.Name.Equals(team))?.ShortName,
+                    Players = teamPlayers.ToList()
+                });
+
+                _logger.LogInformation($"Update Sndtta team - {team}.");
+            }
+
+            await _teamRepository.UpsertManyAsync(pendingTeams);
+            _logger.LogInformation($"Finish updating {pendingTeams.Count} sndtta teams.");
+        }
+
+        public async Task ImportPlayerRanking()
+        {
+            var players = await _playerRepository.FilterByAsync(x => true);
+
+            var rankedPlayers = players.Where(x => x.StDev < 100);
+            var rankedMenPlayers = rankedPlayers.Where(x => x.Gender == "M");
+            var rankedWomenPlayers = rankedPlayers.Where(x => x.Gender == "F");
+
+            var rankedMenRatings = rankedMenPlayers.Select(x => x.Rating).Distinct().OrderByDescending(x=>x).ToList();
+            var rankedWomenRatings = rankedWomenPlayers.Select(x => x.Rating).Distinct().OrderByDescending(x => x).ToList();
+
+            var pendingPlayers = new List<Player>();
+
+            _logger.LogInformation($"Total {players.Count} players, ranked {rankedPlayers.Count()} players");
+
+            foreach (var player in players)
+            {
+                if (player.StDev < 100)
+                {
+                    // process national gender rankings
+                    if(player.Gender == "M")
+                    {
+                        player.NationalGenderRanking = rankedMenRatings.IndexOf(player.Rating) + 1;
+
+                        var rankedStateMenRatings = rankedMenPlayers.Where(x => x.State ==  player.State).Select(x=>x.Rating).Distinct().OrderByDescending(x => x).ToList();
+                        player.StateGenderRanking = rankedStateMenRatings.IndexOf(player.Rating) + 1;
+                    }
+
+                    if (player.Gender == "F")
+                    {
+                        player.NationalGenderRanking = rankedWomenRatings.IndexOf(player.Rating) + 1;
+
+                        var rankedStateWomenRatings = rankedWomenPlayers.Where(x => x.State == player.State).Select(x => x.Rating).Distinct().OrderByDescending(x => x).ToList();
+                        player.StateGenderRanking = rankedStateWomenRatings.IndexOf(player.Rating) + 1;
+                    }
+
+                    _logger.LogInformation($"Update Ranking - {player.LastName}:{player.Id} .");
+                }
+                else
+                {
+                    player.NationalGenderRanking = 0;
+                    player.StateGenderRanking = 0;
+                }
+
+                player.LastUpdated = DateTime.Now;
+                player.RequireDeltaPush = true;
+
+                pendingPlayers.Add(player);
+            }
+
+            await _playerRepository.UpsertManyAsync(pendingPlayers);
+            _logger.LogInformation($"Finish updating ranking for {pendingPlayers.Count} players, only ranked {rankedPlayers.Count()} players.");
+        }
+
+        public async Task ImportPlayerSummary()
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            var players = await _playerRepository.FilterByAsync(x => true);
+            int numThreads = 10; // Number of threads for parallel importing
+            List<Task> importTasks = new List<Task>();
+            for (int i = 0; i < numThreads; i++)
+            {
+                importTasks.Add(UpdatePlayersSummary(players, i, numThreads));
+            }
+            await Task.WhenAll(importTasks);
+            _logger.LogInformation($"Finish updating summary for {players.Count} players - {sw.Elapsed}.");
+            sw.Stop();
+        }
+
+        private async Task UpdatePlayersSummary(List<Player> players, int startIndex, int step)
+        {
+            var pendingPlayers = new List<Player>();
             for (int i = startIndex; i < players.Count; i += step)
             {
-                Player player = players[i];
-                UpdateTeamAndDivision(player, sndttaData);
-                UpdatePlayerRanking(player, players);
-                await ImportSinglePlayerHistory(player.Id);
-                await UpdatePlayerSummary(player);
-                await UpdatePlayer(player);
-                _logger.LogInformation($"Index:{i} Imported player: {player.FullName}:{player.Id}");
+                var updated = await UpdatePlayerSummary(players[i]);
+                updated.LastUpdated= DateTime.Now;
+                updated.RequireDeltaPush = true;
+
+                pendingPlayers.Add(updated);
             }
+            await _playerRepository.UpsertManyAsync(pendingPlayers);
         }
 
-        private void UpdateTeamAndDivision(Player player, List<Player> sndttaData)
+        private async Task<Player> UpdatePlayerSummary(Player player)
         {
-            //if it is sndtta player, update team & division
-            var sndtta = sndttaData.FirstOrDefault(x => x.Id == player.Id);
-            if (sndtta != null)
-            {
-                player.IsSndtta = true;
-                player.Division = sndtta.Division;
-                player.Team = sndtta.Team;
-            }
-        }
-
-        private async Task ImportSinglePlayerHistory(string playerId)
-        {
-            // download player history json
-            var history = await _rcScraper.DownloadPlayerHistoriesAsync(playerId);
-
-            var importedPlayerHistory = await _playerHistoryRepository.FindOneAsync(x => x.Id == playerId);
-
-            if (importedPlayerHistory == null || importedPlayerHistory.History.Count != history.History.Count)
-            {
-                // if never imported before OR imported history != current history, do an update
-                history.RequireDeltaPush = true;
-                await _playerHistoryRepository.UpsertAsync(history, x => x.Id == playerId);
-                _logger.LogInformation($"Imported {history.History.Count} match records for player:{playerId}.");
-            }
-            else
-            {
-                _logger.LogInformation($"Player:{playerId} history remain unchanged.");
-            }
-        }
-
-        private void UpdatePlayerRanking(Player player, IEnumerable<Player> players)
-        {
-            _logger.LogInformation($"Update {player.LastName}:{player.Id} Ranking.");
-
-            var count = players.Where(x=>x.Rating > player.Rating).Count();
-            var genderCount = players.Where(x => x.Gender == player.Gender && x.Rating > player.Rating).Count();
-            
-            //national ranking
-            player.NationalRanking = count+1;
-            player.NationalGenderRanking = genderCount+1;
-
-            //state ranking
-            var stateCount = players.Where(x => x.Rating > player.Rating && x.State == player.State).Count();
-            var stateGenderCount = players.Where(x => x.Rating > player.Rating && x.Gender == player.Gender && x.State == player.State).Count();
-
-            player.StateRanking = stateCount + 1;
-            player.StateGenderRanking = stateGenderCount + 1;
-        }
-
-        private async Task UpdatePlayer(Player player)
-        {
-
-            player.RequireDeltaPush = true;
-            await _playerRepository.UpsertAsync(player, x => x.Id == player.Id);
-            _logger.LogInformation($"Player {player.FullName}:{player.Id} updated.");
-        }
-
-        private async Task UpdatePlayerSummary(Player player)
-        {
-            var playerHistory = await _playerHistoryRepository.FindOneAsync(x => x.Id == player.Id);
-            if(playerHistory != null && playerHistory.History.Any())
-            {
-                var histories = playerHistory.History.OrderByDescending(x => x.EventDate);
-
-                //highest rating
-                var highestRatingHistory = histories.OrderByDescending(x => x.FinalMean).FirstOrDefault();
-                player.HighestRating = highestRatingHistory.FinalMean;
-                player.HighestRatingStDev = highestRatingHistory.FinalStDev;
-
-                // recent histories 6 months
-                var recentHistories = histories.Where(x => x.EventDate >= DateTime.Now.AddMonths(-6)).OrderByDescending(x => x.EventDate);
-                if(recentHistories.Any())
-                {
-                    player.PlayedEventsLast6Mth = recentHistories.Count();
-                    player.RatingChangesLast6Mth = recentHistories.First().FinalMean - recentHistories.Last().InitialMean;
-                }
-                
-                player.LastPlayedEvent = histories.FirstOrDefault()?.EventName;
-                player.LastPlayedEventRatingChange = histories.FirstOrDefault()?.PointChange;
-
-                // total events
-                player.TotalPlayedEvents = histories.Count();
-
-                // history first date
-                var firstHistory = histories.LastOrDefault();
-                if(firstHistory != null)
-                {
-                    player.StartPlayingDate = firstHistory.EventDate;
-                }
-
-                // is junior
-                var hasJuniorEvent = histories.Any(x => x.EventName.ToLower().Contains("junior"));
-                if (hasJuniorEvent)
-                {
-                    player.IsJunior = true;
-                }
-            }
-
+            var sw = new Stopwatch();
+            sw.Start();
             var matches = await _matchRepository.FilterByAsync(x => x.PlayerIds.Contains(player.Id));
-            if(matches.Any())
+            //_logger.LogInformation($"load matches - {sw.Elapsed.TotalMilliseconds}");
+
+            //example: {"Players":{$elemMatch:{"PlayerId":"67890"}}}
+            var filter = Builders<TtEventPlayer>.Filter.ElemMatch<TtEventPlayerRating>(x=>x.Players, 
+                Builders<TtEventPlayerRating>.Filter.Eq(y => y.PlayerId, player.Id));
+            var eventPlayers = await _eventPlayerRepository.FilterByFilterDefinitionAsync(filter);
+
+            //_logger.LogInformation($"load eventPlayers - {sw.Elapsed.TotalMilliseconds}");
+
+            if (!matches.Any())
+                return player;
+
+            var matchPlayed6Months = matches.Where(x => x.MatchDate >= DateTime.Now.AddMonths(-6));
+            player.PlayedMatchesLast6Mth = matchPlayed6Months.Count();
+            player.MatchWinsLast6Mth = matchPlayed6Months.Count(x=>x.WinnerId == player.Id);
+
+            // recent histories 6 months
+            player.PlayedEventsLast6Mth = matchPlayed6Months.Select(x=>x.EventId).Distinct().Count();
+
+            //_logger.LogInformation($"load 6months count - {sw.Elapsed.TotalMilliseconds}");
+
+            var eventsLast6Months = eventPlayers.Where(x=>x.EventDate >= DateTime.Now.AddMonths(-6)).OrderByDescending(x=>x.EventDate);
+            if(eventsLast6Months.Any())
             {
-                var matchPlayed = matches.Where(x => x.MatchDate >= DateTime.Now.AddMonths(-6));
-                player.PlayedMatchesLast6Mth = matchPlayed.Count();
-                player.MatchWinsLast6Mth = matchPlayed.Count(x=>x.WinnerId == player.Id);
+                var playerLastEvent = eventsLast6Months.FirstOrDefault()?.Players.FirstOrDefault(x=>x.PlayerId == player.Id);
+                var playerFirstEvent = eventsLast6Months.LastOrDefault()?.Players.FirstOrDefault(x => x.PlayerId == player.Id);
 
-                var wins = matches.Count(x => x.WinnerId == player.Id);
-                var loses = matches.Count(x => x.LoserId == player.Id);
-
-                player.TotalWins = wins;
-                player.TotalLoses = loses;
-                player.TotalPlayedMatches= matches.Count();
-
-
-                //year to date
-                var yearToDateMatches = matches.Where(x => x.MatchDate >= new DateTime(DateTime.Now.Year, 1, 1));
-                player.YearToDateWins = yearToDateMatches.Count(x=>x.WinnerId == player.Id);
-                player.YearToDateLoses = yearToDateMatches.Count(x => x.LoserId == player.Id);
-
-                // first - fifth games
-                var firstGameWins = matches.Select(x => WinGame(0, player.Id, x));
-                player.WinRateFirstGame = TryDivide(firstGameWins.Count(x => x == true), firstGameWins.Count(x => x.HasValue));
-                
-                var secondGameWins = matches.Select(y => WinGame(1, player.Id, y));
-                player.WinRateSecondGame = TryDivide(secondGameWins.Count(y => y == true), secondGameWins.Count(x => x.HasValue));
-
-                var thirdGameWins = matches.Select(x => WinGame(2, player.Id, x));
-                player.WinRateThirdGame = TryDivide(thirdGameWins.Count(x => x == true) , thirdGameWins.Count(x => x.HasValue));
-
-                var fourthGameWins = matches.Select(x => WinGame(3, player.Id, x));
-                player.WinRateFourthGame = TryDivide(fourthGameWins.Count(z => z == true) , fourthGameWins.Count(x => x.HasValue));
-
-                var fifthGameWins = matches.Select(x => WinGame(4, player.Id, x));
-                player.WinRateFifthGame = TryDivide(fifthGameWins.Count(x => x == true) , fifthGameWins.Count(x => x.HasValue));
-
-                // beat higher player ratings, I am the winner, LoserOpponentMean => is my rating, WinnerOpponentMean => is my opponent rating
-                player.TotalBeatHigherRatingPlayers = matches.Count(x => x.WinnerId == player.Id && x.LoserOpponentMean < x.WinnerOpponentMean);
-
-                // lose lower player ratings, I am the loser, WinnerOpponentMean => is my rating, LoserOpponentMean => is my opponent rating
-                player.TotalLostLowerRatingPlayers = matches.Count(x => x.LoserId == player.Id && x.WinnerOpponentMean > x.LoserOpponentMean);
-
-                // all opponents
-                var opponentIds = new List<string>();
-                var loserOpponents = matches.Where(x => x.WinnerId == player.Id).Select(x => x.LoserId);
-                var winnerOpponents = matches.Where(x => x.LoserId == player.Id).Select(x => x.WinnerId);
-                opponentIds = loserOpponents.Union(winnerOpponents).Distinct().ToList();
-                player.TotalOpponentCount = opponentIds.Count;
-
-                player.TotalBeatPlayersCount = loserOpponents.Distinct().Count();
-
-                var winsWithoutLosingSet = matches.Count(x => x.WinnerId == player.Id && WinAllSets(x.Score));
-                player.TotalWinsWithoutLosingAnySet = winsWithoutLosingSet;
+                if(playerLastEvent!=null && playerFirstEvent != null)
+                {
+                    player.RatingChangesLast6Mth = playerLastEvent.FinalMean - playerFirstEvent.InitialMean;
+                }
             }
 
-            _logger.LogInformation($"Updated player Summary...");
+            //_logger.LogInformation($"load 6months rating-change - {sw.Elapsed.TotalMilliseconds}");
+
+            var wins = matches.Count(x => x.WinnerId == player.Id);
+            var loses = matches.Count(x => x.LoserId == player.Id);
+
+            player.TotalWins = wins;
+            player.TotalLoses = loses;
+            player.TotalPlayedMatches= matches.Count();
+
+            //_logger.LogInformation($"load total win/lose - {sw.Elapsed.TotalMilliseconds}");
+
+            //year to date
+            var yearToDateMatches = matches.Where(x => x.MatchDate >= new DateTime(DateTime.Now.Year, 1, 1));
+            player.YearToDateWins = yearToDateMatches.Count(x=>x.WinnerId == player.Id);
+            player.YearToDateLoses = yearToDateMatches.Count(x => x.LoserId == player.Id);
+
+            //_logger.LogInformation($"year to date - {sw.Elapsed.TotalMilliseconds}");
+
+            // first - fifth games
+            var firstGameWins = matches.Select(x => WinGame(0, player.Id, x));
+            player.WinRateFirstGame = TryDivide(firstGameWins.Count(x => x == true), firstGameWins.Count(x => x.HasValue));
+                
+            var secondGameWins = matches.Select(y => WinGame(1, player.Id, y));
+            player.WinRateSecondGame = TryDivide(secondGameWins.Count(y => y == true), secondGameWins.Count(x => x.HasValue));
+
+            var thirdGameWins = matches.Select(x => WinGame(2, player.Id, x));
+            player.WinRateThirdGame = TryDivide(thirdGameWins.Count(x => x == true) , thirdGameWins.Count(x => x.HasValue));
+
+            var fourthGameWins = matches.Select(x => WinGame(3, player.Id, x));
+            player.WinRateFourthGame = TryDivide(fourthGameWins.Count(z => z == true) , fourthGameWins.Count(x => x.HasValue));
+
+            var fifthGameWins = matches.Select(x => WinGame(4, player.Id, x));
+            player.WinRateFifthGame = TryDivide(fifthGameWins.Count(x => x == true) , fifthGameWins.Count(x => x.HasValue));
+
+            //_logger.LogInformation($"5 games rate - {sw.Elapsed.TotalMilliseconds}");
+
+            // beat higher player ratings, I am the winner, LoserOpponentMean => is my rating, WinnerOpponentMean => is my opponent rating
+            player.TotalBeatHigherRatingPlayers = matches.Count(x => x.WinnerId == player.Id && x.LoserOpponentMean < x.WinnerOpponentMean);
+
+            // lose lower player ratings, I am the loser, WinnerOpponentMean => is my rating, LoserOpponentMean => is my opponent rating
+            player.TotalLostLowerRatingPlayers = matches.Count(x => x.LoserId == player.Id && x.WinnerOpponentMean > x.LoserOpponentMean);
+
+            //_logger.LogInformation($"beat others - {sw.Elapsed.TotalMilliseconds}");
+
+            // all opponents
+            var opponentIds = new List<string>();
+            var loserOpponents = matches.Where(x => x.WinnerId == player.Id).Select(x => x.LoserId);
+            var winnerOpponents = matches.Where(x => x.LoserId == player.Id).Select(x => x.WinnerId);
+            opponentIds = loserOpponents.Union(winnerOpponents).Distinct().ToList();
+            player.TotalOpponentCount = opponentIds.Count;
+
+            player.TotalBeatPlayersCount = loserOpponents.Distinct().Count();
+
+            var winsWithoutLosingSet = matches.Count(x => x.WinnerId == player.Id && WinAllSets(x.Score));
+            player.TotalWinsWithoutLosingAnySet = winsWithoutLosingSet;
+
+            //_logger.LogInformation($"opponents - {sw.Elapsed.TotalMilliseconds}");
+
+
+            // is junior
+            var allEvents = matches.Select(x => new { Id = x.Id, Name = x.EventName }).Distinct().ToList();
+            player.IsJunior = allEvents.Any(x=>x.Name.ToLower().Contains("junior"));
+
+           // _logger.LogInformation($"junior - {sw.Elapsed.TotalMilliseconds}");
+
+            // total events
+            player.TotalPlayedEvents = allEvents.Count();
+
+            // last played event
+            var orderedMatches = matches.OrderByDescending(x=>x.MatchDate).ToList();
+            var lastEvent = orderedMatches.FirstOrDefault();
+            if (lastEvent != null)
+            {
+                var selectedPlayer = eventPlayers.FirstOrDefault(x=>x.Id == lastEvent.Id)?.Players?.FirstOrDefault(x=>x.PlayerId == player.Id);
+                player.LastPlayedEvent = lastEvent.EventName;
+                if(selectedPlayer != null)
+                {
+                    player.LastPlayedEventRatingChange = selectedPlayer.PointChange;
+                }
+            }
+
+            //_logger.LogInformation($"last played event - {sw.Elapsed.TotalMilliseconds}");
+
+            // first match date
+            var firstHistory = orderedMatches.LastOrDefault();
+            if (firstHistory != null)
+            {
+                player.StartPlayingDate = firstHistory.MatchDate;
+            }
+
+            //_logger.LogInformation($"first match date - {sw.Elapsed.TotalMilliseconds}");
+
+            //highest rating
+            var highestRating = GetHighestRating(matches, player);
+            player.HighestRating = highestRating.Item1;
+            player.HighestRatingStDev = highestRating.Item2;
+
+            //_logger.LogInformation($"highest rating - {sw.Elapsed.TotalMilliseconds}");
+
+            _logger.LogInformation($"update player {player.FullName}:{player.Id} summary {sw.Elapsed}");
+            sw.Stop();
+
+            return player;
+        }
+
+        private (int, int) GetHighestRating(List<Match> matches, Player player)
+        {
+            var wins = matches.Where(x => x.WinnerId == player.Id).Select(x => new { Rating = x.LoserOpponentMean, StDev = x.LoserOpponentStDev });
+            var loses = matches.Where(x => x.LoserId == player.Id).Select(x => new { Rating = x.WinnerOpponentMean, StDev = x.WinnerOpponentStDev});
+            var total = wins.Union(loses);
+            var highest = total.OrderByDescending(x => x.Rating).FirstOrDefault();
+            return (highest.Rating, highest.StDev);
         }
 
         private bool WinAllSets(string score)

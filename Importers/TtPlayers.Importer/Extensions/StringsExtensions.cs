@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TtPlayers.Importer.Domain.Models;
 
 namespace TtPlayers.Importer.Extensions
 {
@@ -210,27 +212,62 @@ namespace TtPlayers.Importer.Extensions
 
         public static string ToStateShortform(this string state)
         {
-            switch(state)
+            if (string.IsNullOrEmpty(state))
+                return "";
+
+            switch(state.ToLower())
             {
-                case "New South Wales":
+                case "act":
+                case "australian capital territory":
+                    return "ACT";
+                case "new south wales":
+                case "nsw":
                     return "NSW";
-                case "Tasmania":
+                case "tasmania":
+                case "tas":
                     return "TAS";
-                case "Western Australia":
+                case "western australia":
+                case "wa":
                     return "WA";
-                case "Queensland":
+                case "queensland":
+                case "qld":
                     return "QLD";
-                case "Victoria":
+                case "victoria":
+                case "vic":
                     return "VIC";
-                case "South Australia":
+                case "south australia":
+                case "sa":
                     return "SA";
-                case "Northern Territory":
+                case "northern territory":
+                case "nt":
                     return "NT";
-                case "Melbourne":
+                case "melbourne":
+                    return "VIC";
+                case "St Alban, VIC":
                     return "VIC";
             }
 
-            return state;
+            return "";
+        }
+
+        public static List<string> GetTagWords(this string val, List<string> NoiseWords = null)
+        {
+            var tags = new List<string>();
+
+            var name = val.Replace("!", " ").Replace("@", " ").Replace("#", " ").Replace("$", " ")
+                .Replace("%", " ").Replace("^", " ").Replace("&", " ").Replace("*", " ").Replace(",", " ").Replace(".", " ");
+
+            var words = name.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var word in words)
+            {
+                var trimedWord = word.ToLower().Trim();
+                if (NoiseWords!=null && NoiseWords.Contains(trimedWord)) continue;
+
+                tags.Add(trimedWord);
+            }
+
+            return tags;
         }
     }
 }

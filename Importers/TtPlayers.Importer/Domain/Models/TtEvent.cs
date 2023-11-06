@@ -14,11 +14,6 @@ namespace TtPlayers.Importer.Domain.Models
     [FirestoreData]
     public class TtEvent : IDocument
     {
-        public TtEvent()
-        {
-            PlayerRatings = new List<TtEventPlayerRatingChange> { };
-        }
-
         [BsonElement("_id")]
         [BsonId]
         [FirestoreProperty]
@@ -46,11 +41,18 @@ namespace TtPlayers.Importer.Domain.Models
 
         [FirestoreProperty]
         public string ClubId { get; set; }
+
         [FirestoreProperty]
         public string ClubName { get; set; }
 
         [FirestoreProperty]
-        public List<TtEventPlayerRatingChange> PlayerRatings { get; set; }
+        public int PlayerCount { get; set; }
+
+        [FirestoreProperty]
+        public int MatchCount { get; set; }
+
+        [FirestoreProperty]
+        public List<string> Tags { get; set; }
 
         [FirestoreProperty]
         public DateTime LastUpdated { get; set; }

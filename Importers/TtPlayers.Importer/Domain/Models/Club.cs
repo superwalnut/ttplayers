@@ -58,6 +58,9 @@ namespace TtPlayers.Importer.Domain.Models
         public string Status { get; set; }
 
         [FirestoreProperty]
+        public List<string> Tags { get; set; }
+
+        [FirestoreProperty]
         public DateTime LastUpdated { get; set; }
 
         // properties to push to firebase

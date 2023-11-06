@@ -28,6 +28,9 @@ export interface Player {
     TotalWins:number;
     TotalLoses:number;
 
+    YearToDateWins:number;
+    YearToDateLoses:number;
+
     WinRateFirstGame:number;
     WinRateSecondGame:number;
     WinRateThirdGame:number;
@@ -47,9 +50,7 @@ export interface Player {
     TotalOpponentCount:number;
     TotalBeatPlayersCount:number;
 
-    NationalRanking:number;
     NationalGenderRanking:number;
-    StateRanking:number;
     StateGenderRanking:number;
 
     IsJunior:boolean;

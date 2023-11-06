@@ -27,10 +27,10 @@ namespace TtPlayers.Importer.Applications.Scraper
     {
         private readonly SndttaSettings _settings;
         private readonly IHttpDownloader _httpDownloader;
-        private readonly ILogger<SndttaPlayerImporter> _logger;
+        private readonly ILogger<SndttaPlayerScraper> _logger;
 
         public SndttaPlayerScraper(IOptions<SndttaSettings> settings, IHttpDownloader downloader,
-            ILogger<SndttaPlayerImporter> logger)
+            ILogger<SndttaPlayerScraper> logger)
         {
             _settings = settings.Value;
             _httpDownloader = downloader;

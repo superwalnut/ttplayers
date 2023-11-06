@@ -7,36 +7,102 @@
 </div>
 <!-- header end-->
 
-
-<!-- section start -->
-<section class="agency blog blog-sec blog-list">
+<!-- Breadcrumb -->
+<section class="breadcrumb-section-main inner-3">
     <div class="container">
         <div class="row">
-            <div class="col-12 blog-sec blog-list" *ngFor="let blog of blogData">
-                <div class="blog-agency">
-                    <div class="row blog-contain pl-0 pr-0">
-                        <div class="col-xl-3 col-lg-4 col-lg-5 col-md-6 p-0">
-                            <div class=" text-center">
-                                <img [src]="blog.img" alt="" class="img-fluid blog-img">
+            <div class="col-12">
+                <div class="breadcrumb-contain">
+                    <div>
+                        <ul>
+                            <li><a href="/"><i class="fa fa-home"></i></a></li>
+                            <li><a><i class="fa fa-angle-double-right"></i> clubs</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 class="breadcrumb-txt">clubs</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb end -->
+
+<section class="agency blog blog-sec pt-4">
+    <div class="container no-side">
+        <div class="row">
+            <div class="col-12">
+                <!-- Search by states and Date Ranges -->
+                <div class="subscribe mb-5">
+                    <div class="center-content">
+                        <div class="form-group">
+                            <div class="flex search-form">
+                                <input type="text" (keyup.enter)="search()" [(ngModel)]="keyword" class="form-control text-capitalize"
+                                       placeholder="Please Enter a club's name" id="searchKeyword" name="searchKeyword">
+                                <div class="button-primary">
+                                    <div ngbDropdown class="button-select">
+                                        <button type="button" class="btn text-capitalize btn-outline-secondary" id="dropdownBasic1" ngbDropdownToggle>
+                                            {{state}}
+                                        </button>
+                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                            <button ngbDropdownItem (click)="selectState('NSW')">NSW</button>
+                                            <button ngbDropdownItem (click)="selectState('VIC')">VIC</button>
+                                            <button ngbDropdownItem (click)="selectState('ACT')">ACT</button>
+                                            <button ngbDropdownItem (click)="selectState('QLD')">QLD</button>
+                                            <button ngbDropdownItem (click)="selectState('WA')">WA</button>
+                                            <button ngbDropdownItem (click)="selectState('TAS')">TAS</button>
+                                            <button ngbDropdownItem (click)="selectState('NT')">NT</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" (click)="search()"
+                                            class="btn btn-default primary-btn text-white text-capitalize">
+                                        Search
+                                    </button>
+                                </div>
+                                
                             </div>
                         </div>
-                        <div class="col-xl-9 col-lg-7 col-md-6 p-0">
-                            <div class="img-container center-content">
-                                <div class="center-content">
-                                    <div class="blog-info">
-                                        <div class="m-b-20">
-                                            <div class="center-text">
-                                                <i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>
-                                                <h6 class="m-r-25 font-blog">{{blog.date}}</h6>
-                                                <i class="fa fa-map-marker m-r-10" aria-hidden="true"></i>
-                                                <h6 class="font-blog">{{blog.type}}</h6>
-                                            </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-4 col-md-6" *ngFor="let club of clubs">
+                <div class="blog-agency">
+                    <div class="blog-contain">
+                        <img src="assets/images/clubs/tt-club.png" alt="" class="img-fluid">
+                        <div class="img-container center-content">
+                            <div>
+                                <div class="blog-info">
+                                    <div class="m-b-20">
+                                        <div class="center-text">
+                                            <i class="fa fa-map-marker m-r-10" aria-hidden="true"></i>
+                                            <h6 class="font-blog">{{club.City?club.City+',':''}} {{club.State}}</h6>
                                         </div>
-                                        <h5 class="blog-head font-600">{{blog.title}}</h5>
-                                        <p class="para2">{{blog.content}}</p>
-                                        <div class="btn-bottom m-t-20">
-                                            <a href="#" class="text-uppercase">{{blog.btn}}</a>
+                                    </div>
+                                    <h5 class="blog-head font-600">{{club.Nickname}}</h5>
+                                    <h6>{{club.Name}}</h6>
+                                    <div class="para2 mt-4">
+                                        <div class="center-text mb-4">
+                                            <i class="fa fa-phone-square m-r-10" aria-hidden="true"></i>
+                                            <h6 class="font-blog"><a *ngIf="club.Phone" href="tel:{{club.Phone}}">{{club.Phone}}</a>{{!club.Phone?"-":""}}</h6>
                                         </div>
+                                        <div class="center-text mb-4" >
+                                            <i class="fa fa-envelope m-r-10" aria-hidden="true"></i>
+                                            <h6 class="font-blog"><a *ngIf="club.Email" href="mailto:{{club.Email}}">{{club.Email}}</a>{{!club.Email?"-":""}}</h6>
+                                        </div>
+                                        <div class="center-text mb-4" >
+                                            <i class="fa fa-internet-explorer m-r-10" aria-hidden="true"></i>
+                                            <h6 class="font-blog"><a *ngIf="club.Website" class="text-wrap" href="{{club.Website}}" target="_blank" rel="nofollow">{{displayWebsite(club.Website)}}</a>{{!club.Website?"-":""}}</h6>
+                                        </div>
+                                        <div class="center-text" *ngIf="club.Address1">
+                                            <i class="fa fa-home m-r-10" aria-hidden="true"></i>
+                                            <h6 class="font-blog">{{club.Address1}} {{club.Address2}}, {{club.State}} {{club.PostalCode}}</h6>
+                                        </div>
+                                    </div>
+                                    <div class="btn-bottom m-t-20">
+                                        <a href="/club/{{club.Id}}?state={{state}}" class="btn btn-default btn-white">View Details</a>
                                     </div>
                                 </div>
                             </div>
@@ -45,8 +111,15 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center" *ngIf="lastClub">
+                    <a (click)="loadMoreClubs()" class="btn btn-default btn-white btn-sm">Load more</a>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
-<!-- section end-->
+
 
 <app-gym-footer></app-gym-footer>

@@ -1,0 +1,132 @@
+<app-gym-nav></app-gym-nav>
+
+<!-- header Start-->
+<div class="header5-content">
+    <div class="player-list-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header3.jpg)'}">
+    </div>
+</div>
+<!-- header end-->
+
+<!-- Breadcrumb -->
+<section class="breadcrumb-section-main inner-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-contain">
+                    <div>
+                        <ul>
+                            <li><a href="/"><i class="fa fa-home"></i></a></li>
+                            <li><a href="/events"><i class="fa fa-angle-double-right"></i> events</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 class="breadcrumb-txt" *ngIf="event">{{event.Name}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb end -->
+
+<!-- section start -->
+<section class="agency blog-sec blog-sidebar single_blog_item" *ngIf="event">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="blog-block">
+                    <div class="blog-box">
+                        <div class="overflow-hidden img-container">
+                            <img class="img-fluid blur-up lazyload" [src]="event.State? 'assets/images/events/'+ event.State +'-lg.jpg': 'assets/images/events/AUS-lg.jpg'" alt="blog">
+                            <div class="img-text">
+                                <h3 class="mb-4">
+                                    <span class="m-r-25"><i class="fa fa-clock-o m-r-10" aria-hidden="true"></i> {{event.Date.toDate() | date: 'dd/MM/yyyy'}}</span>
+                                    <span><i class="fa fa-map-marker" aria-hidden="true"></i> {{event.State}}</span>
+                                </h3>
+                                <h1>{{event.Name}}</h1>
+                                <h5 class="mt-5">Participated Players: {{event.PlayerCount}} <i class="fa fa-user m-r-25"></i>
+                                </h5>
+                                <h5 class="mt-3">
+                                    Matched Played: {{event.MatchCount}} <i class="fa fa-gamepad"></i>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-text m-t-20">
+                    <h3 class="blog-head">WHO IS PLAYING</h3>
+                    <div class="blog-divider"></div>
+
+                    <div class="men-tab mb-4" *ngIf="eventMenPlayerRatings && eventMenPlayerRatings.length>0">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                              <a class="nav-link active" aria-current="page">Men</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="container pt-3">
+                                <div class="row">
+                                    <div class="col-xl-3 col-sm-6" *ngFor="let rating of eventMenPlayerRatings; let i = index;">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="container p-0">
+                                                    <div class="row">
+                                                        <div class="col-7">
+                                                            <div class="mb-2"><img src="assets/images/players/male.png"></div>
+                                                            <div class="no-wrap ranking-name"><a href="/player/{{rating.PlayerId}}">{{rating.PlayerName}}</a></div>
+                                                        </div>
+                                                        <div class="col-5 text-right">
+                                                            <div class="ranking-number">{{toPointChange(rating)}}</div>
+                                                            <div>{{toFinalRating(rating)}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="women-tab" *ngIf="eventWomenPlayerRatings && eventWomenPlayerRatings.length>0">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                              <a class="nav-link active" aria-current="page">Women</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="container pt-3">
+                                <div class="row">
+                                    <div class="col-xl-3 col-sm-6" *ngFor="let rating of eventWomenPlayerRatings; let i = index;">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="container p-0">
+                                                    <div class="row">
+                                                        <div class="col-7">
+                                                            <div class="mb-2"><img src="assets/images/players/male.png"></div>
+                                                            <div class="no-wrap ranking-name"><a href="/player/{{rating.PlayerId}}">{{rating.PlayerName}}</a></div>
+                                                        </div>
+                                                        <div class="col-5 text-right">
+                                                            <div class="ranking-number">{{toPointChange(rating)}}</div>
+                                                            <div>{{toFinalRating(rating)}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+<!-- section start -->
+
+<app-gym-footer></app-gym-footer>

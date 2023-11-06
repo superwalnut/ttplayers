@@ -35,7 +35,7 @@ namespace TtPlayers.Importer.Applications
 
         public async Task TransformMatches(bool forceAll = false)
         {
-            var eventMatches = await _eventMatchesRepository.FilterByAsync(x => true);//x.RequireTransform);
+            var eventMatches = await _eventMatchesRepository.FilterByAsync(x => x.RequireTransform);
             var events = await _eventRepository.FilterByAsync(x => true);
             var players = await _rcScraper.DownloadPlayersAsync();
 
@@ -44,7 +44,7 @@ namespace TtPlayers.Importer.Applications
             var sw = new Stopwatch();
             sw.Start();
 
-            int numThreads = 10; // Number of threads for parallel importing
+            int numThreads = 1; // Number of threads for parallel importing
             List<Task> importTasks = new List<Task>();
             for (int i = 0; i < numThreads; i++)
             {
@@ -58,19 +58,27 @@ namespace TtPlayers.Importer.Applications
         {
             for (int i = startIndex; i < eventMatches.Count; i += step)
             {
-                var evt = events.FirstOrDefault(e => e.Id == eventMatches[i].Id);
-
-                if (!forceAll)
+                try
                 {
-                    var importedMatches = await _matchRepository.FilterByAsync(x => x.EventId == evt.Id);
-                    if (importedMatches.Count == eventMatches[i].Matches.Count)
-                    {
-                        continue;
-                    }
-                }
+                    var evt = events.FirstOrDefault(e => e.Id == eventMatches[i].Id);
 
-                var matches = await TransformSingleEventMatches(evt, eventMatches[i], players);
-                await UpsertMatches(evt, matches, eventMatches[i]);
+                    if (!forceAll)
+                    {
+                        var importedMatches = await _matchRepository.FilterByAsync(x => x.EventId == evt.Id);
+                        if (importedMatches.Count == eventMatches[i].Matches.Count)
+                        {
+                            _logger.LogInformation($"Skipping {evt.Name}:{evt.Id}, already transformed previously");
+                            continue;
+                        }
+                    }
+
+                    var matches = await TransformSingleEventMatches(evt, eventMatches[i], players);
+                    await UpsertMatches(evt, matches, eventMatches[i]);
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex,ex.Message);
+                }
             }
         }
 

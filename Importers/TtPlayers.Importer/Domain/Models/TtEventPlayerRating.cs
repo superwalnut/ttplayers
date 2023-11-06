@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TtPlayers.Importer.Domain.Models
 {
     [FirestoreData]
-    public class TtEventPlayerRatingChange
+    public class TtEventPlayerRating
     {
         //PlayerID,PlayerName,PlayerCountry,InitialMean,InitialStDev,PointChange,FinalMean,FinalStDev
         [FirestoreProperty]
@@ -32,5 +32,8 @@ namespace TtPlayers.Importer.Domain.Models
 
         [FirestoreProperty]
         public int FinalStDev { get; set; }
+
+        [FirestoreProperty]
+        public string Gender { get; set; }
     }
 }

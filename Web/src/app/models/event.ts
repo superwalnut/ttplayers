@@ -1,5 +1,4 @@
 import { Timestamp } from 'firebase/firestore';
-import { EventPlayer } from './event-player';
 
 export interface TtEvent {
     Id:string;
@@ -10,7 +9,8 @@ export interface TtEvent {
     Director:string;
     LastUpdated: Timestamp;
     Name:string;
-    PlayerRatings:EventPlayer[];
+    PlayerCount:number;
+    MatchCount:number;
     State:string;
     SubmittedDate: Timestamp;
 }

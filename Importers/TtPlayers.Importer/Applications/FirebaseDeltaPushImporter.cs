@@ -8,7 +8,8 @@ namespace TtPlayers.Importer.Applications
     {
         Task PushPlayers();
         Task PushPlayerHistories();
-        Task PushEvents();
+        Task PushEvents(bool forceAll = false);
+        Task PushEventPlayers(bool forceAll = false);
         Task PushEventMatches(string playerId = null, int? actionCount = null);
 
         Task PushClubs();
@@ -27,6 +28,7 @@ namespace TtPlayers.Importer.Applications
         private readonly IDocumentRepository<SndttaTeam> _sndttaTeamRepository;
         private readonly IDocumentRepository<SndttaUpcomingEvent> _upcomingEventRepository;
         private readonly IDocumentRepository<Club> _clubRepository;
+        private readonly IDocumentRepository<TtEventPlayer> _eventPlayerRepository;
 
         private readonly IFireBaseRepository<Player> _firebasePlayerRepository;
         private readonly IFireBaseRepository<PlayerHistory> _firebasePlayerHistoryRepository;
@@ -35,6 +37,7 @@ namespace TtPlayers.Importer.Applications
         private readonly IFireBaseRepository<SndttaTeam> _firebaseSndttaTeamRepository;
         private readonly IFireBaseRepository<SndttaUpcomingEvent> _firebaseUpcomingEventRepository;
         private readonly IFireBaseRepository<Club> _firebaseClubRepository;
+        private readonly IFireBaseRepository<TtEventPlayer> _firebaseEventPlayerRepository;
 
         public FirebaseDeltaPushImporter(ILogger<FirebaseDeltaPushImporter> logger, 
             IDocumentRepository<Player> playerRepository,
@@ -44,13 +47,15 @@ namespace TtPlayers.Importer.Applications
             IDocumentRepository<SndttaTeam> sndttaTeamRepository,
             IDocumentRepository<SndttaUpcomingEvent> upcomingEventRepository,
             IDocumentRepository<Club> clubRepository,
+            IDocumentRepository<TtEventPlayer> eventPlayerRepository,
             IFireBaseRepository<Player> firebasePlayerRepository,
             IFireBaseRepository<PlayerHistory> firebasePlayerHistoryRepository,
             IFireBaseRepository<Match> firebaseEventMatchesRepository,
             IFireBaseRepository<SndttaTeam> firebaseSndttaTeamRepository,
             IFireBaseRepository<TtEvent> firebaseEventRepository, 
             IFireBaseRepository<SndttaUpcomingEvent> firebaseUpcomingEventRepository,
-            IFireBaseRepository<Club> firebaseClubRepository)
+            IFireBaseRepository<Club> firebaseClubRepository,
+            IFireBaseRepository<TtEventPlayer> firebaseEventPlayerRepository)
         {
             _logger = logger;
             _playerRepository = playerRepository;
@@ -67,6 +72,8 @@ namespace TtPlayers.Importer.Applications
             _firebaseUpcomingEventRepository = firebaseUpcomingEventRepository;
             _clubRepository = clubRepository;
             _firebaseClubRepository = firebaseClubRepository;
+            _eventPlayerRepository = eventPlayerRepository;
+            _firebaseEventPlayerRepository= firebaseEventPlayerRepository;
         }
 
         public async Task PushPlayers()
@@ -103,9 +110,17 @@ namespace TtPlayers.Importer.Applications
             _logger.LogInformation($"Pushing player history to firebase completed with status {result}");
         }
 
-        public async Task PushEvents()
+        public async Task PushEvents(bool forceAll = false)
         {
-            var events = await _eventRepository.FilterByAsync(x => x.RequireDeltaPush);
+            var events = new List<TtEvent>();
+            if (!forceAll)
+            {
+                events = await _eventRepository.FilterByAsync(x => x.RequireDeltaPush);
+            } else
+            {
+                events = await _eventRepository.FilterByAsync(x => true);
+            }
+            
             _logger.LogInformation($"Pushing {events.Count} events to firebase");
 
             await _firebaseEventRepository.UpdateBulk(events);
@@ -117,6 +132,32 @@ namespace TtPlayers.Importer.Applications
 
             var result = await _eventRepository.UpsertManyAsync(events);
             _logger.LogInformation($"Pushing event to firebase completed with status {result}");
+        }
+
+        public async Task PushEventPlayers(bool forceAll = false)
+        {
+            var eventPlayers = new List<TtEventPlayer>();
+            if (!forceAll)
+            {
+                eventPlayers = await _eventPlayerRepository.FilterByAsync(x => x.RequireDeltaPush);
+            } 
+            else
+            {
+                eventPlayers = await _eventPlayerRepository.FilterByAsync(x => true);
+            }
+
+            _logger.LogInformation($"Pushing {eventPlayers.Count} event-players to firebase");
+
+            await _firebaseEventPlayerRepository.UpdateBulk(eventPlayers);
+
+            eventPlayers.ForEach(x => {
+                x.RequireDeltaPush = false;
+                x.LastDeltaPushDate = DateTime.Now;
+            });
+
+            var result = await _eventPlayerRepository.UpsertManyAsync(eventPlayers);
+            _logger.LogInformation($"Pushing event to firebase completed with status {result}");
+
         }
 
         public async Task PushEventMatches(string playerId = null, int? actionCount = null)

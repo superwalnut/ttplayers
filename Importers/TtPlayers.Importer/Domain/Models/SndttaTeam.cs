@@ -16,7 +16,7 @@ namespace TtPlayers.Importer.Domain.Models
     {
         public SndttaTeam()
         {
-            Players = new List<Player>();
+            Players = new List<SndttaTeamPlayer>();
         }
 
         [BsonElement("_id")]
@@ -28,7 +28,7 @@ namespace TtPlayers.Importer.Domain.Models
         public string? ShortName { get; set; }
 
         [FirestoreProperty]
-        public List<Player> Players { get; set; }
+        public List<SndttaTeamPlayer> Players { get; set; }
 
         [FirestoreProperty]
         public DateTime LastUpdated { get; set; }

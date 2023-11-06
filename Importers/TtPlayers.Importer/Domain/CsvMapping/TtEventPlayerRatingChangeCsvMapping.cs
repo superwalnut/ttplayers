@@ -8,7 +8,7 @@ using TtPlayers.Importer.Domain.Models;
 
 namespace TtPlayers.Importer.Domain.CsvMapping
 {
-    public class TtEventPlayerRatingChangeCsvMapping : ClassMap<TtEventPlayerRatingChange>
+    public class TtEventPlayerRatingChangeCsvMapping : ClassMap<TtEventPlayerRating>
     {
         public TtEventPlayerRatingChangeCsvMapping()
         {

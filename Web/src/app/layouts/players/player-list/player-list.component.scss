@@ -52,7 +52,7 @@
 
 .search-form {
     input {
-        padding: 16px 36px 16px 16px;
+        padding: 16px 45% 16px 16px;
         border:solid 1px #c2c2c2;
     }
     .button-primary {
@@ -64,9 +64,16 @@
     }
 }
 
+.button-select {
+    button {
+        padding:13px !important;
+    }
+}
+
 .empty-cart-cls {
     height:100%;
 }
+
 
 @media only screen and (max-width: 1600px) {
 
@@ -104,6 +111,13 @@
         font-weight: 600;
         font-size:60px;
     }
+
+    .button-select {
+        button {
+            padding:14px;
+        }
+    }
+
 }
 
 @media only screen and (min-width: 768px) {
@@ -132,6 +146,18 @@
     .rc-id{
         text-align: center !important;
     }
+
+    .search-form {
+        input {
+            padding-right: 16px;
+            border:solid 1px #c2c2c2;
+        }
+    }
+
+    .last-played-label {
+        display:none;
+    }
+
 }
 
 @media only screen and (max-width: 480px) {

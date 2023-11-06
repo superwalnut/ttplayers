@@ -71,17 +71,20 @@
                     <h4 class="service-heading"> Ranking
                     </h4>
                     <hr>
-                    <div *ngIf="player.NationalRanking>0" class="player-activity-summary">
+                    <div *ngIf="player.NationalGenderRanking>0 && player.StateGenderRanking>0" class="player-activity-summary">
                         {{player.FirstName}} has ranking of
                         <ul class="list-group list-group-flush">
-                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.NationalRanking }}</strong> in Australia.</li>
                             <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.NationalGenderRanking }}</strong> in {{player.Gender=="M"?"Men":"Women"}} of Australia.</li>
-                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.StateRanking}}</strong> in {{player.State}}.</li>
                             <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.StateGenderRanking}}</strong> in {{player.Gender=="M"?"Men":"Women"}} of {{player.State}}.</li>
                         </ul>
                     </div>
-                    <div *ngIf="player.NationalRanking<=0" class="player-activity-summary">
-                        {{player.FirstName}} has no ranking yet.
+                    <div *ngIf="player.NationalGenderRanking<=0 || player.StateGenderRanking<=0" class="player-activity-summary">
+                        <ul class="list-group list-group-flush">
+                            <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>{{player.FirstName}} has no ranking yet.</li>
+                        </ul>
+                        <div class="alert alert-secondary mt-2 alert-sm" role="alert">
+                            We only ranked players who has a standard deviation that is smaller than 100. This is because otherwise their playing strength is relatively uncertain.
+                        </div>
                     </div>
                 </div>
             </div>

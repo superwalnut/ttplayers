@@ -1,17 +1,30 @@
 <h5 class="blog-title">Team mates</h5>
 <div class="sidebar-container" *ngIf="teamPlayers">
-    <div class="container post-container p-0" *ngFor="let teamPlayer of teamPlayers;let i = index">
-        <div class="row m-l-0" *ngIf="i<count">
-            <div class="col-5 p-0">
-                <div class="img-fluid team-player-ico border-around overflow-hide">{{toInitials(teamPlayer)}}</div>
-                <div class="badge badge-blue">{{teamPlayer.Rating}}</div>    
-            </div>
-            <div class="col-7">
-                <h5 class="post-head text-nowrap"><a href="/player/{{teamPlayer.Id}}" title="{{teamPlayer.FullName}}">{{teamPlayer.FullName}}</a></h5>
-                <h6 class="date">{{teamPlayer.Team}}</h6>
-            </div>
+    <div class="container p-0">
+        <div class="row">
+            <ng-container *ngFor="let teamPlayer of teamPlayers;let i = index">
+                <div class="col-lg-12 col-md-3 col-sm-12 mb-4" *ngIf="i<count">
+                    <div class="container post-container p-0">
+                        <div class="row m-l-0" >
+                            <div class="col-5 p-0">
+                                <div class="img-fluid team-player-ico border-around overflow-hide">
+                                    <!-- {{toInitials(teamPlayer)}} -->
+                                    <!-- <i id="gender-ico" class="fa" aria-hidden="true" [ngClass]="{'blue-text fa-male': teamPlayer.Gender == 'M', 'red-text fa-female': teamPlayer.Gender == 'F'}"></i> -->
+                                    <img src="assets/images/players/male.png">
+                                </div>
+                                <div class="badge badge-blue">{{toRating(teamPlayer)}}</div>    
+                            </div>
+                            <div class="col-7">
+                                <h5 class="post-head text-nowrap"><a href="/player/{{teamPlayer.Id}}" title="{{teamPlayer.FullName}}">{{teamPlayer.FullName}}</a></h5>
+                                <h6 class="date">{{teamPlayer.Team}}</h6>
+                            </div>
+                        </div>
+                    </div>            
+                </div>
+            </ng-container>
         </div>
     </div>
+
     <div class="text-center" *ngIf="count< teamPlayers.length">
         <a (click)="loadMore()" class="btn btn-default btn-white btn-sm">Load more</a>
     </div>

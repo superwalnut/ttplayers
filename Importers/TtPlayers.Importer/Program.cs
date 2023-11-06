@@ -17,7 +17,6 @@ namespace TtPlayers.Importer
             public bool AllImport { get; set; }
 
             // import by actions
-
             [Option("player-id", Required = false, HelpText = "Only apply to player xxx.")]
             public string PlayerId { get; set; }
 
@@ -26,6 +25,8 @@ namespace TtPlayers.Importer
 
             [Option("force-all", Required = false, HelpText = "force to apply to all!.")]
             public bool ForceAll { get; set; } = false;
+
+
 
             [Option('p', "player", Required = false, HelpText = "Import players.")]
             public bool PlayerImport { get; set; }
@@ -36,7 +37,7 @@ namespace TtPlayers.Importer
             [Option('e', "event", Required = false, HelpText = "Import tt events.")]
             public bool EventImport { get; set; }
 
-            [Option('m', "match", Required = false, HelpText = "Import tt event matches.")]
+            [Option('m', "event-match", Required = false, HelpText = "Import tt event matches.")]
             public bool EventMatchesImport { get; set; }
 
             [Option('c', "club", Required = false, HelpText = "Import clubs.")]
@@ -48,6 +49,27 @@ namespace TtPlayers.Importer
             [Option('u', "sndtta-upcoming", Required = false, HelpText = "Import sndtta upcoming events.")]
             public bool SndttaUpcomingEvent { get; set; }
 
+            [Option("event-player", Required = false, HelpText = "Import event players.")]
+            public bool EventPlayerImport { get; set; }
+
+            [Option("event-refresh-match-player-count", Required = false, HelpText = "Recount event matches and players.")]
+            public bool CountEventMatchAndPlayer { get; set; }
+
+            [Option("event-player-refresh-gender", Required = false, HelpText = "Refresh event players genders.")]
+            public bool Refresh_Gender_EventPlayers { get; set; }
+
+            [Option("event-player-refresh-eventdate", Required = false, HelpText = "Refresh event players event date.")]
+            public bool Refresh_EventDate_EventPlayers { get; set; }
+            
+            [Option("player-summary", Required = false, HelpText = "Import player summary.")]
+            public bool PlayerSummaryImport { get; set; }
+            
+            [Option("player-ranking", Required = false, HelpText = "Import player ranking.")]
+            public bool PlayerRankingImport { get; set; }
+
+            [Option("player-sndtta-team", Required = false, HelpText = "Import player sndtta teams.")]
+            public bool PlayerSndttaTeamImport { get; set; }
+
             // pushing to firestore
 
             [Option("push-player", Required = false, HelpText = "Push players.")]
@@ -58,6 +80,9 @@ namespace TtPlayers.Importer
 
             [Option("push-event", Required = false, HelpText = "Push events.")]
             public bool PushEvent { get; set; }
+
+            [Option("push-event-player", Required = false, HelpText = "Push event players.")]
+            public bool PushEventPlayers { get; set; }
 
             [Option("push-match", Required = false, HelpText = "Push event matches.")]
             public bool PushEventMatches { get; set; }
@@ -79,7 +104,6 @@ namespace TtPlayers.Importer
 
             
             var playerImporter = host.Services.GetRequiredService<IRatingCentralPlayersImporter>();
-            var sndttaPlayerImporter = host.Services.GetRequiredService<ISndttaPlayerImporters>();
             var eventImporter = host.Services.GetRequiredService<IRatingCentralEventsImporter>();
             var matchTransformer = host.Services.GetRequiredService<IRatingCentralMatchTransformer>();
             var playerHistoryImporter = host.Services.GetRequiredService<IRatingCentralPlayerHistoryImporter>();
@@ -99,36 +123,82 @@ namespace TtPlayers.Importer
                            clubImporter.Import().GetAwaiter().GetResult();
                            // import events, also discover player changes 
                            eventImporter.ImportEvents(o.ForceAll).GetAwaiter().GetResult();
+                           // import event-players
+                           eventImporter.ImportEventPlayers().GetAwaiter().GetResult();
                            // import event-matches
                            eventImporter.ImportEventMatches().GetAwaiter().GetResult();
                            // transform matches
                            matchTransformer.TransformMatches(o.ForceAll).GetAwaiter().GetResult();
                            // import players (include import player-history)
-                           playerImporter.Import(o.ForceAll).GetAwaiter().GetResult();
+                           playerImporter.ImportPlayer().GetAwaiter().GetResult();
+                           // import sndtta team
+                           playerImporter.ImportSndttaTeam().GetAwaiter().GetResult();
+                           // import ranking
+                           playerImporter.ImportPlayerRanking().GetAwaiter().GetResult();
+                           // import summary
+                           playerImporter.ImportPlayerSummary().GetAwaiter().GetResult();
                        }
-                       if (o.PlayerImport)
+                       else if (o.ClubImport)
                        {
-                           // players need to be updated regularly
-                           playerImporter.Import(o.ForceAll).GetAwaiter().GetResult();
-                       } 
-                       else if (o.SndttaPlayerHistoryImport)
-                       {
-                           // sndtta players need to be updated regularly after sndtta players import
-                           playerHistoryImporter.Import().GetAwaiter().GetResult();
+                           clubImporter.Import().GetAwaiter().GetResult();
                        }
                        else if (o.EventImport)
                        {
                            // events need to be updated regularly only refresh the new events
-                           eventImporter.ImportEvents().GetAwaiter().GetResult();
+                           eventImporter.ImportEvents(o.ForceAll).GetAwaiter().GetResult();
                        }
                        else if (o.EventMatchesImport)
                        {
                            // events matches need to be updated after new events import
                            eventImporter.ImportEventMatches().GetAwaiter().GetResult();
                        }
+                       else if (o.CountEventMatchAndPlayer)
+                       {
+                           eventImporter.Refresh_EventMatchAndPlayers_Counts().GetAwaiter().GetResult();
+                       }
+                       else if (o.Refresh_Gender_EventPlayers)
+                       {
+                           eventImporter.Refresh_Gender_EventPlayers().GetAwaiter().GetResult();
+                       }
+                       else if (o.Refresh_EventDate_EventPlayers)
+                       {
+                           eventImporter.Refresh_EventDate_EventPlayers().GetAwaiter().GetResult();
+                       }
+                       else if (o.SndttaPlayerHistoryImport)
+                       {
+                           // sndtta players need to be updated regularly after sndtta players import
+                           playerHistoryImporter.Import().GetAwaiter().GetResult();
+                       }
                        else if (o.EventMatchesTransform)
                        {
                            matchTransformer.TransformMatches(o.ForceAll).GetAwaiter().GetResult();
+                       }
+                       else if (o.PlayerImport)
+                       {
+                           // import players (include import player-history)
+                           playerImporter.ImportPlayer().GetAwaiter().GetResult();
+                           // import sndtta team
+                           playerImporter.ImportSndttaTeam().GetAwaiter().GetResult();
+                           // import ranking
+                           playerImporter.ImportPlayerRanking().GetAwaiter().GetResult();
+                           // import summary
+                           playerImporter.ImportPlayerSummary().GetAwaiter().GetResult();
+                       }
+                       else if (o.PlayerSummaryImport)
+                       {
+                           playerImporter.ImportPlayerSummary().GetAwaiter().GetResult();
+                       }
+                       else if (o.PlayerRankingImport)
+                       {
+                           playerImporter.ImportPlayerRanking().GetAwaiter().GetResult();
+                       }
+                       else if (o.PlayerSndttaTeamImport)
+                       {
+                           playerImporter.ImportSndttaTeam().GetAwaiter().GetResult();
+                       }
+                       else if(o.EventPlayerImport)
+                       {
+                           eventImporter.ImportEventPlayers(o.ForceAll).GetAwaiter().GetResult();
                        }
                        else if(o.SndttaUpcomingEvent)
                        {
@@ -145,7 +215,11 @@ namespace TtPlayers.Importer
                        }
                        else if(o.PushEvent)
                        {
-                           firebasePusher.PushEvents().GetAwaiter().GetResult();
+                           firebasePusher.PushEvents(o.ForceAll).GetAwaiter().GetResult();
+                       }
+                       else if(o.PushEventPlayers)
+                       {
+                           firebasePusher.PushEventPlayers(o.ForceAll).GetAwaiter().GetResult();
                        }
                        else if(o.PushEventMatches)
                        {
@@ -158,10 +232,6 @@ namespace TtPlayers.Importer
                        else if(o.PushSndttaUpcoming)
                        {
                            firebasePusher.PushSndttaUpcomingEvents().GetAwaiter().GetResult();
-                       }
-                       else if (o.ClubImport)
-                       {
-                           clubImporter.Import().GetAwaiter().GetResult();
                        }
                        else if (o.PushClub)
                        {

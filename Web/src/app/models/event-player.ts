@@ -1,9 +1,9 @@
+import { Timestamp } from 'firebase/firestore';
+import { EventPlayerRating } from './event-player-rating';
 export interface EventPlayer {
-    FinalMean:number;
-    FinalStDev:number;
-    InitialMean:number;
-    InitialStDev:number;
-    PlayerId:string;
-    PlayerName:string;
-    PointChange:number;
+
+    Id:string;
+    EventDate:Timestamp;
+    LastUpdated:Timestamp;
+    Players:EventPlayerRating[];
 }

@@ -20,7 +20,11 @@ export class TeamPlayersComponent implements OnInit{
 
   toRating(player:Player)
   {
-    return `${player.Rating}±${player.StDev}`;
+    if(player.StDev>0){
+      return `${player.Rating}±${player.StDev}`;
+    }
+    
+    return `${player.Rating}`;
   }
 
   loadMore() {

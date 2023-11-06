@@ -85,10 +85,12 @@ export class PlayerDetailComponent implements OnInit {
                 this.teamPlayers.push({
                   Id: player.Id,
                   Rating: player.Rating,
+                  StDev: player.StDev,
                   Team: teams[i].Id,
                   FullName: player.FullName.trim(),
                   FirstName: player.FirstName.trim(),
-                  LastName: player.LastName.trim()
+                  LastName: player.LastName.trim(),
+                  Gender: player.Gender
                 });
               }
             }
@@ -145,7 +147,7 @@ export class PlayerDetailComponent implements OnInit {
       if (result) {
         result += ", ";
       }
-      result += `${months} ${months === 1 ? 'Mth' : 'Mths'}`;
+      result += `${months} ${months === 1 ? 'M' : 'M'}`;
     }
 
     // if (days > 0) {
@@ -175,5 +177,17 @@ export class PlayerDetailComponent implements OnInit {
       const firstInitial = player.FirstName.charAt(0);
       const lastInitial = player.LastName.charAt(0);
       return `${firstInitial}${lastInitial}`;
+  }
+
+  toGenderRanking(player:Player) {
+    if(player.Gender == "M"){
+      return "(Men's)";
+    }
+
+    if(player.Gender == "F"){
+      return "(Women's)";
+    }
+
+    return "";
   }
 }

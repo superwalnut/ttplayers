@@ -148,13 +148,7 @@ namespace TtPlayers.Importer.Domain.Models
         //Ranking
 
         [FirestoreProperty]
-        public int NationalRanking { get; set; }
-
-        [FirestoreProperty]
         public int NationalGenderRanking { get; set; }
-
-        [FirestoreProperty]
-        public int StateRanking { get; set; }
 
         [FirestoreProperty]
         public int StateGenderRanking { get; set; }

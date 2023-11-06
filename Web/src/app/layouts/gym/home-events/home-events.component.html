@@ -6,7 +6,7 @@
                 <div class="title">
                     <div class="text-center">
                         <div>
-                            <h6 class=" borders-before"><span>Current & Upcoming</span></h6>
+                            <h6 class=" borders-before"><span>Recent</span></h6>
                         </div>
                         <div class="main-title">
                             <h2>Table Tennis Events</h2>
@@ -15,12 +15,17 @@
                 </div>
             </div>
             <div class="col-12">
-                <owl-carousel-o [options]="trainercarouselOptions" class="trainers-slider">
-                    <ng-container *ngFor="let trainer of trainercarousel">
+                <owl-carousel-o [options]="trainercarouselOptions" class="trainers-slider" *ngIf="events">
+                    <ng-container *ngFor="let evt of events">
                         <ng-template carouselSlide class="item">
-                            <img [src]="trainer.img" alt="" class="img-fluid">
+                            <!-- <img [src]="trainer.img" alt="" class="img-fluid"> -->
+                            <div class="img-fluid border-shadow" [ngStyle]="{'background-image': 'url(assets/images/events/AUS-dark.jpg)'}">
+                                <h3 class="m-b-10">{{evt.Name}}</h3>
+                                <a href="/event/{{evt.Id}}" class="btn btn-default btn-white btn-sm">View Detail</a>
+                            </div>
                             <div class="text-center trainers-info">
-                                <h3 class="m-b-10">{{trainer.title}}</h3>
+                                <h5>{{evt.Name}}</h5>
+                                <div>{{toDisplayDate(evt) | date: 'dd/MM/yyyy'}}</div>
                             </div>
                         </ng-template>
                     </ng-container>

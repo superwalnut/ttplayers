@@ -36,15 +36,31 @@
             <div class="col-lg-9">
                 <div class="row">
                     <div class="col-12 blog-sec blog-list" >
-                        <div class="subscribe">
+                        <div class="subscribe mb-5">
                             <div class="center-content">
                                 <div class="form-group">
                                     <div class="flex search-form">
                                         <input type="text" (keyup.enter)="search()" [(ngModel)]="keyword" class="form-control text-capitalize"
                                                placeholder="Please Enter a player's name" id="username" name="username">
                                         <div class="button-primary">
+                                            <div ngbDropdown class="button-select">
+                                                <button type="button" class="btn text-capitalize btn-outline-secondary" id="ddState" ngbDropdownToggle>
+                                                    {{state?state:"State"}}
+                                                </button>
+                                                <div ngbDropdownMenu aria-labelledby="ddState">
+                                                    <button ngbDropdownItem (click)="selectState('')">All</button>
+                                                    <button ngbDropdownItem (click)="selectState('ACT')">ACT</button>
+                                                    <button ngbDropdownItem (click)="selectState('NSW')">NSW</button>                                        
+                                                    <button ngbDropdownItem (click)="selectState('NT')">NT</button>
+                                                    <button ngbDropdownItem (click)="selectState('QLD')">QLD</button>
+                                                    <button ngbDropdownItem (click)="selectState('SA')">SA</button>
+                                                    <button ngbDropdownItem (click)="selectState('TAS')">TAS</button>
+                                                    <button ngbDropdownItem (click)="selectState('VIC')">VIC</button>
+                                                    <button ngbDropdownItem (click)="selectState('WA')">WA</button>
+                                                </div>
+                                            </div>
                                             <button type="button" (click)="search()"
-                                                    class=" btn btn-default primary-btn text-white text-capitalize">
+                                                    class="btn btn-default primary-btn text-white text-capitalize">
                                                 Search
                                             </button>
                                         </div>
@@ -52,7 +68,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 empty-cart-cls text-center mt-5" *ngIf='!keyword || players.length <=0'>
+                        <div class="col-md-12 empty-cart-cls text-center mt-5" *ngIf='showNoResult'>
                             <img src="assets/images/empty-wishlist.png" alt="Empty cart" title="No Players Found">
                             <h3 class="mt-4"><b>No Players Found</b></h3>
                             <h4>Please try another search.</h4>
@@ -71,41 +87,41 @@
                                                 <div class="m-b-20">
                                                     <div class="center-text">
                                                         <i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>
-                                                        <h6 class="m-r-25 font-blog">Last Played: {{player.LastPlayed.toDate() | date:"dd/MM/yyyy"}}</h6>                                                        
+                                                        <h6 class="m-r-25 font-blog" ngbTooltip="Last Played Date" triggers="click:blur"><span class="last-played-label">Last Played:&nbsp;</span>{{player.LastPlayed.toDate() | date:"dd/MM/yyyy"}}</h6>                                                        
                                                         <i class="fa fa-map-marker m-r-10" aria-hidden="true"></i>
                                                         <h6 class="font-blog m-r-25">{{player.State}}</h6>
                                                         <i class="fa m-r-10" aria-hidden="true" [ngClass]="{'blue-text fa-male': player.Gender == 'M', 'red-text fa-female': player.Gender == 'F'}"></i>
                                                         <h6 class="font-blog m-r-25" [ngClass]="{'blue-text': player.Gender == 'M', 'red-text': player.Gender == 'F'}">{{player.Gender}}</h6>
                                                         <i class="fa fa-list-ol m-r-10" aria-hidden="true" *ngIf="player.Division > 0"></i>
-                                                        <h6 class="font-blog m-r-25" *ngIf="player.Division > 0">{{toDivision(player)}}</h6>
+                                                        <h6 class="font-blog" *ngIf="player.Division > 0">{{toDivision(player)}}</h6>
                                                     </div>
                                                 </div>
                                                 <div class="container-fluid mt-2">
                                                     <div class="row">
-                                                        <div class="col-xl-8 col-md-7">
+                                                        <div class="col-xl-8 col-md-9">
                                                             <h5 class="blog-head font-600"><span class="m-r-25">{{player.FullName}}</span><span class="text-muted">{{toRating(player)}}</span></h5>
                                                         </div>
-                                                        <div class="col-xl-4 col-md-5 text-right align-middle rc-id">
+                                                        <div class="col-xl-4 col-md-3 text-right align-middle rc-id pt-2">
                                                             RC ID: {{player.Id}}
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-xl-3 col-6">
+                                                        <div class="col-xl-3 col-6 mb-3">
                                                             <h5 class="text-center"><i class="fa fa-trophy m-r-0" aria-hidden="true"></i></h5>
                                                             <h4 class="text-center">{{player.TotalWins}}</h4>
                                                             <h6 class="text-center">Match Wins</h6>
                                                         </div>
-                                                        <div class="col-xl-3 col-6">
+                                                        <div class="col-xl-3 col-6 mb-3">
                                                             <h5 class="text-center"><i class="fa fa-bar-chart m-r-0" aria-hidden="true"></i></h5>
                                                             <h4 class="text-center">{{player.TotalWins / player.TotalPlayedMatches | percent }}</h4> 
                                                             <h6 class="text-center">Winning</h6>
                                                         </div>
-                                                        <div class="col-xl-3 col-6 counter-container">
+                                                        <div class="col-xl-3 col-6 mb-3">
                                                             <h5 class="text-center"><i class="fa fa-list m-r-0" aria-hidden="true"></i></h5>
                                                             <h4 class="text-center">{{player.TotalPlayedMatches}}</h4>
                                                             <h6 class="text-center">Matches</h6>
                                                         </div>
-                                                        <div class="col-xl-3 col-6 counter-container">
+                                                        <div class="col-xl-3 col-6 mb-3">
                                                             <h5 class="text-center"><i class="fa fa-calendar-check-o m-r-0" aria-hidden="true"></i></h5>
                                                             <h4 class="text-center">{{player.TotalPlayedEvents}}</h4>
                                                             <h6 class="text-center">Tournaments</h6>
@@ -120,6 +136,13 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="text-center" *ngIf="lastPlayer">
+                            <a (click)="loadMorePlayers()" class="btn btn-default btn-white btn-sm">Load more</a>
                         </div>
                     </div>
                 </div>

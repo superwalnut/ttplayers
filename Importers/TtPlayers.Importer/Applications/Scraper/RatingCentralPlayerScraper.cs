@@ -21,7 +21,7 @@ namespace TtPlayers.Importer.Applications.Scraper
 
         Task<IList<TtEvent>> DownloadEventsAsync();
 
-        Task<IList<TtEventPlayerRatingChange>> DownloadEventPlayerRatingsAsync(string eventId);
+        Task<IList<TtEventPlayerRating>> DownloadEventPlayerRatingsAsync(string eventId);
 
         Task<TtEventMatches> DownloadEventMatchesAsync(string eventId);
 
@@ -34,7 +34,7 @@ namespace TtPlayers.Importer.Applications.Scraper
         private readonly ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> _playerHistoryCsvService;
         private readonly ICsvService<Club, ClubCsvMapping> _clubCsvService;
         private readonly ICsvService<TtEventCsvModel, TtEventCsvMapping> _eventCsvService;
-        private readonly ICsvService<TtEventPlayerRatingChange, TtEventPlayerRatingChangeCsvMapping> _eventRatingChangeCsvService;
+        private readonly ICsvService<TtEventPlayerRating, TtEventPlayerRatingChangeCsvMapping> _eventRatingChangeCsvService;
         private readonly ICsvService<TtEventMatchEntry, TtEventMatchCsvMapping> _eventMatchEntryCsvService;
 
         public RatingCentralScraper(IOptions<SndttaSettings> settings,
@@ -42,7 +42,7 @@ namespace TtPlayers.Importer.Applications.Scraper
             ICsvService<Club, ClubCsvMapping> clubCsvService,
             ICsvService<PlayerHistoryEntry, PlayerHistoryCsvMapping> playerHistoryCsvService,
             ICsvService<TtEventCsvModel, TtEventCsvMapping> eventCsvService,
-            ICsvService<TtEventPlayerRatingChange, TtEventPlayerRatingChangeCsvMapping> eventRatingChangeCsvService,
+            ICsvService<TtEventPlayerRating, TtEventPlayerRatingChangeCsvMapping> eventRatingChangeCsvService,
             ICsvService<TtEventMatchEntry, TtEventMatchCsvMapping> eventMatchEntryCsvService)
         {
             _settings = settings.Value;
@@ -124,7 +124,7 @@ namespace TtPlayers.Importer.Applications.Scraper
             return events;
         }
 
-        public async Task<IList<TtEventPlayerRatingChange>> DownloadEventPlayerRatingsAsync(string eventId)
+        public async Task<IList<TtEventPlayerRating>> DownloadEventPlayerRatingsAsync(string eventId)
         {
             //download json event player rating changes
             var url = _settings.RcAusEventSummaryUrl.Replace("{0}", eventId);

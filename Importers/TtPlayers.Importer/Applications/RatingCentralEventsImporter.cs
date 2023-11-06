@@ -19,6 +19,13 @@ namespace TtPlayers.Importer.Applications
     {
         Task ImportEvents(bool forceAll = false);
         Task ImportEventMatches();
+        Task ImportEventPlayers(bool forceAll = false);
+
+        Task Refresh_EventMatchAndPlayers_Counts();
+
+        Task Refresh_EventDate_EventPlayers();
+
+        Task Refresh_Gender_EventPlayers();
     }
 
     public class RatingCentralEventsImporter : RatingCentralImporterBase, IRatingCentralEventsImporter
@@ -28,6 +35,8 @@ namespace TtPlayers.Importer.Applications
         private readonly IDocumentRepository<TtEventMatches> _eventMatchesRepository;
         private readonly IDocumentRepository<PlayerUpdate> _playerUpdateRepository;
         private readonly IDocumentRepository<Club> _clubRepository;
+        private readonly IDocumentRepository<TtEventPlayer> _eventPlayerRepository;
+        private readonly IDocumentRepository<Player> _playerRepository;
 
         private readonly IRatingCentralScraper _rcScraper;
 
@@ -35,11 +44,13 @@ namespace TtPlayers.Importer.Applications
             IDocumentRepository<TtEvent> eventRepository,
             IDocumentRepository<TtEventMatches> eventMatchesRepository,
             ICsvService<TtEventMatchEntry, TtEventMatchCsvMapping> eventMatchEntryCsvService,
-            ICsvService<TtEventPlayerRatingChange, TtEventPlayerRatingChangeCsvMapping> eventRatingChangeCsvService,
+            ICsvService<TtEventPlayerRating, TtEventPlayerRatingChangeCsvMapping> eventRatingChangeCsvService,
             ICsvService<TtEventCsvModel, TtEventCsvMapping> eventCsvService,
             IDocumentRepository<PlayerUpdate> playerUpdateRepository,
             ILogger<RatingCentralEventsImporter> logger,
             IDocumentRepository<Club> clubRepository,
+            IDocumentRepository<TtEventPlayer> eventPlayerRepository,
+            IDocumentRepository<Player> playerRepository,
             IRatingCentralScraper rcScraper)
             :base(logger)
         {
@@ -48,6 +59,8 @@ namespace TtPlayers.Importer.Applications
             _playerUpdateRepository= playerUpdateRepository;
             _rcScraper = rcScraper;
             _clubRepository= clubRepository;
+            _eventPlayerRepository = eventPlayerRepository;
+            _playerRepository= playerRepository;
             _logger = logger;
         }
 
@@ -77,18 +90,17 @@ namespace TtPlayers.Importer.Applications
                     // enrich state & club name from club entities
                     EnrichClubInfo(evt, clubs);
 
-                    // get player rating
-                    var ratings = await GetPlayerRatingChanges(evt);
-                    _logger.LogInformation($"Importing {ratings.Count} player ratings for event {evt.Name}:{evt.Id}...");
-
                     // update
-                    evt.PlayerRatings = ratings.ToList();
                     evt.RequireDeltaPush = true;
-                    await _eventRepository.UpsertAsync(evt, x => x.Id == evt.Id);
+
+                    // set tags
+                    evt.Tags = SetEventTags(evt);
 
                     index--;
-                    Thread.Sleep(200);
                 }
+
+                await _eventRepository.UpsertManyAsync(pendingEvents);
+
                 _logger.LogInformation($"Finish upserting {pendingEvents.Count()} events.");
             }
         }
@@ -105,10 +117,139 @@ namespace TtPlayers.Importer.Applications
             var index = pendingEvents.Count();
             foreach (var evt in pendingEvents)
             {
-                await ImportSingleEventMatches(evt);
+                var matches = await _rcScraper.DownloadEventMatchesAsync(evt.Id);
+                _logger.LogInformation($"Start importing {matches.Matches.Count} matches for event:{evt.Id}.");
+                await _eventMatchesRepository.UpsertAsync(matches, x => x.Id == evt.Id);
+
+
+                //Update event with match statistics
+                evt.MatchCount = matches.Matches.Count;
+                await _eventRepository.UpsertAsync(evt, x => x.Id == evt.Id);
+
                 _logger.LogInformation($"{index} - importing event matches for event - {evt.Name}:{evt.Id}.");
+                index--;
+            }
+        }
+
+        public async Task ImportEventPlayers(bool forceAll = false)
+        {
+
+            var events = await _eventRepository.FilterByAsync(c => true);
+            
+            var pendingEvents = events;
+
+            if (!forceAll)
+            {
+                var eventPlayers = await _eventPlayerRepository.FilterByAsync(x => true);
+                var existedEventPlayers = eventPlayers.Select(x => x.Id).ToList();
+                pendingEvents = events.Where(x => !existedEventPlayers.Contains(x.Id)).ToList();
+            }
+            
+            var index = pendingEvents.Count();
+            foreach(var evt in pendingEvents)
+            {
+                // get player rating
+                var ratings = await GetPlayerRatingChanges(evt);
+
+                // insert player update action
+                await InsertPlayerAction(ratings, evt);
+
+                await _eventPlayerRepository.UpsertAsync(new TtEventPlayer
+                {
+                    Id = evt.Id,
+                    EventDate = evt.Date,
+                    Players = ratings.ToList(),
+                    LastUpdated = DateTime.Now,
+                    RequireDeltaPush = true
+                }, x=>x.Id == evt.Id);
+
+                //Update event with match statistics
+                evt.PlayerCount = ratings.Count;
+                await _eventRepository.UpsertAsync(evt, x => x.Id == evt.Id);
+
+                _logger.LogInformation($"{index} - Importing {ratings.Count} player ratings for event {evt.Name}:{evt.Id}...");
                 Thread.Sleep(1000);
                 index--;
+            }
+        }
+
+        public async Task Refresh_EventMatchAndPlayers_Counts()
+        {
+            var events = await _eventRepository.FilterByAsync(c => true);
+            var eventPlayers = await _eventPlayerRepository.FilterByAsync(x => true);
+            var eventMatches = await _eventMatchesRepository.FilterByAsync(x => true);
+
+            var index = events.Count();
+            foreach(var evt in events)
+            {
+                // count players
+                var players = eventPlayers.FirstOrDefault(x => x.Id == evt.Id);
+                if(players!= null)
+                {
+                    evt.PlayerCount = players.Players.Count;
+                } else
+                {
+                    _logger.LogWarning($"{evt.Name}:{evt.Id} players is not imported!");
+                }
+
+                var matches = eventMatches.FirstOrDefault(x => x.Id == evt.Id);
+                // count matches
+                if (matches != null)
+                {
+                    evt.MatchCount = matches.Matches.Count;
+                } else
+                {
+                    _logger.LogWarning($"{evt.Name}:{evt.Id} matches is not imported!");
+                }
+
+                await _eventRepository.UpsertAsync(evt, x => x.Id == evt.Id);
+                _logger.LogInformation($"{index} - Counting {evt.Name}:{evt.Id} players and matches.");
+                index--;
+            }
+        }
+
+        public async Task Refresh_EventDate_EventPlayers()
+        {
+            var eventPlayers = await _eventPlayerRepository.FilterByAsync(x => true);
+            var events = await _eventRepository.FilterByAsync(x => true);
+            foreach(var ep in eventPlayers)
+            {
+                var evt = events.FirstOrDefault(x => x.Id == ep.Id);
+
+                if (evt != null)
+                {
+                    ep.EventDate = evt.Date;
+                    ep.LastUpdated = DateTime.Now;
+                    ep.RequireDeltaPush = true;
+
+                    await _eventPlayerRepository.UpsertAsync(ep, x => x.Id == ep.Id);
+                    _logger.LogWarning($"set date for {ep.Id}");
+                } else
+                {
+                    _logger.LogWarning($"{ep.Id} is not existed");
+                }
+            }
+        }
+
+        public async Task Refresh_Gender_EventPlayers()
+        {
+            var eventPlayers = await _eventPlayerRepository.FilterByAsync(x => true);
+            var players = await _playerRepository.FilterByAsync(x => true);
+            foreach (var ep in eventPlayers)
+            {
+                foreach(var p in ep.Players)
+                {
+                    var player = players.FirstOrDefault(x => x.Id == p.PlayerId);
+                    if (player != null)
+                    {
+                        p.Gender = player.Gender;
+                    }
+                }
+
+                ep.LastUpdated = DateTime.Now;
+                ep.RequireDeltaPush = true;
+                await _eventPlayerRepository.UpsertAsync(ep, x => x.Id == ep.Id);
+                _logger.LogWarning($"set gender for event:{ep.Id} players");
             }
         }
 
@@ -118,18 +259,35 @@ namespace TtPlayers.Importer.Applications
             if (club != null)
             {
                 evt.ClubName = club.Name;
-                if (string.IsNullOrEmpty(evt.State))
+
+                var transformstate = evt.State.ToStateShortform();
+                evt.State = transformstate;
+
+                /*
+                    {
+                      _id: "$State",
+                      count: {
+                        $sum: 1
+                      }
+                    }
+                 */
+                if (string.IsNullOrEmpty(transformstate))
                 {
+                    //if not able to transform, apply club's state
                     evt.State = club.State.ToStateShortform();
                 }
             }
         }
 
-        private async Task<IList<TtEventPlayerRatingChange>> GetPlayerRatingChanges(TtEvent evt)
+        private async Task<IList<TtEventPlayerRating>> GetPlayerRatingChanges(TtEvent evt)
         {
             // import summary
             var ratings = await _rcScraper.DownloadEventPlayerRatingsAsync(evt.Id);
+            return ratings;
+        }
 
+        private async Task InsertPlayerAction(IList<TtEventPlayerRating> ratings, TtEvent evt)
+        {
             // insert player update to player-update action table
             var updates = ratings.Select(x => new PlayerUpdate
             {
@@ -141,18 +299,27 @@ namespace TtPlayers.Importer.Applications
             {
                 await _playerUpdateRepository.UpsertAsync(update, x => x.Id == update.Id);
             }
-
-            return ratings;
         }
 
-
-        private async Task ImportSingleEventMatches(TtEvent evt)
+        private List<string> SetEventTags(TtEvent evt)
         {
-            var matches = await _rcScraper.DownloadEventMatchesAsync(evt.Id);
+            var tags = new List<string>();
 
-            _logger.LogInformation($"Start importing {matches.Matches.Count} matches for event:{evt.Id}.");
+            if (!string.IsNullOrEmpty(evt.Name))
+            {
+                tags.Add(evt.Name.Trim().ToLower());
+            }
 
-            await _eventMatchesRepository.UpsertAsync(matches, x => x.Id == evt.Id);
+            if (!string.IsNullOrEmpty(evt.ClubName))
+            {
+                tags.Add(evt.ClubName.Trim().ToLower());
+            }
+
+            var tagsFromName = evt.Name.GetTagWords();
+            tags.AddRange(tagsFromName);
+
+            return tags;
         }
+
     }
 }

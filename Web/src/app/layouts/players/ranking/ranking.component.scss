@@ -1,0 +1,92 @@
+
+.breadcrumb-section-main {
+    padding:30px;
+}
+
+.card {
+    margin-right:10px;
+    margin-bottom:10px;
+}
+
+.card-body{
+    padding:0.8em;
+}
+
+.ranking-number {
+    font-size:1.7em;
+    font-weight:600;
+}
+
+.ranking-name {
+    a {
+        font-weight:600;
+    }
+    
+}
+
+.no-wrap{
+    white-space: nowrap;
+}
+
+.alert-sm {
+    padding:0.25em 0.75em;
+    font-size: 0.9em;
+}
+
+.btn-gender{
+    position: relative;
+    display:inline-block;
+    top: auto;
+    right: auto;
+    flex-direction: column;
+}
+
+.btn-state {
+    position: relative;
+    display:inline-block;
+    top: auto;
+    right: auto;
+    flex-direction: column;
+}
+
+.first-player {
+    width:49%;
+    margin-left:25%;
+    border:solid 1px #FFD700;
+    box-shadow: 3px 3px #efefef;
+
+    i {
+        text-shadow: 2px 2px #858585;    
+    }
+}
+
+.second-player {
+    border:solid 1px #C0C0C0;
+    box-shadow: 3px 3px #efefef;
+    i {
+        text-shadow: 2px 2px #6e6e6e;    
+    }
+}
+
+.third-player {
+    border:solid 1px #CD7F32;
+    box-shadow: 3px 3px #efefef;
+    i {
+        text-shadow: 2px 2px #7e7e7e;    
+    }
+}
+
+.gold {
+    font-size: 3em;
+    color:#FFD700;
+}
+
+.silver {
+    font-size: 3em;
+    color:#C0C0C0;
+}
+
+.bronze {
+    font-size: 3em;
+    color:#CD7F32;
+}
