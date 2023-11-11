@@ -20,7 +20,7 @@ namespace TtPlayers.Importer
             [Option("player-id", Required = false, HelpText = "Only apply to player xxx.")]
             public string PlayerId { get; set; }
 
-            [Option("action-count", Required = false, HelpText = "Only apply to number of items.")]
+            [Option("count", Required = false, HelpText = "Only apply to number of items.")]
             public int? ActionCount { get; set; }
 
             [Option("force-all", Required = false, HelpText = "force to apply to all!.")]
@@ -70,6 +70,11 @@ namespace TtPlayers.Importer
             [Option("player-sndtta-team", Required = false, HelpText = "Import player sndtta teams.")]
             public bool PlayerSndttaTeamImport { get; set; }
 
+            // import statistics
+
+            [Option("statistics", Required = false, HelpText = "Import player sndtta teams.")]
+            public bool StatisticsImport { get; set; }
+
             // pushing to firestore
 
             [Option("push-player", Required = false, HelpText = "Push players.")]
@@ -95,6 +100,12 @@ namespace TtPlayers.Importer
 
             [Option("push-sndtta-upcoming", Required = false, HelpText = "Push sndtta upcoming events.")]
             public bool PushSndttaUpcoming { get; set; }
+
+            [Option("push-statistics", Required = false, HelpText = "Push statistics.")]
+            public bool PushStatistics { get; set; }
+
+            [Option("show-push-summary", Required = false, HelpText = "Show Push Summary.")]
+            public bool ShowPushSummary { get; set; }
         }
 
         static void Main(string[] args)
@@ -109,6 +120,7 @@ namespace TtPlayers.Importer
             var playerHistoryImporter = host.Services.GetRequiredService<IRatingCentralPlayerHistoryImporter>();
             var sndttaUpcomingEventImporter = host.Services.GetRequiredService<ISndttaUpcomingEventImporter>();
             var clubImporter = host.Services.GetRequiredService<IRatingCentralClubImporter>();
+            var statisticImporter = host.Services.GetRequiredService<IStatisticsImporter>();
 
             var firebasePusher = host.Services.GetRequiredService<IFirebaseDeltaPushImporter>();
 
@@ -205,6 +217,11 @@ namespace TtPlayers.Importer
                            // sndtta events only need to be updated once per season
                            sndttaUpcomingEventImporter.Import().GetAwaiter().GetResult();
                        }
+                       else if(o.StatisticsImport)
+                       {
+                           statisticImporter.ImportStatistics().GetAwaiter().GetResult();
+                       }
+                       // push firebase
                        else if(o.PushPlayers)
                        {
                            firebasePusher.PushPlayers().GetAwaiter().GetResult();
@@ -236,6 +253,14 @@ namespace TtPlayers.Importer
                        else if (o.PushClub)
                        {
                            firebasePusher.PushClubs().GetAwaiter().GetResult();
+                       }
+                       else if (o.PushStatistics)
+                       {
+                           firebasePusher.PushStatistics().GetAwaiter().GetResult();
+                       }
+                       else if(o.ShowPushSummary)
+                       {
+                           firebasePusher.ShowPendingPushSummary().GetAwaiter().GetResult();
                        }
                        else
                        {

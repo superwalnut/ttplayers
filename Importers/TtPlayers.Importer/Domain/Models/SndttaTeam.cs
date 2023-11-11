@@ -32,5 +32,9 @@ namespace TtPlayers.Importer.Domain.Models
 
         [FirestoreProperty]
         public DateTime LastUpdated { get; set; }
+
+        // properties to push to firebase
+        public DateTime? LastDeltaPushDate { get; set; }
+        public bool RequireDeltaPush { get; set; }
     }
 }

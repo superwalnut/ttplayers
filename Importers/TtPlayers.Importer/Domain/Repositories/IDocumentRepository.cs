@@ -37,6 +37,10 @@ namespace TtPlayers.Importer.Domain.Repositories
         Task<bool> UpsertManyAsync(IList<TDocument> documents);
         Task<bool> UpsertAsync(TDocument document, Expression<Func<TDocument, bool>> filterExpression);
         Task<List<TProjected>> GroupByAsync<TProjected>(BsonDocument groupBsonDocument);
+
+        Task<long> CountAllAsync();
+
+        Task<long> CountAsync(Expression<Func<TDocument, bool>> filterExpression);
     }
 
 }

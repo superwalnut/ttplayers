@@ -161,7 +161,8 @@ namespace TtPlayers.Importer.Applications
                     Id = team,
                     LastUpdated = DateTime.Now,
                     ShortName = teamNameDict?.FirstOrDefault(x => x.Name.Equals(team))?.ShortName,
-                    Players = teamPlayers.ToList()
+                    Players = teamPlayers.ToList(),
+                    RequireDeltaPush = true
                 });
 
                 _logger.LogInformation($"Update Sndtta team - {team}.");
@@ -392,7 +393,7 @@ namespace TtPlayers.Importer.Applications
 
             //_logger.LogInformation($"highest rating - {sw.Elapsed.TotalMilliseconds}");
 
-            _logger.LogInformation($"update player {player.FullName}:{player.Id} summary {sw.Elapsed}");
+            _logger.LogInformation($"update player summary {player.FullName}:{player.Id} - Time {sw.Elapsed}");
             sw.Stop();
 
             return player;

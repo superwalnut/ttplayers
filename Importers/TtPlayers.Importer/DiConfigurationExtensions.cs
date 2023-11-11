@@ -68,7 +68,7 @@ namespace TtPlayers.Importer
             services.AddTransient<ISndttaPlayerScraper, SndttaPlayerScraper>();
             services.AddTransient<IRatingCentralClubImporter, RatingCentralClubImporter>();
             services.AddTransient<IRatingCentralScraper, RatingCentralScraper>();
-
+            services.AddTransient<IStatisticsImporter, StatisticsImporter>();
         }
     }
 }

@@ -185,6 +185,16 @@ namespace TtPlayers.Importer.Domain.Repositories
             await _collection.DeleteManyAsync(filter);
         }
 
+        public async Task<long> CountAllAsync()
+        {
+            return await _collection.CountDocumentsAsync(new BsonDocument());
+        }
+
+        public async Task<long> CountAsync(Expression<Func<TDocument, bool>> filterExpression)
+        {
+            return await _collection.CountDocumentsAsync(filterExpression);
+        }
+
         private Dictionary<int, IList<TDocument>> CreateBatches(IList<TDocument> documents)
         {
             var batches = new Dictionary<int, IList<TDocument>>();

@@ -255,6 +255,10 @@ namespace TtPlayers.Importer.Applications
 
         private void EnrichClubInfo(TtEvent evt, List<Club> clubs)
         {
+            // transform state value first
+            evt.State = evt.State.ToStateShortform();
+
+            // then enrich from clubs
             var club = clubs.FirstOrDefault(x => x.Id == evt.ClubId);
             if (club != null)
             {
@@ -277,6 +281,10 @@ namespace TtPlayers.Importer.Applications
                     evt.State = club.State.ToStateShortform();
                 }
             }
+            /*
+             Bulk update collection scripts
+                db.Events.updateMany({state:"Queensland"}, {$set:{state:"QLD"}})
+             */
         }
 
         private async Task<IList<TtEventPlayerRating>> GetPlayerRatingChanges(TtEvent evt)
