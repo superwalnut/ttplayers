@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore  } from '@angular/fire/compat/firestore';
-import { Observable, of, take } from 'rxjs';
+import { Observable, map, of, take } from 'rxjs';
 import { Club } from './../models/club';
 
 @Injectable({
@@ -43,7 +43,7 @@ export class ClubService {
     {
       return of();
     }
-
+    //Tags Arrays State Ascending Status Ascending Name Ascending __name__ Ascending
     if(keyword){
       const wordsArray = keyword.toLocaleLowerCase().split(" ");
       return this.firestore.collection<Club>('Clubs', ref =>
@@ -64,6 +64,28 @@ export class ClubService {
       .limit(pageSize)
     ).valueChanges().pipe(take(1));
   }
+
+  searchClubsForAutoComplete(keyword:string) : Observable<any[]>{
+    console.log('search autocomplete', keyword);
+    if(keyword){
+      const wordsArray = keyword.toLocaleLowerCase().split(" ");
+      return this.firestore.collection<Club>('Clubs', ref => 
+        ref
+        .where('Tags', 'array-contains-any', wordsArray)
+        .where('Status', '==', 'Active')
+        .orderBy('Name','asc')
+        .limit(10)
+      ).valueChanges().pipe(
+        take(1), 
+        map((clubs => {
+          return clubs.map(c =>{
+            return `${c.Name} - (ID:${c.Id})`;
+          })
+        })),
+      );
+    } 
+  }
+
 
 
 }

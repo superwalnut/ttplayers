@@ -49,8 +49,8 @@
                                             <h1>{{player.FullName}}<span class="p-l-10 rc-id"><a href="https://www.ratingscentral.com/PlayerHistory.php?PlayerID={{player.Id}}" target="_blank" rel="nofollow">(RC ID: {{player.Id}})</a></span></h1>
                                         </div>
                                         <div class="col-1 p-0 m-0 text-right">
-                                            <button class="btn btn-outline-danger btn-sm">
-                                                <i class="fa fa-heart"></i>
+                                            <button class="btn btn-sm" [ngClass]="{'btn-outline-danger': friend!=null, 'btn-outline-secondary': friend == null}" (click)="action_friend(content)">
+                                                <i class="fa" [ngClass]="{'fa-heart': friend!=null, 'fa-heart-o': friend == null}"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -167,3 +167,22 @@
 
 
 <app-gym-footer></app-gym-footer>
+
+
+<!-- Login-popup section start -->
+<ng-template #content let-modal>
+    <div class="login-modal">
+        <div class="modal-header">
+            <button aria-label="Close" (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body text-center">
+            <h3 class="m-b-20">Login Required</h3>
+            <p>To add players to your friend list, please log in to your account.</p>
+            <a aria-label="Register" class="btn btn-default primary-btn m-t-20" href="/register">register</a>
+            <a aria-label="Login" class="btn btn-default primary-btn m-t-20" href="/login">login</a>
+        </div>
+    </div>
+</ng-template>
+<!-- Login-popup section end -->

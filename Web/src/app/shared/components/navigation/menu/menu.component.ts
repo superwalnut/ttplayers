@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Menu, NavService } from '../../../../service/nav.service';
+import { AuthService } from 'src/app/service/auth.service';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-menu',
@@ -9,15 +11,18 @@ import { Menu, NavService } from '../../../../service/nav.service';
 export class MenuComponent implements OnInit {
   public menuItems: Menu[];
   public openSide : boolean = false;
-  public activeItem: string = 'home';
+  public activeItem: string = '';
   public active: boolean = false;
   public activeChildItem : string = '' 
   public overlay: boolean = false;
+
+  public user:User;
   
-  constructor( public navServices: NavService) { }
+  constructor(public navServices: NavService, private authService:AuthService) { }
  
   ngOnInit() {
-    this.navServices.items.subscribe(menuItems => {
+    this.user = this.authService.getLoggedInUser();
+    this.navServices.getMenuItems(this.user).subscribe(menuItems => {
       this.menuItems = menuItems
     });
   }

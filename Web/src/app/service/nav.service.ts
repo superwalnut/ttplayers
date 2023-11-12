@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { User } from '../models/user';
 
 // Menu
 export interface Menu {
@@ -23,22 +24,49 @@ export class NavService {
 
   constructor() {   }
 
-  MENUITEMS: Menu[] = [
-	 {
-			title: 'Players', type: 'link', path: '/players',
-    },
-    {
-			title: 'Events', type: 'link', path:'/events',
-    },    
-    {
-         title: 'Rankings', type: 'link', path: '/rankings',
-    },
-    {
-         title: 'Clubs', type: 'link', path: '/clubs',
-    },
-    {
-         title: 'Create Account', type:'link', path:'/register'
-    },
+  getMenuItems(user:User) {
+   var menuItems: Menu[] = [];
+
+   if(user){
+      // logged in
+      menuItems.push({title: 'Dashboard', type: 'link', path: '/dashboard'});
+      menuItems.push({title: 'Players', type: 'link', path: '/players'});
+      menuItems.push({title: 'Events', type: 'link', path:'/events'});
+      menuItems.push({title: 'Rankings', type: 'link', path: '/rankings'});
+      menuItems.push({title: 'Clubs', type: 'link', path: '/clubs'});
+      menuItems.push({title: user.Email, type: 'sub', children:[
+         { path: '/profile', title: 'profile',  type: 'link' },
+         { path: '/logout', title: 'logout',  type: 'link' }
+      ]});
+   
+   } else {
+      menuItems.push({title: 'Players', type: 'link', path: '/players'});
+      menuItems.push({title: 'Events', type: 'link', path:'/events'});
+      menuItems.push({title: 'Rankings', type: 'link', path: '/rankings'});
+      menuItems.push({title: 'Clubs', type: 'link', path: '/clubs'});
+      menuItems.push({title: 'Login', type:'link', path:'/login'});
+   }
+
+   const items = new BehaviorSubject<Menu[]>(menuItems);
+   return items;
+  }
+
+  //MENUITEMS: Menu[] = [
+	//  {
+	// 		title: 'Players', type: 'link', path: '/players',
+   //  },
+   //  {
+	// 		title: 'Events', type: 'link', path:'/events',
+   //  },    
+   //  {
+   //       title: 'Rankings', type: 'link', path: '/rankings',
+   //  },
+   //  {
+   //       title: 'Clubs', type: 'link', path: '/clubs',
+   //  },
+   //  {
+   //       title: 'Create Account', type:'link', path:'/register'
+   //  },
    //  {
 	// 		title: 'Pages', type: 'sub', children: [
    //          { path: '/404', title: '404',  type: 'link' },
@@ -124,9 +152,5 @@ export class NavService {
    //    }
    //    ]
    //  }
-   ]
-  
-  	// Array
-	items = new BehaviorSubject<Menu[]>(this.MENUITEMS);
-   
+   //]
 }

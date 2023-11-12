@@ -12,7 +12,7 @@
                                     <!-- <i id="gender-ico" class="fa" aria-hidden="true" [ngClass]="{'blue-text fa-male': teamPlayer.Gender == 'M', 'red-text fa-female': teamPlayer.Gender == 'F'}"></i> -->
                                     <img src="assets/images/players/male.png">
                                 </div>
-                                <div class="badge badge-blue">{{toRating(teamPlayer)}}</div>    
+                                <div class="badge" [ngClass]="{'badge-blue': teamPlayer.Gender == 'M', 'badge-red': teamPlayer.Gender == 'F'}">{{toRating(teamPlayer)}}</div>    
                             </div>
                             <div class="col-7">
                                 <h5 class="post-head text-nowrap"><a href="/player/{{teamPlayer.Id}}" title="{{teamPlayer.FullName}}">{{teamPlayer.FullName}}</a></h5>

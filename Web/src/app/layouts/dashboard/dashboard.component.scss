@@ -1,0 +1,79 @@
+
+.breadcrumb-section-main {
+    padding:30px;
+}
+
+.blog-contain {
+    border: 1px solid #f3f3f3;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    filter: drop-shadow(0 0 10px #eee);
+    transition: all 0.3s;
+
+    .profile-img {
+        min-height:400px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        color:#fff;
+    
+        
+        /* Style for the container div */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+        .profile-title {
+            h1 {
+                font-family: "Poppins", sans-serif;
+                text-transform: capitalize;
+                font-weight: 600;
+                font-size:4em;
+            }
+    
+            h4{
+                color:#fff;
+                font-size:3em;
+                font-weight:100;
+            }
+    
+            h5 {
+                color:#fff;
+                font-weight:100;
+                font-size:1.5em;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .profile-img {
+        min-height:150px !important;
+
+        .profile-title{
+            h1{
+                font-size:2em !important;
+            }
+            h4{
+                font-size:1.5em !important;
+            }
+            h5{
+                font-size:1.2em !important;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .profile-title {
+        h1{
+            font-size:2.5em !important;
+        }
+        h4{
+            font-size:1.8em !important;
+        }
+        h5{
+            font-size:1.3em !important;
+        }
+    }
+}

@@ -34,11 +34,19 @@ import { ClubListComponent } from './clubs/club-list/club-list.component';
 import { EventListComponent } from './events/event-list/event-list.component';
 import { EventDetailComponent } from './events/event-detail/event-detail.component';
 import { RankingComponent } from './players/ranking/ranking.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { ProfileComponent } from './profile/profile.component';
+import { LogoutComponent } from './logout/logout.component';
+import { ResendEmailVerificationComponent } from './resend-email-verification/resend-email-verification.component';
 
 @NgModule({
   declarations: [
     GymComponent, GymAboutComponent, GymScheduleComponent, GymWorkoutAboutComponent, GymCounterComponent, HomeEventsComponent, GymTestimonialComponent, GymPricingComponent, GymBMIComponent, GymBrandComponent, GymCopyrightComponent, 
-    PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent, PlayerHistoryComponent, PlayerTotalCounterComponent, PlayerSummaryComponent, PlayerSetsStatisticsComponent, ClubDetailComponent, TeamPlayersComponent, HomeComponent, ClubListComponent, EventListComponent, EventDetailComponent, RankingComponent
+    PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent, PlayerHistoryComponent, PlayerTotalCounterComponent, PlayerSummaryComponent, PlayerSetsStatisticsComponent, ClubDetailComponent, TeamPlayersComponent, 
+    HomeComponent, ClubListComponent, EventListComponent, EventDetailComponent, RankingComponent, DashboardComponent, ForgotPasswordComponent, LoginComponent, RegisterComponent, ProfileComponent, LogoutComponent, ResendEmailVerificationComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +57,7 @@ import { RankingComponent } from './players/ranking/ranking.component';
     CountToModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule    
   ],
   exports: [],
 })

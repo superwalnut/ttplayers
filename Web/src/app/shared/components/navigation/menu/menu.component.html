@@ -61,7 +61,7 @@
                                 {{childrenItem.title}}
                              </a>
                         <!-- Link -->
-                        <a routerLink="/" routerLinkActive="active"
+                        <a routerLink="{{childrenItem.path}}" routerLinkActive="active"
                             *ngIf="childrenItem.type === 'link' && !menuItem.megaMenu">
                             {{childrenItem.title}}
                         </a>

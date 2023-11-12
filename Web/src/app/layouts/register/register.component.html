@@ -1,0 +1,46 @@
+<app-gym-nav></app-gym-nav>
+<!-- header Start-->
+<div class="header5-content">
+    <div class="player-list-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header3.jpg)'}">
+    </div>
+</div>
+<!-- header end-->
+
+<!-- section start -->
+<section class="register-page section-b-space">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>create account</h3>
+                <div class="theme-card">
+                    <form class="theme-form" [formGroup]="registrationForm" (ngSubmit)="createUser()">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="email">First Name</label>
+                                <input type="text" class="form-control" id="fname" placeholder="First Name" required="true" formControlName="firstName">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="review">Last Name</label>
+                                <input type="text" class="form-control" id="lname" placeholder="Last Name" required="true" formControlName="lastName">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="email">email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Email" required="true" formControlName="email">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="review">Password</label>
+                                <input type="password" class="form-control" id="review" placeholder="Enter your password" required="true" formControlName="password">
+                            </div>
+                            <button type="submit" class="btn primary-btn btn-default radius-0">create Account</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+  <!--Section ends-->
+  
+<app-gym-footer></app-gym-footer>

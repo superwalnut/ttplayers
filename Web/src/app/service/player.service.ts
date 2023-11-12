@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore  } from '@angular/fire/compat/firestore';
-import { Observable, of, take } from 'rxjs';
+import { Observable, map, of, take } from 'rxjs';
 import { Player } from '../models/player';
 import { PlayerHistory } from '../models/player-history';
 
@@ -51,6 +51,21 @@ export class PlayerService {
     }
   }
 
+  searchPlayerByNameForAutocomplete(searchTerm: string): Observable<string[]> {
+      return this.firestore.collection<Player>('Players', ref =>
+        ref
+        .where('Names', 'array-contains', searchTerm.toLowerCase())
+        .orderBy('Id', 'asc')
+        .limit(10)
+      ).valueChanges().pipe(
+        take(1), 
+        map((players => {
+          return players.map(p =>{
+            return `${p.FullName} ${p.Rating}±${p.StDev} (ID:${p.Id})`;
+          })
+        })),
+      );
+  }
 
   getPlayer(id:string): Observable<Player> {
     return this.firestore.doc<Player>(`Players/${id}`).valueChanges();

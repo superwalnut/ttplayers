@@ -5,9 +5,18 @@ import { PlayerListComponent } from './layouts/players/player-list/player-list.c
 import { PlayerDetailComponent } from './layouts/players/player-detail/player-detail.component';
 import { HomeComponent } from './layouts/home/home.component';
 import { ClubListComponent } from './layouts/clubs/club-list/club-list.component';
+import { ClubDetailComponent } from './layouts/clubs/club-detail/club-detail.component';
 import { EventListComponent } from './layouts/events/event-list/event-list.component';
 import { EventDetailComponent } from './layouts/events/event-detail/event-detail.component';
 import { RankingComponent } from './layouts/players/ranking/ranking.component';
+import { DashboardComponent } from './layouts/dashboard/dashboard.component';
+import { ForgotPasswordComponent } from './layouts/forgot-password/forgot-password.component';
+import { AuthGuard } from './auth/auth.guard';
+import { RegisterComponent } from './layouts/register/register.component';
+import { LoginComponent } from './layouts/login/login.component';
+import { ProfileComponent } from './layouts/profile/profile.component';
+import { LogoutComponent } from './layouts/logout/logout.component';
+import { ResendEmailVerificationComponent } from './layouts/resend-email-verification/resend-email-verification.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +44,10 @@ export const routes: Routes = [
     component: ClubListComponent
   },
   {
+    path: 'club/:id',
+    component: ClubDetailComponent
+  },
+  {
     path: 'events',
     component: EventListComponent
   },
@@ -45,12 +58,19 @@ export const routes: Routes = [
   {
     path: 'rankings',
     component: RankingComponent
-  }
+  },
+  { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LogoutComponent },
+  { path: 'register', component: RegisterComponent},
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'resend-email-verification', component: ResendEmailVerificationComponent },
+  { path: 'dashboard', component: DashboardComponent , canActivate: [AuthGuard]},
+  { path: 'profile', component:ProfileComponent , canActivate: [AuthGuard]}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
-    // preloadingStrategy: PreloadAllModules,
+  // preloadingStrategy: PreloadAllModules,
     anchorScrolling: 'enabled',
     scrollPositionRestoration: 'enabled',
 })],

@@ -12,6 +12,12 @@ import { SndttaTeamService } from './../../../service/sndtta-team.service';
 import { Club } from 'src/app/models/club';
 import { Team } from 'src/app/models/team';
 import { TeamPlayer } from 'src/app/models/team-player';
+import { Friend } from '../../../models/friend';
+import { FriendService } from './../../../service/friend.service';
+import { AuthService } from 'src/app/service/auth.service';
+import { User } from 'src/app/models/user';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-player-detail',
@@ -24,15 +30,23 @@ export class PlayerDetailComponent implements OnInit {
   //histories:PlayerHistoryEntry[];
   club:Club;
   teamPlayers:TeamPlayer[] = [];
-
   matchesByEvent: { [eventId: string]: Match[] } = {};
-
   keyword:string;
-
   lastMatch:Match = null;
+  friend: Friend = null;
+  loggedInUser: User = null;
 
   constructor(private route: ActivatedRoute,
-    private title: Title, private playerService:PlayerService, private matchService:MatchService, private clubService:ClubService, private sndttaTeamService:SndttaTeamService) { }
+    private title: Title, 
+    private playerService:PlayerService, 
+    private matchService:MatchService, 
+    private clubService:ClubService, 
+    private sndttaTeamService:SndttaTeamService,
+    private friendService:FriendService,
+    private authService:AuthService,
+    private modalService: NgbModal,
+    private toastrService: ToastrService
+    ) { }
 
   ngOnInit() {
     this.title.setTitle(this.route.snapshot.data['title']);
@@ -49,6 +63,16 @@ export class PlayerDetailComponent implements OnInit {
       //     this.histories = history.History;
       //   }
       // });
+
+      // load friend info
+      this.loggedInUser = this.authService.getLoggedInUser();
+      if(this.loggedInUser){
+        this.friendService.getFriend(this.loggedInUser.Id, player.Id).subscribe(f => {
+          if(f){
+            this.friend = f;
+          }
+        });
+      }
 
       // load matches info
       this.matchService.searchMatches(playerId).subscribe(matches =>{
@@ -120,6 +144,49 @@ export class PlayerDetailComponent implements OnInit {
     });
   }
 
+  action_friend(content) {
+    if(this.loggedInUser){
+      // if user logged in, action this with his friend list
+      console.log('add friend');
+
+      if(this.friend != null){
+        // which means this player is already your friend, then remove it from your friend list
+        this.remove_friend();
+      } else {
+        // which means this player is NOT your friend, then add him to your friend list
+        this.add_friend();
+      }
+    } else {
+      // popup to show message and redirect to register/login page
+      this.modalService.open(content, { centered: true });
+    }
+  }
+
+  add_friend() {
+    const friend = {
+      Id: `${this.loggedInUser.Id}-${this.player.Id}`,
+      UserId: this.loggedInUser.Id,
+      FriendPlayerId: this.player.Id,
+      FirstName: this.player.FirstName,
+      LastName: this.player.LastName,
+      FullName: this.player.FullName,
+      Gender: this.player.Gender,
+      State: this.player.State
+    } as Friend;
+    this.friendService.addFriend(friend).then(x=>{
+      this.friend = friend;
+      this.toastrService.show(`Added ${this.player.FullName} to your friend list`);
+    });
+  }
+
+  remove_friend() {
+    this.friendService.removeFriend(this.friend.Id).then(x=>{
+      this.friend = null;
+      this.toastrService.show(`Removed ${this.player.FullName} from your friend list`);
+    });
+  }
+
+  // display label methods
   toRating(player:Player)
   {
     return `${player.Rating}±${player.StDev}`;
