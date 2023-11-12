@@ -51,19 +51,14 @@ export class PlayerService {
     }
   }
 
-  searchPlayerByNameForAutocomplete(searchTerm: string): Observable<string[]> {
+  searchPlayerByNameForAutocomplete(searchTerm: string): Observable<any[]> {
       return this.firestore.collection<Player>('Players', ref =>
         ref
         .where('Names', 'array-contains', searchTerm.toLowerCase())
         .orderBy('Id', 'asc')
         .limit(10)
       ).valueChanges().pipe(
-        take(1), 
-        map((players => {
-          return players.map(p =>{
-            return `${p.FullName} ${p.Rating}±${p.StDev} (ID:${p.Id})`;
-          })
-        })),
+        take(1)
       );
   }
 

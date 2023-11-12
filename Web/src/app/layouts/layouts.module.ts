@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CountToModule } from 'angular-count-to';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 
@@ -52,12 +52,11 @@ import { ResendEmailVerificationComponent } from './resend-email-verification/re
     CommonModule,
     LayoutsRoutingModule,
     CarouselModule,
-    NgbModule,
     SharedModule,
     CountToModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbTypeaheadModule    
+    NgbModule,
   ],
   exports: [],
 })

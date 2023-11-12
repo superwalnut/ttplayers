@@ -1,0 +1,15 @@
+<div class="form-group mb-4">
+    <ng-template #rt let-r="result" let-t="term">
+        <i id="gender-ico" class="fa m-r-10" aria-hidden="true" [ngClass]="{'blue-text fa-male': r.gender == 'M', 'red-text fa-female': r.gender == 'F'}"></i>
+        <!-- <img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']" class="me-1" style="width: 16px" /> -->
+        <ngb-highlight [result]="r.name" [term]="t" class="m-r-10"></ngb-highlight>
+        <span class="m-r-10">{{r.rating}}</span>
+        <span class="badge bg-dark state-badge">{{r.state}}</span>
+    </ng-template>
+    <input type="text" class="form-control" placeholder="Enter Player Name" name="searchPlayerId" formControlName="searchPlayerId" 
+        [(ngModel)]="playerAutoCompleteModel" 
+        [ngbTypeahead]="searchPlayer"
+        [resultTemplate]="rt"
+        [inputFormatter]="searchPlayerFormatter"
+        >
+</div>

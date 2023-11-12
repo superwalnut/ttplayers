@@ -3,20 +3,33 @@
     padding:30px;
 }
 
+.blog-agency {
+    height:1000px;
+}
+
+.list-group-item{
+    font-size:0.8em;
+    padding: 0.5rem 1.0rem;
+    color:#747474;
+}
+
+.state-badge {
+    color:#fff;
+}
+
 .blog-contain {
     border: 1px solid #f3f3f3;
     background: #fff;
     border-radius: 16px;
-    overflow: hidden;
     filter: drop-shadow(0 0 10px #eee);
     transition: all 0.3s;
 
     .profile-img {
-        min-height:400px;
+        min-height:300px;
         background-size: cover;
         background-repeat: no-repeat;
         color:#fff;
-    
+        border-radius: 16px;
         
         /* Style for the container div */
         display: flex;
@@ -45,6 +58,7 @@
         }
     }
 }
+
 
 @media only screen and (max-width: 575px) {
     .profile-img {

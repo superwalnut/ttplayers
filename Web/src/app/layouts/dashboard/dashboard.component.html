@@ -46,14 +46,26 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-7 col-lg-7 col-md-7 pt-5 pb-5 pl-5 pr-5">
-                            <h3 class="mb-2">Enter your profiles</h3>
+                        <div class="col-xl-7 col-lg-7 col-md-7 p-4">
+                            <h3 class="mb-2">Pair your Rating Central ID</h3>
                             <hr/>
-                            <div class="theme-card">
-                                <form class="theme-form">
+                            <h6>Please enter your Full Name to search Rating Central Players.</h6>
+                            <div class="theme-card mt-4">
+                                <form class="theme-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
                                     <div class="form-group mb-4">
-                                        <label for="playerId">Select Rating Central Player</label>
-                                        <input type="text" class="form-control" placeholder="Select Rating Central Player" name="searchPlayerId" [(ngModel)]="playerAutoCompleteModel" [ngbTypeahead]="searchPlayer">
+                                        <ng-template #rt let-r="result" let-t="term">
+                                            <i id="gender-ico" class="fa m-r-10" aria-hidden="true" [ngClass]="{'blue-text fa-male': r.gender == 'M', 'red-text fa-female': r.gender == 'F'}"></i>
+                                            <!-- <img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']" class="me-1" style="width: 16px" /> -->
+                                            <ngb-highlight [result]="r.name" [term]="t" class="m-r-10"></ngb-highlight>
+                                            <span class="m-r-10">{{r.rating}}</span>
+                                            <span class="badge bg-dark state-badge">{{r.state}}</span>
+                                        </ng-template>
+                                        <input type="text" class="form-control" placeholder="Enter Player Name" name="searchPlayerId" formControlName="searchPlayerId" 
+                                            [(ngModel)]="playerAutoCompleteModel" 
+                                            [ngbTypeahead]="searchPlayer"
+                                            [resultTemplate]="rt"
+                                            [inputFormatter]="searchPlayerFormatter"
+                                            >
                                     </div>
                                     <!-- <div class="form-group">
                                         <label for="clubId">Select Your Table Tennis Club</label>
