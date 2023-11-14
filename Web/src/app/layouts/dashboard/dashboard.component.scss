@@ -7,8 +7,30 @@
     padding:0;
 }
 
+.dashboard-friends-title {
+    padding:0;
+    color:#000;
+
+    h2 {
+        margin-left: 0px;
+    }
+}
+
 .dashboard-friends {
     padding:0;
+
+    .container {
+        border:solid 1px #efefef;
+        border-radius: 16px;
+        filter: drop-shadow(0 0 10px #eee);
+        transition: all 0.3s;
+
+        .row {
+            background-color: #efefef;
+            padding-top:5px;
+            padding-bottom:5px;
+        }
+    }
 }
 
 .list-group-item{
@@ -19,6 +41,25 @@
 
 .state-badge {
     color:#fff;
+}
+
+.friend-title {
+    .font-600 {
+        font-weight: 600;
+    }
+
+    small {
+        font-size:0.8em !important;
+        font-weight: 500;
+    }
+}
+
+.green {
+    color:green;
+}
+
+.red {
+    color:red;
 }
 
 .blog-contain {

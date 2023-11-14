@@ -5,3 +5,56 @@
 .red-text {
     color:#e3154f !important;
 }
+
+
+.rank {
+    font-size:2em;
+    font-weight:600;
+    color:#ffc107;
+}
+
+.highlight {
+    background: #3c7ddf;
+    color:#fff;
+
+    a {
+        color:#fff !important;
+    }
+
+    .green {
+        color:#00ff00 !important;
+    }
+    
+    .red {
+        color:#e50202 !important;
+    }
+}    
+
+.friend-row {
+    padding:0.6em;
+
+    a {
+        color:#357fef;
+        text-decoration: underline;
+    }
+
+    .green {
+        color:#03b803;
+    }
+    
+    .red {
+        color:red;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .friend-row {
+        padding:0.1em;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .friend-row {
+        padding:0.4em;
+    }
+}

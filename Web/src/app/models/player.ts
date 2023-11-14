@@ -23,6 +23,10 @@ export interface Player {
     RatingChangesLast6Mth:number;
     MatchWinsLast6Mth:number;
 
+    RatingChangesMonthly:number;
+    RatingChangesQuarterly:number;
+    RatingChangesYearly:number;
+
     TotalPlayedEvents:number;
     TotalPlayedMatches:number;
     TotalWins:number;

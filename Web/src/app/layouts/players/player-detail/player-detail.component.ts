@@ -208,15 +208,5 @@ export class PlayerDetailComponent implements OnInit {
       return `${firstInitial}${lastInitial}`;
   }
 
-  toGenderRanking(player:Player) {
-    if(player.Gender == "M"){
-      return "(Men's)";
-    }
 
-    if(player.Gender == "F"){
-      return "(Women's)";
-    }
-
-    return "";
-  }
 }
