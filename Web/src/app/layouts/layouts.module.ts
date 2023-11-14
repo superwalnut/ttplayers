@@ -41,12 +41,18 @@ import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LogoutComponent } from './logout/logout.component';
 import { ResendEmailVerificationComponent } from './resend-email-verification/resend-email-verification.component';
+import { PlayerDetailBasicInfoComponent } from '../layouts/players/player-detail/player-detail-basic-info/player-detail-basic-info.component';
+import { PlayerListTileComponent } from './players/player-list/player-list-tile/player-list-tile.component';
+import { FriendDetailTileComponent } from './dashboard/friend-detail-tile/friend-detail-tile.component';
 
 @NgModule({
   declarations: [
     GymComponent, GymAboutComponent, GymScheduleComponent, GymWorkoutAboutComponent, GymCounterComponent, HomeEventsComponent, GymTestimonialComponent, GymPricingComponent, GymBMIComponent, GymBrandComponent, GymCopyrightComponent, 
     PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent, PlayerHistoryComponent, PlayerTotalCounterComponent, PlayerSummaryComponent, PlayerSetsStatisticsComponent, ClubDetailComponent, TeamPlayersComponent, 
-    HomeComponent, ClubListComponent, EventListComponent, EventDetailComponent, RankingComponent, DashboardComponent, ForgotPasswordComponent, LoginComponent, RegisterComponent, ProfileComponent, LogoutComponent, ResendEmailVerificationComponent
+    HomeComponent, ClubListComponent, EventListComponent, EventDetailComponent, RankingComponent, DashboardComponent, ForgotPasswordComponent, LoginComponent, RegisterComponent, ProfileComponent, LogoutComponent, ResendEmailVerificationComponent,
+    PlayerDetailBasicInfoComponent,
+    PlayerListTileComponent,
+    FriendDetailTileComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,8 @@
+<div class="row" *ngIf="friend">
+    <div class="col-2"><i id="gender-ico" class="fa m-r-10" aria-hidden="true" [ngClass]="{'blue-text fa-male': friend.Gender == 'M', 'red-text fa-female': friend.Gender == 'F'}"></i> {{friend.FirstName}} {{friend.LastName}}</div>
+    <div class="col-2"></div>
+    <div class="col-2"></div>
+    <div class="col-2"></div>
+    <div class="col-2"></div>
+    <div class="col-2"></div>
+</div>

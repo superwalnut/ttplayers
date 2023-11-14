@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Friend } from './../models/friend';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +27,13 @@ export class FriendService {
   getFriend(uid:string, friendPlayerId:string) : Observable<Friend> {
     const friendId = `${uid}-${friendPlayerId}`;
     return this.firestore.doc<Friend>(`Friends/${friendId}`).valueChanges();
+  }
+
+  getFriends(userId:string) : Observable<Friend[]> {
+    return this.firestore.collection<Friend>('Friends', ref =>
+        ref
+        .where('UserId', '==', userId)
+      ).valueChanges().pipe(take(1));
   }
 
 }

@@ -282,17 +282,10 @@ namespace TtPlayers.Importer.Applications
 
             //_logger.LogInformation($"load 6months count - {sw.Elapsed.TotalMilliseconds}");
 
-            var eventsLast6Months = eventPlayers.Where(x=>x.EventDate >= DateTime.Now.AddMonths(-6)).OrderByDescending(x=>x.EventDate);
-            if(eventsLast6Months.Any())
-            {
-                var playerLastEvent = eventsLast6Months.FirstOrDefault()?.Players.FirstOrDefault(x=>x.PlayerId == player.Id);
-                var playerFirstEvent = eventsLast6Months.LastOrDefault()?.Players.FirstOrDefault(x => x.PlayerId == player.Id);
-
-                if(playerLastEvent!=null && playerFirstEvent != null)
-                {
-                    player.RatingChangesLast6Mth = playerLastEvent.FinalMean - playerFirstEvent.InitialMean;
-                }
-            }
+            player.RatingChangesLast6Mth = RatingChangesInPeriod(player.Id, eventPlayers, 6);
+            player.RatingChangesMonthly = RatingChangesInPeriod(player.Id, eventPlayers, 1);
+            player.RatingChangesQuarterly = RatingChangesInPeriod(player.Id, eventPlayers, 3);
+            player.RatingChangesYearly = RatingChangesInPeriod(player.Id, eventPlayers, 12);
 
             //_logger.LogInformation($"load 6months rating-change - {sw.Elapsed.TotalMilliseconds}");
 
@@ -397,6 +390,23 @@ namespace TtPlayers.Importer.Applications
             sw.Stop();
 
             return player;
+        }
+
+        private int RatingChangesInPeriod(string playerId, List<TtEventPlayer> eventPlayers, int months)
+        {
+            var eventsInPeriod = eventPlayers.Where(x => x.EventDate >= DateTime.Now.AddMonths(months * -1)).OrderByDescending(x => x.EventDate);
+            if (eventsInPeriod.Any())
+            {
+                var playerLastEvent = eventsInPeriod.FirstOrDefault()?.Players.FirstOrDefault(x => x.PlayerId == playerId);
+                var playerFirstEvent = eventsInPeriod.LastOrDefault()?.Players.FirstOrDefault(x => x.PlayerId == playerId);
+
+                if (playerLastEvent != null && playerFirstEvent != null)
+                {
+                    return playerLastEvent.FinalMean - playerFirstEvent.InitialMean;
+                }
+            }
+
+            return 0;
         }
 
         private (int, int) GetHighestRating(List<Match> matches, Player player)

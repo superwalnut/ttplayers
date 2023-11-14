@@ -81,8 +81,6 @@ namespace TtPlayers.Importer.Domain.Models
         public int PlayedMatchesLast6Mth { get; set; }
         [FirestoreProperty]
         public int PlayedEventsLast6Mth { get; set; }
-        [FirestoreProperty]
-        public int RatingChangesLast6Mth { get; set; }
 
         [FirestoreProperty]
         public int MatchWinsLast6Mth { get; set; }
@@ -153,21 +151,19 @@ namespace TtPlayers.Importer.Domain.Models
         [FirestoreProperty]
         public int StateGenderRanking { get; set; }
 
-        // Win rate ranking
 
-        //[FirestoreProperty]
-        //public int YeatToDateWinRateNationalRanking { get; set; }
+        // Recent Rating Changes
+        [FirestoreProperty]
+        public int RatingChangesMonthly { get; set; }
 
-        //[FirestoreProperty]
-        //public int YeatToDateWinRateNationalGenderRanking { get; set; }
+        [FirestoreProperty]
+        public int RatingChangesQuarterly { get; set; }
 
-        //[FirestoreProperty]
-        //public int YeatToDateWinRateStateRanking { get; set; }
+        [FirestoreProperty]
+        public int RatingChangesLast6Mth { get; set; }
 
-        //[FirestoreProperty]
-        //public int YeatToDateWinRateStateGenderRanking { get; set; }
-
-
+        [FirestoreProperty]
+        public int RatingChangesYearly { get; set; }
 
         [FirestoreProperty] 
         public int HighestRating { get; set; }

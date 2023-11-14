@@ -3,8 +3,12 @@
     padding:30px;
 }
 
-.blog-agency {
-    height:1000px;
+.dashboard-profile{
+    padding:0;
+}
+
+.dashboard-friends {
+    padding:0;
 }
 
 .list-group-item{
@@ -23,13 +27,14 @@
     border-radius: 16px;
     filter: drop-shadow(0 0 10px #eee);
     transition: all 0.3s;
+    overflow: auto;
 
     .profile-img {
-        min-height:300px;
+        height:100%;
+        min-height:350px;
         background-size: cover;
         background-repeat: no-repeat;
         color:#fff;
-        border-radius: 16px;
         
         /* Style for the container div */
         display: flex;
@@ -41,12 +46,13 @@
                 font-family: "Poppins", sans-serif;
                 text-transform: capitalize;
                 font-weight: 600;
-                font-size:4em;
+                font-size:3em;
+                color:#fff;
             }
     
             h4{
                 color:#fff;
-                font-size:3em;
+                font-size:2em;
                 font-weight:100;
             }
     
@@ -62,11 +68,13 @@
 
 @media only screen and (max-width: 575px) {
     .profile-img {
-        min-height:150px !important;
+        min-height:100px !important;
+        border-bottom-left-radius: 0%;
+        border-bottom-right-radius: 0%;
 
         .profile-title{
             h1{
-                font-size:2em !important;
+                font-size:1.8em !important;
             }
             h4{
                 font-size:1.5em !important;
@@ -81,13 +89,13 @@
 @media only screen and (max-width: 991px) {
     .profile-title {
         h1{
-            font-size:2.5em !important;
-        }
-        h4{
             font-size:1.8em !important;
         }
+        h4{
+            font-size:1.5em !important;
+        }
         h5{
-            font-size:1.3em !important;
+            font-size:1.2em !important;
         }
     }
 }

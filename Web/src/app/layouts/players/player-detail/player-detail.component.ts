@@ -186,46 +186,8 @@ export class PlayerDetailComponent implements OnInit {
     });
   }
 
-  // display label methods
-  toRating(player:Player)
-  {
-    return `${player.Rating}±${player.StDev}`;
-  }
 
-  totalPlayedTime(player:Player) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
-    const timeDifference = today.getTime() - player.StartPlayingDate.toDate().getTime();
-    const millisecondsInDay = 1000 * 60 * 60 * 24;
-    const millisecondsInMonth = millisecondsInDay * 30.44; // Approximate average number of days in a month
-
-    const years = Math.floor(timeDifference / (millisecondsInDay * 365));
-    const months = Math.floor((timeDifference % (millisecondsInDay * 365)) / millisecondsInMonth);
-    const days = Math.floor((timeDifference % millisecondsInMonth) / millisecondsInDay);
-
-    let result = "";
-
-    if (years > 0) {
-      result += `${years} ${years === 1 ? 'Yr' : 'Yrs'}`;
-    }
-
-    if (months > 0) {
-      if (result) {
-        result += ", ";
-      }
-      result += `${months} ${months === 1 ? 'M' : 'M'}`;
-    }
-
-    // if (days > 0) {
-    //   if (result) {
-    //     result += ", ";
-    //   }
-    //   result += `${days} ${days === 1 ? 'day' : 'Days'}`;
-    // }
-
-    return result;
-  }
 
   getDivision(player:Player){
     if(player.Division <= 0){

@@ -35,7 +35,7 @@ export class AuthService {
     }
 
     sendEmailVerification() {
-      this.auth.currentUser.then(user=>{
+      return this.auth.currentUser.then(user=>{
         user.sendEmailVerification().then(_=>{
           console.log('email verification sent');
         });

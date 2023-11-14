@@ -24,67 +24,79 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-4" *ngIf="!user.EmailVerified">
+    </div>
+</section>
+<!-- Breadcrumb end -->
+
+<section class="dashboard-profile sider mt-4 mb-4">
+    <div class="container">
+        <div class="row" *ngIf="!user.EmailVerified">
             <div class="col-12">
                 <!-- Email Verification -->
                 <div class="alert alert-warning" role="alert">
                     <i class="fa fa-info m-r-10"></i>Thank you for signing up with ttPlayers. We sent you a verification email, please check your inbox and verify your email address by following the instructions. 
-                    Click <a href="/resend-email-verification">resend</a> to send another verification email.
+                    Click <a (click)="resendEmailVerify()">resend</a> to send another verification email.
                 </div>
             </div>
         </div>
-        <div class="row mt-4 blog-agency">
+        <div class="row mt-4 blog-agency" *ngIf="!completedProfile">
             <div class="col-12">
                 <!-- Complete your profile -->
-                    <div class="row blog-contain pl-0 pr-0">
-                        <div class="col-xl-5 col-lg-5 col-md-5 p-0">
-                            <div class="text-center profile-img" [ngStyle]="{'background-image': 'url(assets/images/gym/header2.jpg)'}">
-                                <div class="profile-title">
-                                    <h4>Please complete</h4>
-                                    <h1>Your Profile</h1>
-                                    <h5 class="mt-3">to unlock more features</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-7 col-lg-7 col-md-7 p-4">
-                            <h3 class="mb-2">Pair your Rating Central ID</h3>
-                            <hr/>
-                            <h6>Please enter your Full Name to search Rating Central Players.</h6>
-                            <div class="theme-card mt-4">
-                                <form class="theme-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
-                                    <div class="form-group mb-4">
-                                        <ng-template #rt let-r="result" let-t="term">
-                                            <i id="gender-ico" class="fa m-r-10" aria-hidden="true" [ngClass]="{'blue-text fa-male': r.gender == 'M', 'red-text fa-female': r.gender == 'F'}"></i>
-                                            <!-- <img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']" class="me-1" style="width: 16px" /> -->
-                                            <ngb-highlight [result]="r.name" [term]="t" class="m-r-10"></ngb-highlight>
-                                            <span class="m-r-10">{{r.rating}}</span>
-                                            <span class="badge bg-dark state-badge">{{r.state}}</span>
-                                        </ng-template>
-                                        <input type="text" class="form-control" placeholder="Enter Player Name" name="searchPlayerId" formControlName="searchPlayerId" 
-                                            [(ngModel)]="playerAutoCompleteModel" 
-                                            [ngbTypeahead]="searchPlayer"
-                                            [resultTemplate]="rt"
-                                            [inputFormatter]="searchPlayerFormatter"
-                                            >
-                                    </div>
-                                    <!-- <div class="form-group">
-                                        <label for="clubId">Select Your Table Tennis Club</label>
-                                        <input type="text" class="form-control" placeholder="Select Table Tennis Club" name="searchClubId" [(ngModel)]="clubAutoCompleteModel" [ngbTypeahead]="searchClub">
-                                    </div> -->
-                                    <button class="btn primary-btn btn-default radius-0" type="submit">Save</button>
-                                </form>
+                <div class="row blog-contain pl-0 pr-0">
+                    <div class="col-xl-5 col-lg-5 col-md-5 p-0">
+                        <div class="text-center profile-img" [ngStyle]="{'background-image': 'url(assets/images/gym/header2.jpg)'}">
+                            <div class="profile-title">
+                                <h4>Please complete</h4>
+                                <h1>Your Profile</h1>
+                                <h5 class="mt-3">to unlock more features</h5>
                             </div>
                         </div>
                     </div>
+                    <div class="col-xl-7 col-lg-7 col-md-7 p-4">
+                        <h3 class="mb-2">Pair your Rating Central ID</h3>
+                        <hr/>
+                        <h6>Please enter your Full Name to search Rating Central Players.</h6>
+                        <div class="theme-card mt-4">
+                            <form class="theme-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+                                <app-player-autocomplete (actionTriggered)="handlePlayerAutoCompleteAction($event)"></app-player-autocomplete>
+                                <button class="btn primary-btn btn-default radius-0" type="submit">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row mt-5">
+        <div class="row blog-agency" *ngIf="completedProfile">
             <div class="col-12">
-
+                <!-- Your profile -->
+                <div class="row blog-contain pl-0 pr-0">
+                    <div class="col-xl-3 col-lg-3 col-md-3 p-0">
+                        <div class="text-center profile-img" [ngStyle]="{'background-image': 'url(assets/images/gym/header2.jpg)'}">
+                            <div class="profile-title">
+                                <h4>Welcome</h4>
+                                <h1 class="mt-1">{{completedProfile.FullName}}</h1>
+                                <h5 class="mt-3"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-9 col-lg-9 col-md-9 p-4">
+                        <div class="container portfolio-detail mb-3" *ngIf="player">
+                            <app-player-detail-basic-info [player]="player"></app-player-detail-basic-info>
+                        </div>
+                        <app-player-total-counter [player]="player"></app-player-total-counter>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
-<!-- Breadcrumb end -->
+
+<section class="dashboard-friends mb-4">
+    <div class="container" *ngIf="friends">
+        <ng-container *ngFor="let friend of friends">
+            <app-friend-detail-tile [friend]="friend"></app-friend-detail-tile>
+        </ng-container>
+    </div>
+</section>
 
 <app-gym-footer></app-gym-footer>

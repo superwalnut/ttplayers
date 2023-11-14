@@ -11,6 +11,7 @@ import { PlayerAutocompleteComponent } from './components/player-autocomplete/pl
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+
 @NgModule({
   declarations: [MenuComponent, TapToTopComponent, LoaderComponent, GymFooterComponent, GymNavComponent, PlayerAutocompleteComponent],
   exports: [
@@ -19,6 +20,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     TapToTopComponent,
     GymFooterComponent,
     GymNavComponent,
+    PlayerAutocompleteComponent,
   ],
   imports: [
     CommonModule,

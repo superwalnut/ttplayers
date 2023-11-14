@@ -119,4 +119,43 @@ export class PlayerService {
       .limit(pageSize)
     ).valueChanges().pipe(take(1));
   }
+
+  getPlayerByPlayerIdList(playerIds:string[]) : Observable<Player[]>{
+    const batches = this.createBatch(playerIds, 30);
+
+    const queries = batches.map(batch => {
+      return this.firestore.collection<Player>('Players', ref =>
+        ref.where('Id', 'in', batch)
+      ).valueChanges();
+    });
+
+    return this.combineObservables(playerIds, queries);
+  }
+
+  private createBatch(playerIds: string[], batchSize: number): string[][] {
+    const batches: string[][] = [];
+    for (let i = 0; i < playerIds.length; i += batchSize) {
+      const batch = playerIds.slice(i, i + batchSize);
+      batches.push(batch);
+    }
+    return batches;
+  }
+
+  private combineObservables(teams: string[], observables: Observable<Player[]>[]): Observable<Player[]> {
+    return new Observable<Player[]>(subscriber => {
+      const mergedResults: Player[] = [];
+  
+      const subscribeToQuery = (query: Observable<Player[]>) => {
+        query.subscribe(results => {
+          mergedResults.push(...results);
+          if (mergedResults.length === teams.length) {
+            subscriber.next(mergedResults);
+            subscriber.complete();
+          }
+        });
+      };
+  
+      observables.forEach(subscribeToQuery);
+    });
+  }
 }

@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, LOCALE_ID } from '@angular/core';
 import { Observable, OperatorFunction, catchError, debounceTime, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
 import { PlayerService } from 'src/app/service/player.service';
-import { Profile } from '../../../models/profile';
+import { PlayerAutoComplete } from '../../../models/player-autocomplete';
 
 @Component({
   selector: 'app-player-autocomplete',
@@ -9,21 +9,23 @@ import { Profile } from '../../../models/profile';
   styleUrls: ['./player-autocomplete.component.scss']
 })
 export class PlayerAutocompleteComponent {
-  @Output() actionTriggered = new EventEmitter<void>();
+  @Output() actionTriggered = new EventEmitter<PlayerAutoComplete>();
 
   searching = false;
   searchFailed = false;
-  playerAutoCompleteModel: any;
+  public playerAutoCompleteModel: any;
 
   constructor(private playerService:PlayerService) {
   }
 
-  triggerAction() {
+  onInputBlur() {
     // Emit the event when the button is clicked
+    console.log('send model', this.playerAutoCompleteModel);
+
     this.actionTriggered.emit(this.playerAutoCompleteModel);
   }
 
-  searchPlayer: OperatorFunction<string, readonly {name, id, gender, state, rating, firstName, lastName}[]> = (text$: Observable<string>) =>
+  searchPlayer: OperatorFunction<string, readonly PlayerAutoComplete[]> = (text$: Observable<string>) =>
   text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
@@ -33,7 +35,17 @@ export class PlayerAutocompleteComponent {
         tap(() => (this.searchFailed = false)),
         map((players => {
           return players.map(p =>{
-            return { name : `${p.FirstName} ${p.LastName} (ID:${p.Id})`, id : p.Id, gender: p.Gender, state: p.State, rating: `${p.Rating}±${p.StDev}`, firstName: p.FirstName, lastName: p.LastName};
+            return {
+              Label: `${p.FirstName} ${p.LastName} (ID:${p.Id})`,
+              PlayerId: p.Id,
+              Rating: p.Rating,
+              StDev: p.StDev,
+              FullName: p.FullName,
+              FirstName: p.FirstName,
+              LastName: p.LastName,
+              State: p.State,
+              Gender: p.Gender
+            } as PlayerAutoComplete;
           })
         })),
         catchError(() => {
@@ -45,6 +57,6 @@ export class PlayerAutocompleteComponent {
     tap(() => (this.searching = false)),
   );
 
-  searchPlayerFormatter = (x: { name: string }) => x.name;
+  searchPlayerFormatter = (x: { Label: string }) => x.Label;
 
 }

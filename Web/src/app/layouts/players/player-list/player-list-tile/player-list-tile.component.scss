@@ -1,0 +1,171 @@
+
+.init-img {
+    height:100%;
+    width:100%;
+    font-weight: 400;
+    font-size:70px;    
+
+    display: flex;
+    align-items: center; /* Vertical centering */
+    justify-content: center; /* Horizontal centering */
+}
+
+.blue-text {
+    color: rgba(65, 163, 255, 1) !important;
+}
+
+.red-text {
+    color:#e3154f !important;
+}
+
+.blue-bg {
+    background: linear-gradient(to bottom, rgba(65, 163, 255, 0.6), rgba(57, 159, 255, 0.6));
+}
+
+.red-bg {
+    background: linear-gradient(to bottom, rgba(227, 21, 79, 0.6), rgba(228, 18, 77, 0.6));
+}
+
+.blog-head {
+    font-size:1.5em;
+}
+
+.rating{
+    .rating-number{
+        font-size:1.5em;
+        font-weight: 200;
+    }
+    font-size:1.5em;
+}
+
+
+.btn-bottom{
+    margin-top:50px !important;
+}
+
+.m-r-0 {
+    margin-right: 0 !important;
+}
+
+.search-form {
+    input {
+        padding: 16px 45% 16px 16px;
+        border:solid 1px #c2c2c2;
+    }
+    .button-primary {
+        right:0%;
+        margin-right:2px;
+        button {
+            padding: 14px 35px;
+        }
+    }
+}
+
+.button-select {
+    button {
+        padding:13px !important;
+    }
+}
+
+.empty-cart-cls {
+    height:100%;
+}
+
+
+@media only screen and (max-width: 1600px) {
+
+}
+
+@media only screen and (max-width: 1366px) and (min-width: 1200px) {
+}
+
+@media only screen and (max-width: 1366px) {
+}
+
+@media only screen and (max-width: 1250px) {
+}
+
+@media only screen and (max-width: 1199px) and (min-width: 576px) {
+}
+
+@media only screen and (max-width: 1199px) and (min-width: 992px) {
+}
+
+@media only screen and (max-width: 1199px) {
+}
+
+@media only screen and (max-width: 1024px) {
+}
+
+@media only screen and (max-width: 991px) and (min-width: 768px) {
+}
+
+@media only screen and (max-width: 991px) and (min-width: 576px) {
+}
+
+@media only screen and (max-width: 991px)   {
+    .init-img{
+        font-weight: 600;
+        font-size:60px;
+    }
+
+    .button-select {
+        button {
+            padding:14px;
+        }
+    }
+
+}
+
+@media only screen and (min-width: 768px) {
+}
+
+@media only screen and (max-width: 767px) {
+}
+
+@media only screen and (max-width: 767px) and (min-width: 576px) {
+}
+
+@media only screen and (max-width: 600px) {
+    .player-list-header{
+        min-height:60px;
+    }
+    
+}
+
+@media only screen and (max-width: 575px) {
+    .init-img{
+        height:60px;
+        font-weight: 400;
+        font-size:40px;
+        }
+
+    .rc-id{
+        text-align: center !important;
+    }
+
+    .search-form {
+        input {
+            padding-right: 16px;
+            border:solid 1px #c2c2c2;
+        }
+    }
+
+    .last-played-label {
+        display:none;
+    }
+
+}
+
+@media only screen and (max-width: 480px) {
+}
+
+@media only screen and (max-width: 420px) {
+}
+
+@media only screen and (max-width: 360px) {
+}
+
+@media only screen and (max-width: 320px) {
+}
+
