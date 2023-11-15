@@ -21,6 +21,14 @@
     }
 }
 
+.event-img {
+    width:100%;
+    height:100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 @media (max-width: 576px) {
     .col-xs-6 {
         flex: 0 0 50%;
@@ -30,6 +38,11 @@
     .subscribe .form-group input, .subscribe .form-group textarea {
         padding-right:0%;
     }
+
+    .event-img {
+        height:70px;
+    }
+    
 }
 
 @media (max-width: 992px) {

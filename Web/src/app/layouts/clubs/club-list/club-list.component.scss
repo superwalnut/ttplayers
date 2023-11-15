@@ -29,9 +29,21 @@
     min-height: 600px;;
 }
 
+.club-img {
+    width:100%;
+    height:100px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 @media (max-width: 576px) {
     .subscribe .form-group input, .subscribe .form-group textarea {
         padding-right:0%;
+    }
+
+    .club-img {
+        height:70px;
     }
 }
 
@@ -45,4 +57,9 @@
             padding:14px;
         }
     }
+
+    .club-img {
+        height:80px;
+    }
+
 }

@@ -1,14 +1,14 @@
-<div class="row friend-row" [ngClass]="{'highlight': player.Id== yourself.Id}" *ngIf="player">
-    <div class="col-1 rank text-center"> #{{rank}}</div>
-    <div class="col-3 text-center">
+<div class="row friend-detail" [ngClass]="{'highlight': player.Id== yourself.Id}" *ngIf="player">
+    <div class="col-1 rank text-center friend-detail-label"> #{{rank}}</div>
+    <div class="col-3 text-center friend-detail-label">
         <i id="gender-ico" class="fa" aria-hidden="true" [ngClass]="{'blue-text fa-male': player.Gender == 'M', 'red-text fa-female': player.Gender == 'F'}"></i>&nbsp;
         <a href="/player/{{player.Id}}">{{player.FirstName}} {{player.LastName}}</a>
         <br/>
         {{toRating(player)}}
     </div>
-    <div class="col-1 text-center">{{player.NationalGenderRanking>0?"#"+player.NationalGenderRanking:"--"}}</div>
-    <div class="col-1 text-center">{{player.YearToDateWins / (player.YearToDateWins+player.YearToDateLoses) | percent }}</div>
-    <div class="col-2 text-center">{{player.TotalWins}} / {{player.TotalPlayedMatches}}</div>
-    <div class="col-2 text-center">{{player.TotalBeatPlayersCount}} / {{player.TotalOpponentCount}}</div>
-    <div class="col-2 text-center" [ngClass]="{'green':player.RatingChangesQuarterly>0, 'red':player.RatingChangesQuarterly<0}">{{player.RatingChangesQuarterly>0?"+"+player.RatingChangesQuarterly:player.RatingChangesQuarterly}}</div>
+    <div class="col-1 text-center friend-detail-label">{{player.NationalGenderRanking>0?"#"+player.NationalGenderRanking:"--"}}</div>
+    <div class="col-1 text-center friend-detail-label">{{player.YearToDateWins / (player.YearToDateWins+player.YearToDateLoses) | percent }}</div>
+    <div class="col-2 text-center friend-detail-label">{{player.TotalWins}}/{{player.TotalPlayedMatches}}</div>
+    <div class="col-2 text-center friend-detail-label">{{player.TotalBeatPlayersCount}}/{{player.TotalOpponentCount}}</div>
+    <div class="col-2 text-center friend-detail-label" [ngClass]="{'green':player.RatingChangesQuarterly>0, 'red':player.RatingChangesQuarterly<0}">{{player.RatingChangesQuarterly>0?"+"+player.RatingChangesQuarterly:player.RatingChangesQuarterly}}</div>
 </div>

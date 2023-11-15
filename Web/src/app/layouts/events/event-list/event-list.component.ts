@@ -65,5 +65,13 @@ export class EventListComponent {
    getLocalState() {
      return localStorage.getItem('event-state');
    }
+
+   getEventBg(evt:TtEvent) {
+    if(!evt.State){
+      return `url(assets/images/events/AUS.jpg)`;
+    }
+
+    return `url(assets/images/events/${evt.State}.jpg)`;
+   }
 }
 

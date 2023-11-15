@@ -10,10 +10,11 @@ import { GymNavComponent } from './components/gym-nav/gym-nav.component';
 import { PlayerAutocompleteComponent } from './components/player-autocomplete/player-autocomplete.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FooterFixedMobileMenuComponent } from './components/footer-fixed-mobile-menu/footer-fixed-mobile-menu.component';
 
 
 @NgModule({
-  declarations: [MenuComponent, TapToTopComponent, LoaderComponent, GymFooterComponent, GymNavComponent, PlayerAutocompleteComponent],
+  declarations: [MenuComponent, TapToTopComponent, LoaderComponent, GymFooterComponent, GymNavComponent, PlayerAutocompleteComponent, FooterFixedMobileMenuComponent],
   exports: [
     MenuComponent,
     LoaderComponent,

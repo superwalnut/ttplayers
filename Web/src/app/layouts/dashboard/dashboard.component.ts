@@ -10,6 +10,8 @@ import { Player } from 'src/app/models/player';
 import { PlayerService } from 'src/app/service/player.service';
 import { FriendService } from 'src/app/service/friend.service';
 import { Friend } from 'src/app/models/friend';
+import { combineLatest, mergeMap, of, switchMap, zip } from 'rxjs';
+import { subscribe } from 'diagnostics_channel';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,14 +22,11 @@ export class DashboardComponent implements OnInit{
   profileForm!: FormGroup;
   user:User;
 
-  completedProfile:Profile; // try to load this from DB
-
+  completedProfile:Profile = null; // try to load this from DB
   selectedPlayerProfile:PlayerAutoComplete; // profile selected from the autocomplete
-
-  player:Player;
+  player:Player; // once completed the profile, player will be populated with paired Rating Central Player
 
   friends:Friend[];
-
   firendPlayers:Player[];
 
   constructor(public authService: AuthService, 
@@ -40,37 +39,47 @@ export class DashboardComponent implements OnInit{
     this.user = this.authService.getLoggedInUser();
     this.profileForm = new FormGroup({});
 
-    this.profileService.getProfile(this.user.Id).subscribe(x=>{
+    if(this.user.EmailVerified){
+      this.loadProfile();
+    }
+  }
+
+  loadProfile() {
+    this.profileService.getProfile(this.user.Id).subscribe(profile=>{
       // do nothing if user has't setup their profile yet.
-      if(x){
-        this.completedProfile = x;
-        // get the player if already has profile
-        if(this.completedProfile) {
-          this.playerService.getPlayer(this.completedProfile.PlayerId).subscribe(p=>{
-            this.player = p;
-            console.log('player', this.player);
-            // get user's friends
-            if(this.user.EmailVerified){
-              this.friendService.getFriends(this.user.Id).subscribe(friends=>{
-                this.friends = friends;
-                console.log('friends', this.friends);
+      if(!profile)
+        return;
 
-                const friendPlayerIds = this.friends.map(f => f.FriendPlayerId);
-                // load players by friend-player-IDs
-                this.playerService.getPlayerByPlayerIdList(friendPlayerIds).subscribe(x=>{
-                  // push yourself to friend list too
-                  x.push(this.player);
-
-                  //get all friend players & sort fiend-players by Rating
-                  this.firendPlayers = this.sortPlayersByRating(x);
-                  console.log('friend players', x);
-                });
-              });
-            }
-          });
-        }
-      }
+      this.completedProfile = profile;
+      
+      // get the player if already has profile
+      this.loadYourselfAndFriends(this.completedProfile.PlayerId);
     });
+  }
+
+  loadYourselfAndFriends(profilePlayerId:string) {
+    // get user's friends
+    if(this.user.EmailVerified){
+      this.playerService.getPlayer(profilePlayerId).pipe(
+        switchMap(player=>{
+          this.player = player;
+          console.log('yourself player', this.player);
+          return zip(of(player),this.friendService.getFriends(this.user.Id));
+        }),
+        switchMap(([player, friends])=>{
+          this.friends = friends;
+          console.log('friends', this.friends);
+          const friendPlayerIds = this.friends.map(f => f.FriendPlayerId);
+          // load players by friend-player-IDs
+          return zip(of(player), this.playerService.getPlayerByPlayerIdList(friendPlayerIds));
+        })
+      ).subscribe(([mePlayer, players]) =>{
+        console.log('friend-players', this.firendPlayers);
+        players.push(mePlayer);
+        var sorted = this.sortPlayersByRating(players);
+        this.firendPlayers = sorted;
+      });
+    }
   }
 
   saveProfile() {
@@ -87,6 +96,7 @@ export class DashboardComponent implements OnInit{
       this.profileService.saveProfile(this.user.Id, profile).then(x=>{
         this.completedProfile = profile;
         this.toastrService.show('You have successfully paired your rating central player ID');
+        this.loadYourselfAndFriends(this.completedProfile.PlayerId);
       });
     }
     else {

@@ -30,7 +30,7 @@
     }
 }    
 
-.friend-row {
+.friend-detail {
     padding:0.6em;
 
     a {
@@ -48,13 +48,27 @@
 }
 
 @media only screen and (max-width: 575px) {
-    .friend-row {
-        padding:0.1em;
+    .friend-detail {
+        padding:0em;
+    }
+
+    .rank {
+        font-size:1em;
+        font-weight:400;
+    }
+
+    .friend-detail-label {
+        padding:0.1em !important;
+        font-size:0.7em;
+
+        a {
+            font-size:0.8em;
+        }
     }
 }
 
 @media only screen and (max-width: 991px) {
-    .friend-row {
+    .friend-detail {
         padding:0.4em;
     }
 }
