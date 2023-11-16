@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StatisticsService } from './../../../service/statistics.service';
 import { Statistics } from 'src/app/models/statistics';
 import { LocalstorageService } from 'src/app/service/localstorage.service';
+import { GlobalConstants } from 'src/app/service/global.constants';
 
 @Component({
   selector: 'app-gym-counter',
@@ -10,25 +11,12 @@ import { LocalstorageService } from 'src/app/service/localstorage.service';
 })
 export class GymCounterComponent implements OnInit {
   stats:Statistics;
-  storageKey:string = 'stats-counter';
   counter:any;
 
   constructor(private statsService:StatisticsService, private lsService:LocalstorageService) { }
 
   ngOnInit() {
-    const val = this.lsService.getItemWithExpiration(this.storageKey);
-    if(val){
-      this.stats = val;
-      this.setCounters(this.stats.TotalPlayerCount, this.stats.TotalEventCount, this.stats.TotalMatchCount, this.stats.ActivePlayerCount);
-    } else {
-      this.statsService.getLatest().subscribe(x=>{
-        if(x.length>0){
-          this.stats = x[0];
-          this.lsService.setItemWithExpiration('stats-counter', this.stats, 7);
-          this.setCounters(this.stats.TotalPlayerCount, this.stats.TotalEventCount, this.stats.TotalMatchCount, this.stats.ActivePlayerCount);
-        }
-      });
-    }
+    this.loadStats();
   }
 
   setCounters(players:number, events:number, matches:number, activePlayers:number) {
@@ -56,6 +44,22 @@ export class GymCounterComponent implements OnInit {
         img:'assets/images/gym/counter/work-icon.png',
         type:'Active Players'
       }];
+  }
+
+  loadStats() {
+    const val = this.lsService.getItemWithExpiration(GlobalConstants.STATS_KEY);
+    if(val){
+      this.stats = val;
+      this.setCounters(this.stats.TotalPlayerCount, this.stats.TotalEventCount, this.stats.TotalMatchCount, this.stats.ActivePlayerCount);
+    } else {
+      this.statsService.getLatest().subscribe(x=>{
+        if(x){
+          this.stats = x;
+          this.lsService.setItemWithExpiration(GlobalConstants.STATS_KEY, this.stats, GlobalConstants.LOCAL_STORAGE_EXPIRY);
+          this.setCounters(this.stats.TotalPlayerCount, this.stats.TotalEventCount, this.stats.TotalMatchCount, this.stats.ActivePlayerCount);
+        }
+      });
+    }
   }
   
 }

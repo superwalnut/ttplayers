@@ -2,7 +2,7 @@
   "profiles": {
     "TtPlayers.Importer": {
       "commandName": "Project",
-      "commandLineArgs": "--push-match --action-count=20000"
+      "commandLineArgs": "--push-match --player-id=147512 --count=20000"
     }
   }
 }

@@ -1,61 +1,18 @@
  <div class="blog-side">
-        <div>
-            <h5 class="blog-title">States</h5>
-            <div class="sidebar-container borders">
-                <ul class="sidebar-list">
-                    <li class="d-flex"><a href="#"> <i class="fa fa-angle-right m-r-15"
-                                                       aria-hidden="true"></i>Lorem
-                        Ipsum Is Simple</a></li>
-                    <li class="d-flex"><a href="#"> <i class="fa fa-angle-right m-r-15"
-                                                       aria-hidden="true"></i>Many Variations</a></li>
-                    <li class="d-flex"><a href="#"> <i class="fa fa-angle-right m-r-15"
-                                                       aria-hidden="true"></i>random text</a></li>
-                    <li class="d-flex"><a href="#"> <i class="fa fa-angle-right m-r-15"
-                                                       aria-hidden="true"></i>lorem ipsum.</a></li>
-                    <li class="d-flex"><a href="#"> <i class="fa fa-angle-right m-r-15"
-                                                       aria-hidden="true"></i>it's Random.</a></li>
-                </ul>
-            </div>
+    <div *ngIf="statistics">
+        <h5 class="blog-title">Players</h5>
+        <h6 class="mb-3">Total <strong class="total-counter">{{statistics.TotalPlayerCount}}</strong> players registered.</h6>
+        <div class="sidebar-container borders">
+            <ul class="sidebar-list">
+                <li class="d-flex"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>NSW: {{statistics.StatePlayerCounts.NSW}} Players</li>
+                <li class="d-flex"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>VIC: {{statistics.StatePlayerCounts.VIC}} Players</li>
+                <li class="d-flex"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>QLD: {{statistics.StatePlayerCounts.QLD}} Players</li>
+                <li class="d-flex"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>SA: {{statistics.StatePlayerCounts.SA}} Players</li>
+                <li class="d-flex"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>TAS: {{statistics.StatePlayerCounts.TAS}} Players</li>
+                <li class="d-flex"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>WA: {{statistics.StatePlayerCounts.WA}} Players</li>
+                <li class="d-flex"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>ACT: {{statistics.StatePlayerCounts.ACT}} Players</li>
+                <li class="d-flex"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>NT: {{statistics.StatePlayerCounts.NT}} Players</li>
+            </ul>
         </div>
-        <div>
-            <h5 class="blog-title">Top Movers</h5>
-            <div class="sidebar-container">
-                <div class="post-container d-flex">
-                    <div class="w-35 m-r-25">
-                        <img src="assets/images/inner-page/side-img/1.jpg" alt=""
-                             class="img-fluid">
-                        <div class="badge">2020</div>
-                    </div>
-                    <div><h5 class="post-head">lorem ipsum</h5>
-                        <h6 class="date">nov 22, 2020</h6>
-                    </div>
-                </div>
-                <div class="post-container d-flex">
-                    <div class="w-35 m-r-25"><img src="assets/images/inner-page/side-img/2.jpg" alt=""
-                                                  class="img-fluid"><div class="badge badge-red">2020</div></div>
-                    <div><h5 class="post-head">lorem ipsum</h5>                                     <h6
-                            class="date">nov 22, 2020</h6></div>
-                </div>
-                <div class="post-container d-flex">
-                    <div class="w-35 m-r-25"><img src="assets/images/inner-page/side-img/3.jpg" alt=""
-                                                  class="img-fluid">
-                        <div class="badge badge-yellow">2020</div></div>
-                    <div><h5 class="post-head">lorem ipsum</h5>                                     <h6
-                            class="date">nov 22, 2020</h6></div>
-                </div>
-                <div class="post-container d-flex">
-                    <div class="w-35 m-r-25"><img src="assets/images/inner-page/side-img/4.jpg" alt=""
-                                                  class="img-fluid"><div class="badge badge-blue">2020</div></div>
-                    <div><h5 class="post-head">lorem ipsum</h5>                                     <h6
-                            class="date">nov 22, 2020</h6></div>
-                </div>
-            </div>
-        </div>
-        <div class="sidebar-container">
-            <h5 class="blog-title">newsletter</h5>
-            <div class="newsletter text-center form">
-                <div class="form-group"><input type="text" class="form-control" placeholder="enter email">
-                    <a href="#"> <i class="fa fa-paper-plane" aria-hidden="true"></i> </a></div>
-            </div>
-        </div>
+    </div>
 </div>

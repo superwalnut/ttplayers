@@ -130,6 +130,18 @@
         font-size:0.6em;
         padding:0.1em !important;
     }
+
+    .dashboard-friends-title {
+        h2 {
+            text-align: center;
+        }
+    }
+
+    .dashboard-profile {
+        h2 {
+            text-align: center;
+        }
+    }
 }
 
 @media only screen and (max-width: 991px) {

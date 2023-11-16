@@ -23,8 +23,9 @@ export class EventDetailComponent {
 
     this.eventService.getEvent(eventId).subscribe(evt=>{
       this.event = evt;
-
+      console.log('event', this.event);
       this.eventService.getEventPlayer(eventId).subscribe(player =>{
+        console.log('event-players', player);
 
         this.eventMenPlayerRatings = [];
         this.eventWomenPlayerRatings = [];

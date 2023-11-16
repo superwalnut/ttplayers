@@ -35,7 +35,17 @@ namespace TtPlayers.Importer.Applications
 
         public async Task TransformMatches(bool forceAll = false)
         {
-            var eventMatches = await _eventMatchesRepository.FilterByAsync(x => x.RequireTransform);
+            var eventMatches = new List<TtEventMatches>();
+
+            if(forceAll)
+            {
+                eventMatches = await _eventMatchesRepository.FilterByAsync(x => true);
+            }
+            else
+            {
+                eventMatches = await _eventMatchesRepository.FilterByAsync(x => x.RequireTransform);
+            }
+            
             var events = await _eventRepository.FilterByAsync(x => true);
             var players = await _rcScraper.DownloadPlayersAsync();
 
@@ -44,7 +54,7 @@ namespace TtPlayers.Importer.Applications
             var sw = new Stopwatch();
             sw.Start();
 
-            int numThreads = 1; // Number of threads for parallel importing
+            int numThreads = 10; // Number of threads for parallel importing
             List<Task> importTasks = new List<Task>();
             for (int i = 0; i < numThreads; i++)
             {

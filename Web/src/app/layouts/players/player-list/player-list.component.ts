@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Player } from 'src/app/models/player';
+import { Statistics } from 'src/app/models/statistics';
+import { LocalstorageService } from 'src/app/service/localstorage.service';
 import { PlayerService } from 'src/app/service/player.service';
+import { StatisticsService } from 'src/app/service/statistics.service';
+import { GlobalConstants } from 'src/app/service/global.constants';
 
 @Component({
   selector: 'app-player-list',
@@ -18,7 +22,9 @@ export class PlayerListComponent implements OnInit {
     
   lastPlayer:Player = null;
 
-  constructor(private playerService:PlayerService, private route: ActivatedRoute, private router:Router) {
+  stats:Statistics; // use for statistics data for sidebar
+
+  constructor(private playerService:PlayerService, private route: ActivatedRoute, private router:Router, private statsService:StatisticsService, private lsService:LocalstorageService) {
   }
 
   ngOnInit() {
@@ -27,6 +33,8 @@ export class PlayerListComponent implements OnInit {
         this.keyword = keyword;
         this.search();
       }
+
+      this.loadStatistics();
   }
 
   selectState(val:string){
@@ -69,6 +77,20 @@ export class PlayerListComponent implements OnInit {
       }
     });
 
+  }
+
+  loadStatistics() {
+    const val = this.lsService.getItemWithExpiration(GlobalConstants.STATS_KEY);
+    if(val){
+      this.stats = val;
+    } else {
+      this.statsService.getLatest().subscribe(x=>{
+        if(x){
+          this.stats = x;
+          this.lsService.setItemWithExpiration(GlobalConstants.STATS_KEY, this.stats, GlobalConstants.LOCAL_STORAGE_EXPIRY);
+        }
+      });
+    }
   }
 
   

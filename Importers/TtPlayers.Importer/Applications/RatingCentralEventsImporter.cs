@@ -133,7 +133,7 @@ namespace TtPlayers.Importer.Applications
 
         public async Task ImportEventPlayers(bool forceAll = false)
         {
-
+            var players = await _playerRepository.FilterByAsync(c => true);
             var events = await _eventRepository.FilterByAsync(c => true);
             
             var pendingEvents = events;
@@ -149,10 +149,12 @@ namespace TtPlayers.Importer.Applications
             foreach(var evt in pendingEvents)
             {
                 // get player rating
-                var ratings = await GetPlayerRatingChanges(evt);
+                var ratings = (await GetPlayerRatingChanges(evt)).ToList();
 
                 // insert player update action
                 await InsertPlayerAction(ratings, evt);
+
+                ratings.ForEach(x => x.Gender = players.FirstOrDefault(p => p.Id == x.PlayerId)?.Gender);
 
                 await _eventPlayerRepository.UpsertAsync(new TtEventPlayer
                 {
@@ -160,7 +162,8 @@ namespace TtPlayers.Importer.Applications
                     EventDate = evt.Date,
                     Players = ratings.ToList(),
                     LastUpdated = DateTime.Now,
-                    RequireDeltaPush = true
+                    RequireDeltaPush = true,
+                    
                 }, x=>x.Id == evt.Id);
 
                 //Update event with match statistics

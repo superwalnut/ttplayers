@@ -173,16 +173,15 @@ namespace TtPlayers.Importer.Applications
 
         public async Task PushEventMatches(string playerId = null, int? actionCount = 10000)
         {
-            var matches = await _matchRepository.FilterByAsyncOrderByDesending(x => x.RequireDeltaPush, x=>x.MatchDate, 0, actionCount.Value);
-
+            var matches = new List<Match>();
+            
             if(!string.IsNullOrEmpty(playerId))
             {
-                matches = matches.Where(x => x.PlayerIds.Contains(playerId)).ToList();
+                matches = await _matchRepository.FilterByAsyncOrderByDesending(x => x.RequireDeltaPush && x.PlayerIds.Contains(playerId), x => x.MatchDate, 0, actionCount.Value);
             }
-
-            if(actionCount.HasValue && actionCount.Value > 0)
+            else
             {
-                matches = matches.Take(actionCount.Value).ToList();
+                matches = await _matchRepository.FilterByAsyncOrderByDesending(x => x.RequireDeltaPush, x => x.MatchDate, 0, actionCount.Value);
             }
 
             _logger.LogInformation($"Pushing {matches.Count} matches with match details to firebase");
@@ -277,6 +276,21 @@ namespace TtPlayers.Importer.Applications
             var sndttaTeams = await _sndttaTeamRepository.CountAsync(x => x.RequireDeltaPush);
             _logger.LogInformation($"Teams: {sndttaTeams} pending to push");
 
+        }
+
+        private Dictionary<int, IList<IDocument>> CreateBatches(IList<IDocument> documents)
+        {
+            var batches = new Dictionary<int, IList<IDocument>>();
+
+            int batchSize = 500;
+
+            for (int i = 0; i < documents.Count; i += batchSize)
+            {
+                IList<IDocument> batch = documents.Skip(i).Take(batchSize).ToList();
+                batches.Add(i, batch);
+            }
+
+            return batches;
         }
     }
 }

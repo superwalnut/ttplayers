@@ -26,7 +26,7 @@ export class EventService {
       .orderBy('Date','desc')
       .orderBy('Id','asc')
       .limit(pageSize)
-    ).valueChanges().pipe(take(1));
+    ).valueChanges().pipe();
   }
 
   searchEventsWithPaging(state: string,  pageSize:number, lastDoc:TtEvent): Observable<TtEvent[]> {
@@ -43,7 +43,7 @@ export class EventService {
       .orderBy('Id','asc')
       .startAfter(lastDoc.Date, lastDoc.Id)
       .limit(pageSize)
-    ).valueChanges().pipe(take(1));
+    ).valueChanges().pipe();
   }
 
 
