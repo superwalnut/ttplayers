@@ -1,0 +1,55 @@
+<div class="container counter bg-light-inner  pt-3 pl-3 pr-3 mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h4>Ranking</h4>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 p-4">
+            <div *ngIf="player.NationalGenderRanking>0 && player.StateGenderRanking>0" class="player-activity-summary mb-4">
+                <strong>{{player.FirstName}}</strong> has ranking of
+                <ul class="list-group list-group-flush">
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.NationalGenderRanking }}</strong> in {{player.Gender=="M"?"Men":"Women"}} of Australia.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>top <strong>{{(100 - toNationalRankingPosition()) +'%'}}</strong> in {{player.Gender=="M"?"Men":"Women"}} of Australia.</li>
+                </ul>
+            </div>
+            <div class="player-ranking-container">
+                <div class="top-label-wrapper">
+                    <span [ngStyle]="{ 'left': toNationalRankingPosition() + '%' }">{{player.FirstName}}</span>
+                    <i class="caret-label fa fa-caret-down" aria-hidden="true" [ngStyle]="{ 'left': toNationalRankingPosition() + '%'  }"></i>
+                </div>
+                
+                <div class="gradient-progress"></div>
+            
+                <div class="bottom-label-wrapper">
+                    <span>#{{toTotalPlayers()}}</span>
+                    <span class="text-right">#1</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 p-4">
+            <div *ngIf="player.NationalGenderRanking>0 && player.StateGenderRanking>0" class="player-activity-summary mb-4">
+                <strong>{{player.FirstName}}</strong> has ranking of
+                <ul class="list-group list-group-flush">
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.StateGenderRanking}}</strong> in {{player.Gender=="M"?"Men":"Women"}} of {{player.State}}.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>top <strong>{{(100 - toStateRankingPosition()) +'%'}}</strong> in {{player.Gender=="M"?"Men":"Women"}} of {{player.State}}.</li>
+                </ul>
+            </div>
+            <div class="player-ranking-container">
+                <div class="top-label-wrapper">
+                    <span [ngStyle]="{ 'left': toStateRankingPosition() + '%' }">{{player.FirstName}}</span>
+                    <i class="caret-label fa fa-caret-down" aria-hidden="true" [ngStyle]="{ 'left': toStateRankingPosition()  + '%' }"></i>
+                </div>
+                
+                <div class="gradient-progress"></div>
+            
+                <div class="bottom-label-wrapper">
+                    <span>#{{toStateTotalPlayers()}}</span>
+                    <span class="text-right">#1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

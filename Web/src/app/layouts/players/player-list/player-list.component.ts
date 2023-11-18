@@ -34,7 +34,9 @@ export class PlayerListComponent implements OnInit {
         this.search();
       }
 
-      this.loadStatistics();
+      this.statsService.getLatest().subscribe(x=>{
+        this.stats = x;
+      });
   }
 
   selectState(val:string){
@@ -78,21 +80,5 @@ export class PlayerListComponent implements OnInit {
     });
 
   }
-
-  loadStatistics() {
-    const val = this.lsService.getItemWithExpiration(GlobalConstants.STATS_KEY);
-    if(val){
-      this.stats = val;
-    } else {
-      this.statsService.getLatest().subscribe(x=>{
-        if(x){
-          this.stats = x;
-          this.lsService.setItemWithExpiration(GlobalConstants.STATS_KEY, this.stats, GlobalConstants.LOCAL_STORAGE_EXPIRY);
-        }
-      });
-    }
-  }
-
-  
 }
 

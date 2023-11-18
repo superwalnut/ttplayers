@@ -1,0 +1,38 @@
+<div class="container counter bg-light-inner pt-3 pl-3 pr-3 mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h4>Opponents</h4>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 p-4">
+            <div *ngIf="player.TotalOpponentCount>0" class="player-activity-summary mb-4">
+                <strong>{{player.FirstName}}</strong> played against <strong>{{player.TotalOpponentCount}}</strong> opponents, 
+                <ul class="list-group list-group-flush">
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> beat <strong>{{player.TotalBeatPlayersCount }}</strong> players.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> lost to <strong>{{totalLostOpponents}}</strong> players.</li>
+                </ul>
+            </div>
+            <div *ngIf="player.TotalBeatHigherRatingPlayers>0" class="player-activity-summary mb-4">
+                And beat
+                <ul class="list-group list-group-flush">
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> <strong>{{player.TotalBeatHigherRatingPlayers }}</strong> players with <strong>higher</strong> ratings than {{player.Gender == "M"?"him":"her"}}.</li>
+                </ul>
+            </div>
+            <div *ngIf="player.TotalLostLowerRatingPlayers>0" class="player-activity-summary mb-4">
+                And lost to
+                <ul class="list-group list-group-flush">
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> <strong>{{player.TotalLostLowerRatingPlayers }}</strong> players with <strong>lower</strong> ratings than {{player.Gender == "M"?"him":"her"}}.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 p-4">
+            <div class="chart-container">
+                <canvas  id="OpponentChart" >{{ opponentChart }}</canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+

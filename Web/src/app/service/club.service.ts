@@ -53,7 +53,7 @@ export class ClubService {
         .orderBy('Name','asc')
         .startAfter(lastDoc.Name)
         .limit(pageSize)
-      ).valueChanges().pipe(take(1));
+      ).valueChanges().pipe();
     }
 
     return this.firestore.collection<Club>('Clubs', ref =>
@@ -62,7 +62,7 @@ export class ClubService {
       .orderBy('Name','asc')
       .startAfter(lastDoc.Name)
       .limit(pageSize)
-    ).valueChanges().pipe(take(1));
+    ).valueChanges().pipe();
   }
 
   searchClubsForAutoComplete(keyword:string) : Observable<any[]>{
@@ -76,7 +76,6 @@ export class ClubService {
         .orderBy('Name','asc')
         .limit(10)
       ).valueChanges().pipe(
-        take(1), 
         map((clubs => {
           return clubs.map(c =>{
             return `${c.Name} - (ID:${c.Id})`;

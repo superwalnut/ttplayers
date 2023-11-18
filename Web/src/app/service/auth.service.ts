@@ -78,15 +78,18 @@ export class AuthService {
     SignInWithGooglePopUp() {
       const provider = new GoogleAuthProvider();
       provider.addScope("email");
-      this.auth.signInWithPopup(provider)
+      return this.auth.signInWithPopup(provider)
         .then((result) => {
+          console.log('You have been successfully logged in!', result);
           // This gives you a Google Access Token. You can use it to access the Google API.
-          const token = result.user.getIdToken();
+          //const token = result.user.getIdToken();
+          //console.log('token', token);
           // The signed-in user info.
-          const user = result.user;
+          //const user = result.user;
           // IdP data available using getAdditionalUserInfo(result)
           // ...
         }).catch((error) => {
+          console.log('google signin error', error);
           // Handle Errors here.
           const errorCode = error.code;
           const errorMessage = error.message;
@@ -100,7 +103,7 @@ export class AuthService {
 
     SignInWithGoogleRedirect() {
       const provider = new GoogleAuthProvider();
-      this.auth.signInWithRedirect(provider);
+      return this.auth.signInWithRedirect(provider);
     }
 
     getGoogleRedirectResult() {
@@ -125,9 +128,9 @@ export class AuthService {
       });
     }
 
-    signInWithFacebook() {
+    signInWithFacebookPopup() {
       const provider = new FacebookAuthProvider();
-      this.auth.signInWithPopup(provider)
+      return this.auth.signInWithPopup(provider)
         .then((result) => {
           // The signed-in user info.
           const user = result.user;
@@ -135,6 +138,8 @@ export class AuthService {
           // This gives you a Facebook Access Token. You can use it to access the Facebook API.
           const accessToken = result.user.getIdToken();
 
+          console.log('user', user);
+          console.log('access token', accessToken);
           // IdP data available using getAdditionalUserInfo(result)
           // ...
         })

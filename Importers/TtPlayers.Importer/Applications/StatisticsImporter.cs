@@ -53,6 +53,23 @@ namespace TtPlayers.Importer.Applications
                 statePlayerCounts.Add(state, (int)stateCount);
             }
 
+            // men & women players
+            var totalMenPlayerCount = await _playerRepository.CountAsync(x=>x.Gender == "M");
+            var stateMenPlayerCounts = new Dictionary<string, int>();
+            foreach (var state in _states)
+            {
+                var stateCount = await _playerRepository.CountAsync(x => x.State == state && x.Gender == "M");
+                stateMenPlayerCounts.Add(state, (int)stateCount);
+            }
+
+            var totalWomenPlayerCount = await _playerRepository.CountAsync(x => x.Gender == "F");
+            var stateWomenPlayerCounts = new Dictionary<string, int>();
+            foreach (var state in _states)
+            {
+                var stateCount = await _playerRepository.CountAsync(x => x.State == state && x.Gender == "F");
+                stateWomenPlayerCounts.Add(state, (int)stateCount);
+            }
+
             _logger.LogInformation($"count total players {totalPlayerCount}");
 
             var activePlayerCount = await _playerRepository.CountAsync(x => x.LastPlayed > DateTime.Now.AddMonths(-6));
@@ -98,20 +115,45 @@ namespace TtPlayers.Importer.Applications
 
             _logger.LogInformation($"count total clubs {totalEventCount}");
 
+            // average winning rate
+
+            var allPlayers = await _playerRepository.FilterByAsync(x => true);
+            var selectedPlayers = allPlayers.Where(x => x.TotalPlayedMatches > 0).ToList();
+            var averageRate = selectedPlayers.Sum(x => x.TotalWins * 1.0d / x.TotalPlayedMatches) / selectedPlayers.Count;
+            var stateAverageRates = new Dictionary<string, double>();
+            foreach (var state in _states)
+            {
+                var statePlayers = allPlayers.Where(x=>x.State == state && x.TotalPlayedMatches > 0).ToList();
+                var stateAverageRate = statePlayers.Sum(x => x.TotalWins * 1.0d / x.TotalPlayedMatches) / statePlayers.Count;
+                stateAverageRates.Add(state, stateAverageRate);
+            }
+
+            _logger.LogInformation($"count average win rate {averageRate}");
+
+
             var statistics = new Statistics
             {
                 Id = DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                CreatedDate = DateTime.Now,
                 TotalPlayerCount = (int)totalPlayerCount,
-                TotalClubCount= (int)totalClubCount,
+                TotalMenPlayerCount = (int)totalMenPlayerCount,
+                TotalWomenPlayerCount = (int)totalWomenPlayerCount,
+                TotalClubCount = (int)totalClubCount,
                 TotalEventCount= (int)totalEventCount,
                 TotalMatchCount= (int)totalMatchCount,
                 ActivePlayerCount = (int)activePlayerCount,
 
+                AverageWinRate = averageRate,
+
+                StatePlayerCounts = statePlayerCounts,
+                StateMenPlayerCounts = stateMenPlayerCounts,
+                StateWomenPlayerCounts = stateWomenPlayerCounts,
                 StateActivePlayerCounts = activeStateCounts,
                 StateClubCounts = stateClubCounts,
                 StateEventCounts= stateEventCounts,
-                StatePlayerCounts = statePlayerCounts,
-                StateMatchCounts = stateMatchCounts
+                StateMatchCounts = stateMatchCounts,
+
+                StateAverageRates = stateAverageRates,
             };
 
             await _statisticRepository.UpsertAsync(statistics, x => x.Id == statistics.Id);

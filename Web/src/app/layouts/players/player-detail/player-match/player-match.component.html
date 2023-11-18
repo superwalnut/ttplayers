@@ -1,0 +1,36 @@
+<div class="container counter bg-light-inner pt-3 pl-3 pr-3 mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h4>Matches</h4>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 p-4">
+            <div *ngIf="player.TotalPlayedMatches>0" class="player-activity-summary mb-4">
+                <strong>{{player.FirstName}}</strong> played <strong>{{player.TotalPlayedMatches}}</strong> matches, 
+                <ul class="list-group list-group-flush">
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> won <strong>{{player.TotalWins }}</strong> matches.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> lost <strong>{{player.TotalLoses }}</strong> matches.</li>
+                </ul>
+            </div>
+            <div *ngIf="player.TotalWinsWithoutLosingAnySet>0" class="player-activity-summary mb-4">
+                And won <strong>{{player.TotalWinsWithoutLosingAnySet }}</strong> Clean Sheet matches <br/>(Without losing any set. i.e. 3:0)
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 p-4">
+            <ngx-gauge
+                class="match-chart"
+                [type]="gaugeType" 
+                [value]="wins" 
+                [label]="gaugeLabel"
+                [append]="gaugeAppendText"
+                [max]="max"
+                thick = 20
+                foregroundColor = "#007bff"
+                >
+            </ngx-gauge>
+        </div>
+    </div>
+</div>
+

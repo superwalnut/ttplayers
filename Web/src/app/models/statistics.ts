@@ -1,15 +1,32 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface Statistics {
     Id:string;
-    TotalPlayerCount:number;
+    CreatedDate:Timestamp;
+
+    TotalPlayerCount:number;    
     StatePlayerCounts:StateCounter;
+
+    TotalMenPlayerCount:number;
+    StateMenPlayerCounts:StateCounter;
+
+    TotalWomenPlayerCount:number;
+    StateWomenPlayerCounts:StateCounter;
+
     TotalEventCount:number;
     StateEventCounts:StateCounter;
+
     TotalMatchCount:number;
     StateMatchCounts:StateCounter;
+
     ActivePlayerCount:number;
     StateActivePlayerCounts:StateCounter;
+
     TotalClubCount:number;
     StateClubCounts:StateCounter;
+
+    AverageWinRate:number;
+    StateAverageRates:StateCounter;
 }
 
 export interface StateCounter {

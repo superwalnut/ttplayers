@@ -18,6 +18,8 @@ import { AuthService } from 'src/app/service/auth.service';
 import { User } from 'src/app/models/user';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { StatisticsService } from 'src/app/service/statistics.service';
+import { Statistics } from 'src/app/models/statistics';
 
 @Component({
   selector: 'app-player-detail',
@@ -27,7 +29,6 @@ import { ToastrService } from 'ngx-toastr';
 
 export class PlayerDetailComponent implements OnInit {
   player:Player;
-  //histories:PlayerHistoryEntry[];
   club:Club;
   teamPlayers:TeamPlayer[] = [];
   matchesByEvent: { [eventId: string]: Match[] } = {};
@@ -35,6 +36,7 @@ export class PlayerDetailComponent implements OnInit {
   lastMatch:Match = null;
   friend: Friend = null;
   loggedInUser: User = null;
+  stats:Statistics = null; // get latest statistics
 
   constructor(private route: ActivatedRoute,
     private title: Title, 
@@ -45,7 +47,8 @@ export class PlayerDetailComponent implements OnInit {
     private friendService:FriendService,
     private authService:AuthService,
     private modalService: NgbModal,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private statsService:StatisticsService
     ) { }
 
   ngOnInit() {
@@ -57,12 +60,6 @@ export class PlayerDetailComponent implements OnInit {
     this.playerService.getPlayer(playerId).subscribe(player => {
       this.player = player;
       console.log(this.player);
-
-      // this.playerService.getPlayerHistory(playerId).subscribe(history =>{
-      //   if(history && history.History){
-      //     this.histories = history.History;
-      //   }
-      // });
 
       // load friend info
       this.loggedInUser = this.authService.getLoggedInUser();
@@ -121,6 +118,11 @@ export class PlayerDetailComponent implements OnInit {
           }
         });
       }
+
+      // load statistics
+      this.statsService.getLatest().subscribe(x=>{
+        this.stats = x;
+      });
     });
   }
 

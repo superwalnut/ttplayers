@@ -40,7 +40,7 @@ export class FriendService {
     return this.firestore.collection<Friend>('Friends', ref =>
         ref
         .where('UserId', '==', userId)
-      ).valueChanges().pipe(take(1));
+      ).valueChanges().pipe();
   }
   
   countFriends(userId:string) {

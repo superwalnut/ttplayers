@@ -19,14 +19,14 @@ export class PlayerService {
         .where('Names', 'array-contains', searchTerm.toLowerCase())
         .orderBy('Id', 'asc')
         .limit(pageSize)
-      ).valueChanges().pipe(take(1));
+      ).valueChanges();
     } else {
       return this.firestore.collection<Player>('Players', ref =>
         ref
         .where('Names', 'array-contains', searchTerm.toLowerCase())
         .orderBy('Id', 'asc')
         .limit(pageSize)
-      ).valueChanges().pipe(take(1));
+      ).valueChanges();
     }
   }
 
@@ -39,7 +39,7 @@ export class PlayerService {
         .orderBy('Id', 'asc')
         .startAfter(lastPlayer.Id)
         .limit(pageSize)
-      ).valueChanges().pipe(take(1));
+      ).valueChanges();
     } else {
       return this.firestore.collection<Player>('Players', ref =>
         ref
@@ -47,7 +47,7 @@ export class PlayerService {
         .orderBy('Id', 'asc')
         .startAfter(lastPlayer.Id)
         .limit(pageSize)
-      ).valueChanges().pipe(take(1));
+      ).valueChanges();
     }
   }
 
@@ -57,9 +57,7 @@ export class PlayerService {
         .where('Names', 'array-contains', searchTerm.toLowerCase())
         .orderBy('Id', 'asc')
         .limit(10)
-      ).valueChanges().pipe(
-        take(1)
-      );
+      ).valueChanges();
   }
 
   getPlayer(id:string): Observable<Player> {
@@ -81,7 +79,7 @@ export class PlayerService {
         .orderBy('StateGenderRanking','asc')
         .orderBy('Id', 'asc')
         .limit(pageSize)
-      ).valueChanges().pipe(take(1));
+      ).valueChanges();
     }
 
     return this.firestore.collection<Player>('Players', ref =>
@@ -90,7 +88,7 @@ export class PlayerService {
       .orderBy('NationalGenderRanking','asc')
       .orderBy('Id', 'asc')
       .limit(pageSize)
-    ).valueChanges().pipe(take(1));
+    ).valueChanges();
   }
 
   getRankingsWithPaging(gender:string, state:string, pageSize:number, lastDoc:Player) : Observable<Player[]> {
@@ -107,7 +105,7 @@ export class PlayerService {
         .orderBy('Id', 'asc')
         .startAfter(lastDoc.StateGenderRanking, lastDoc.Id)
         .limit(pageSize)
-      ).valueChanges().pipe(take(1));
+      ).valueChanges();
     }
 
     return this.firestore.collection<Player>('Players', ref =>
@@ -117,7 +115,7 @@ export class PlayerService {
       .orderBy('Id', 'asc')
       .startAfter(lastDoc.NationalGenderRanking, lastDoc.Id)
       .limit(pageSize)
-    ).valueChanges().pipe(take(1));
+    ).valueChanges();
   }
 
   getPlayerByPlayerIdList(playerIds:string[]) : Observable<Player[]>{

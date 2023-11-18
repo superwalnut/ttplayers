@@ -13,16 +13,17 @@ export class GymCounterComponent implements OnInit {
   stats:Statistics;
   counter:any;
 
-  constructor(private statsService:StatisticsService, private lsService:LocalstorageService) { }
+  constructor(private statsService:StatisticsService) { }
 
   ngOnInit() {
-    this.loadStats();
+    this.statsService.getLatest().subscribe(x=>{
+      this.stats = x;
+      this.setCounters(x.TotalPlayerCount, x.TotalEventCount, x.TotalMatchCount, x.ActivePlayerCount);
+    });
   }
 
   setCounters(players:number, events:number, matches:number, activePlayers:number) {
-
     var matchRound = Math.round(matches/1000000 * 100) / 100;
-
     this.counter = [
       {
         count:`${players}+`,
@@ -45,21 +46,4 @@ export class GymCounterComponent implements OnInit {
         type:'Active Players'
       }];
   }
-
-  loadStats() {
-    const val = this.lsService.getItemWithExpiration(GlobalConstants.STATS_KEY);
-    if(val){
-      this.stats = val;
-      this.setCounters(this.stats.TotalPlayerCount, this.stats.TotalEventCount, this.stats.TotalMatchCount, this.stats.ActivePlayerCount);
-    } else {
-      this.statsService.getLatest().subscribe(x=>{
-        if(x){
-          this.stats = x;
-          this.lsService.setItemWithExpiration(GlobalConstants.STATS_KEY, this.stats, GlobalConstants.LOCAL_STORAGE_EXPIRY);
-          this.setCounters(this.stats.TotalPlayerCount, this.stats.TotalEventCount, this.stats.TotalMatchCount, this.stats.ActivePlayerCount);
-        }
-      });
-    }
-  }
-  
 }

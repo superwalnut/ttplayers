@@ -31,6 +31,6 @@ export class MatchService {
       .orderBy('Id', 'asc')
       .startAfter(lastDoc.MatchDate, lastDoc.Id)
       .limit(10)
-    ).valueChanges().pipe(take(1));
+    ).valueChanges().pipe();
   }
 }

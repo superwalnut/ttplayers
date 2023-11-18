@@ -50,4 +50,16 @@ export class LoginComponent implements OnInit {
       .catch((error) => this.toastrService.error(error.message))
       .finally(() => (this.loading = false));
   }
+
+  googleLogin() {
+    this.authService.SignInWithGooglePopUp().then(x=>{
+      console.log('sign in with google');
+    });
+  }
+
+  facebookLogin() {
+    this.authService.signInWithFacebookPopup().then(x=>{
+      console.log('sign in with facebook');
+    });
+  }
 }

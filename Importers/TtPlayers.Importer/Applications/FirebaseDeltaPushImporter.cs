@@ -246,7 +246,7 @@ namespace TtPlayers.Importer.Applications
 
         public async Task PushStatistics()
         {
-            var items = await _statisticsRepository.FilterByAsync(x => true);
+            var items = await _statisticsRepository.FilterByAsyncOrderByDesending(x => true, x=>x.CreatedDate, 0, 1);
             _logger.LogInformation($"Pushing {items.Count} statistics");
             foreach (var item in items)
             {

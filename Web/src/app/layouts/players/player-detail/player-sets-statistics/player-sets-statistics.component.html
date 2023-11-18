@@ -1,4 +1,4 @@
-<div class="container counter bg-light-inner p-4 mt-4" *ngIf="player.WinRateFirstGame || player.WinRateSecondGame || player.WinRateThirdGame || player.WinRateFourthGame || player.WinRateFifthGame">
+<div class="container counter bg-light-inner p-4 mt-4">
     <div class="row">
         <div class="col-12">
             <h3 class="match-statistics">Match statistics - <span class="small text-muted">Winning rating of each set</span> </h3>
@@ -53,6 +53,13 @@
                     </div>
                     <h6 class="count-desc text-center">Fifth Set</h6>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="chart-container">
+                <canvas id="SetsChart" >{{ setsChart }}</canvas>
             </div>
         </div>
     </div>

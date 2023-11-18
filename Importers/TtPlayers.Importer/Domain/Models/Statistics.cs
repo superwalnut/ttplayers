@@ -20,10 +20,25 @@ namespace TtPlayers.Importer.Domain.Models
         public string? Id { get; set; }
 
         [FirestoreProperty]
+        public DateTime CreatedDate { get; set; }
+
+        [FirestoreProperty]
         public int TotalPlayerCount { get; set; }
 
         [FirestoreProperty]
         public Dictionary<string, int> StatePlayerCounts { get; set; }
+
+        [FirestoreProperty]
+        public int TotalMenPlayerCount { get; set; }
+
+        [FirestoreProperty]
+        public Dictionary<string, int> StateMenPlayerCounts { get; set; }
+
+        [FirestoreProperty]
+        public int TotalWomenPlayerCount { get; set; }
+
+        [FirestoreProperty]
+        public Dictionary<string, int> StateWomenPlayerCounts { get; set; }
 
         [FirestoreProperty]
         public int TotalEventCount { get; set; }
@@ -48,6 +63,12 @@ namespace TtPlayers.Importer.Domain.Models
 
         [FirestoreProperty]
         public Dictionary<string, int> StateClubCounts { get; set; }
+
+        [FirestoreProperty]
+        public double AverageWinRate { get; set; }
+
+        [FirestoreProperty]
+        public Dictionary<string,double> StateAverageRates { get; set; }
 
     }
 }

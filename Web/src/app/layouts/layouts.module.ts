@@ -44,6 +44,11 @@ import { ResendEmailVerificationComponent } from './resend-email-verification/re
 import { PlayerDetailBasicInfoComponent } from '../layouts/players/player-detail/player-detail-basic-info/player-detail-basic-info.component';
 import { PlayerListTileComponent } from './players/player-list/player-list-tile/player-list-tile.component';
 import { FriendDetailTileComponent } from './dashboard/friend-detail-tile/friend-detail-tile.component';
+import { PlayerRankingComponent } from './players/player-detail/player-ranking/player-ranking.component';
+import { PlayerWinRateComponent } from './players/player-detail/player-win-rate/player-win-rate.component';
+import { PlayerOpponentComponent } from './players/player-detail/player-opponent/player-opponent.component';
+import { PlayerMatchComponent } from './players/player-detail/player-match/player-match.component';
+import { NgxGaugeModule } from 'ngx-gauge';
 
 @NgModule({
   declarations: [
@@ -52,7 +57,11 @@ import { FriendDetailTileComponent } from './dashboard/friend-detail-tile/friend
     HomeComponent, ClubListComponent, EventListComponent, EventDetailComponent, RankingComponent, DashboardComponent, ForgotPasswordComponent, LoginComponent, RegisterComponent, ProfileComponent, LogoutComponent, ResendEmailVerificationComponent,
     PlayerDetailBasicInfoComponent,
     PlayerListTileComponent,
-    FriendDetailTileComponent
+    FriendDetailTileComponent,
+    PlayerRankingComponent,
+    PlayerWinRateComponent,
+    PlayerOpponentComponent,
+    PlayerMatchComponent
   ],
   imports: [
     CommonModule,
@@ -63,6 +72,7 @@ import { FriendDetailTileComponent } from './dashboard/friend-detail-tile/friend
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
+    NgxGaugeModule,
   ],
   exports: [],
 })
