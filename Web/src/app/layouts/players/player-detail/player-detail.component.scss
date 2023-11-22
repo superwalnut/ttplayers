@@ -81,6 +81,12 @@ h5{
     padding-left:10px;
 }
 
+.btn-sm {
+    i {
+        width:14px;
+    }
+}
+
 @media only screen and (max-width: 575px) {
     .border-around {
         display:none;

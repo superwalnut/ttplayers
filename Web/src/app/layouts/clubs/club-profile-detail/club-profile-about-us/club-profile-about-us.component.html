@@ -1,0 +1,38 @@
+<!-- about section Start-->
+<section class="gym format" id="club-about" *ngIf="club">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="text-center center-content">
+                    <div class="about-img">
+                        <div class="borders-around">
+                            <div>
+                                <div class="bg-black"></div>
+                            </div>
+                            <img src="assets/images/gym/about-us.jpg" alt="" class="img-fluid format-img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="center-text">
+                    <div>
+                        <div class="format-small-text">
+                            <h6 class="font-primary borders-before"><span>Welcome to {{club.Nickname}}</span></h6>
+                        </div>
+                        <div class="format-head-text">
+                            <h3 class="about-font-header gradient-text">about the club</h3>
+                        </div>
+                        <div class="format-sub-text">
+                            <p class="p-light about-para">Welcome to <strong>{{club.Name}}</strong>, is a table tennis club located in {{club.City}}.</p>
+                            <p class="p-light about-para">Join us in celebrating the art of table tennis and unlocking the potential for every player, no matter their level of expertise. 
+                                We're here to support and empower the table tennis community on their journey to excellence.</p>
+                        </div>
+                        <a (click)="claimClub()" class="btn btn-default primary-btn">Claim this club</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- about section end-->

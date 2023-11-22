@@ -1,0 +1,39 @@
+<!--trainer section start-->
+<section class="gym trainers">
+    <div class="container overflow-hide">
+        <div class="row">
+            <div class="col-12">
+                <div class="title">
+                    <div class="text-center">
+                        <div>
+                            <h6 class=" borders-before"><span>Recent</span></h6>
+                        </div>
+                        <div class="main-title">
+                            <h2>Table Tennis Events</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <owl-carousel-o [options]="trainercarouselOptions" class="trainers-slider" *ngIf="events">
+                    <ng-container *ngFor="let evt of events">
+                        <ng-template carouselSlide class="item">
+                            <!-- <img [src]="trainer.img" alt="" class="img-fluid"> -->
+                            <div class="img-fluid border-shadow" [ngStyle]="{'background-image': 'url(assets/images/events/AUS-dark.jpg)'}">
+                                <h3 class="m-b-10">{{evt}}</h3>
+                                <a class="btn btn-default btn-white btn-sm">Claim This Club</a>
+                            </div>
+                            <div class="text-center trainers-info">
+                                <button type="button" (click)="claimClub()"
+                                        class=" btn btn-default primary-btn text-white text-capitalize">
+                                    Claim This Club
+                                </button>
+                            </div>
+                        </ng-template>
+                    </ng-container>
+                </owl-carousel-o>
+            </div>
+        </div>
+    </div>
+</section>
+<!--trainer section end-->

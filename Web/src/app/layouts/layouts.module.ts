@@ -43,12 +43,21 @@ import { LogoutComponent } from './logout/logout.component';
 import { ResendEmailVerificationComponent } from './resend-email-verification/resend-email-verification.component';
 import { PlayerDetailBasicInfoComponent } from '../layouts/players/player-detail/player-detail-basic-info/player-detail-basic-info.component';
 import { PlayerListTileComponent } from './players/player-list/player-list-tile/player-list-tile.component';
-import { FriendDetailTileComponent } from './dashboard/friend-detail-tile/friend-detail-tile.component';
 import { PlayerRankingComponent } from './players/player-detail/player-ranking/player-ranking.component';
 import { PlayerWinRateComponent } from './players/player-detail/player-win-rate/player-win-rate.component';
 import { PlayerOpponentComponent } from './players/player-detail/player-opponent/player-opponent.component';
 import { PlayerMatchComponent } from './players/player-detail/player-match/player-match.component';
+import { ClubProfileDetailComponent } from './clubs/club-profile-detail/club-profile-detail.component';
 import { NgxGaugeModule } from 'ngx-gauge';
+import { ClubProfileHeaderComponent } from './clubs/club-profile-detail/club-profile-header/club-profile-header.component';
+import { ClubProfileAboutUsComponent } from './clubs/club-profile-detail/club-profile-about-us/club-profile-about-us.component';
+import { ClubProfileContactUsComponent } from './clubs/club-profile-detail/club-profile-contact-us/club-profile-contact-us.component';
+import { ClubProfileEventsComponent } from './clubs/club-profile-detail/club-profile-events/club-profile-events.component';
+import { ClubProfilePlayersComponent } from './clubs/club-profile-detail/club-profile-players/club-profile-players.component';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { FriendListComponent } from './dashboard/friend-list/friend-list.component'
+import { FriendDetailTileComponent } from './dashboard/friend-list/friend-detail-tile/friend-detail-tile.component';
+import { CompetitorListComponent } from './dashboard/competitor-list/competitor-list.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +70,15 @@ import { NgxGaugeModule } from 'ngx-gauge';
     PlayerRankingComponent,
     PlayerWinRateComponent,
     PlayerOpponentComponent,
-    PlayerMatchComponent
+    PlayerMatchComponent,
+    ClubProfileDetailComponent,
+    ClubProfileHeaderComponent,
+    ClubProfileAboutUsComponent,
+    ClubProfileContactUsComponent,
+    ClubProfileEventsComponent,
+    ClubProfilePlayersComponent,
+    FriendListComponent,
+    CompetitorListComponent
   ],
   imports: [
     CommonModule,
@@ -73,6 +90,7 @@ import { NgxGaugeModule } from 'ngx-gauge';
     ReactiveFormsModule,
     NgbModule,
     NgxGaugeModule,
+    GoogleMapsModule
   ],
   exports: [],
 })

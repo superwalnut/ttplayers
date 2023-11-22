@@ -12,9 +12,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterFixedMobileMenuComponent } from './components/footer-fixed-mobile-menu/footer-fixed-mobile-menu.component';
 
-
 @NgModule({
-  declarations: [MenuComponent, TapToTopComponent, LoaderComponent, GymFooterComponent, GymNavComponent, PlayerAutocompleteComponent, FooterFixedMobileMenuComponent],
+  declarations: [MenuComponent, 
+    TapToTopComponent, 
+    LoaderComponent, 
+    GymFooterComponent, 
+    GymNavComponent, 
+    PlayerAutocompleteComponent, 
+    FooterFixedMobileMenuComponent
+  ],
   exports: [
     MenuComponent,
     LoaderComponent,

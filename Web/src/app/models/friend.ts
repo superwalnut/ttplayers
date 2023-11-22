@@ -1,7 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
 
 export interface Friend {
-    Id:string;
+    Id:string;// UserId + FriendPlayerId
     UserId:string;
     FriendPlayerId: string;
     FullName: string;

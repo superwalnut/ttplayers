@@ -14,20 +14,9 @@
 }
 
 .highlight {
-    background: #3c7ddf;
-    color:#fff;
+    background: #dddddd;
 
-    a {
-        color:#fff !important;
-    }
-
-    .green {
-        color:#00ff00 !important;
-    }
-    
-    .red {
-        color:#e50202 !important;
-    }
+  
 }    
 
 .friend-detail {
@@ -47,6 +36,10 @@
     }
 }
 
+.remove-friend {
+    font-size: 1.5em;
+}
+
 @media only screen and (max-width: 575px) {
     .friend-detail {
         padding:0em;
@@ -63,6 +56,10 @@
 
         a {
             font-size:0.8em;
+        }
+
+        .remove-friend {
+            font-size: 1.5em;
         }
     }
 }

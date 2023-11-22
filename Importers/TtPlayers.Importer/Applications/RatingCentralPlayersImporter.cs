@@ -347,13 +347,13 @@ namespace TtPlayers.Importer.Applications
 
 
             // is junior
-            var allEvents = matches.Select(x => new { Id = x.Id, Name = x.EventName }).Distinct().ToList();
+            var allEvents = matches.Select(x => new { EventId = x.EventId, Name = x.EventName }).Distinct().ToList();
             player.IsJunior = allEvents.Any(x=>x.Name.ToLower().Contains("junior"));
 
            // _logger.LogInformation($"junior - {sw.Elapsed.TotalMilliseconds}");
 
             // total events
-            player.TotalPlayedEvents = allEvents.Count();
+            player.TotalPlayedEvents = allEvents.Select(x=>x.EventId).Distinct().Count();
 
             // last played event
             var orderedMatches = matches.OrderByDescending(x=>x.MatchDate).ToList();

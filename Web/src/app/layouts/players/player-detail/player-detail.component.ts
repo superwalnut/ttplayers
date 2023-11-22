@@ -20,6 +20,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { StatisticsService } from 'src/app/service/statistics.service';
 import { Statistics } from 'src/app/models/statistics';
+import { Competitor } from './../../../models/competitor';
+import { CompetitorService } from './../../../service/competitor.service';
 
 @Component({
   selector: 'app-player-detail',
@@ -37,6 +39,7 @@ export class PlayerDetailComponent implements OnInit {
   friend: Friend = null;
   loggedInUser: User = null;
   stats:Statistics = null; // get latest statistics
+  competitor: Competitor = null;
 
   constructor(private route: ActivatedRoute,
     private title: Title, 
@@ -48,7 +51,8 @@ export class PlayerDetailComponent implements OnInit {
     private authService:AuthService,
     private modalService: NgbModal,
     private toastrService: ToastrService,
-    private statsService:StatisticsService
+    private statsService:StatisticsService,
+    private competitorService:CompetitorService
     ) { }
 
   ngOnInit() {
@@ -60,16 +64,25 @@ export class PlayerDetailComponent implements OnInit {
     this.playerService.getPlayer(playerId).subscribe(player => {
       this.player = player;
       console.log(this.player);
-
-      // load friend info
+      
       this.loggedInUser = this.authService.getLoggedInUser();
       if(this.loggedInUser){
+        // load friend info
         this.friendService.getFriend(this.loggedInUser.Id, player.Id).subscribe(f => {
           if(f){
             this.friend = f;
           }
         });
+
+        // load competitor info
+        this.competitorService.getCompetitor(this.loggedInUser.Id, playerId).subscribe(c =>{
+          if(c)
+          {
+            this.competitor = c;
+          }
+        });
       }
+
 
       // load matches info
       this.matchService.searchMatches(playerId).subscribe(matches =>{
@@ -164,6 +177,19 @@ export class PlayerDetailComponent implements OnInit {
     }
   }
 
+  action_competitor(content) {
+    if(this.loggedInUser){
+      if(this.competitor != null) {
+        this.remove_competitor();
+      } else {
+        this.add_competitor();
+      }
+    } else {
+      // popup to show message and redirect to register/login page
+      this.modalService.open(content, { centered: true });
+    }
+  }
+
   add_friend() {
     const friend = {
       Id: `${this.loggedInUser.Id}-${this.player.Id}`,
@@ -177,18 +203,41 @@ export class PlayerDetailComponent implements OnInit {
     } as Friend;
     this.friendService.addFriend(friend).then(x=>{
       this.friend = friend;
-      this.toastrService.show(`Added ${this.player.FullName} to your friend list`);
+      this.toastrService.show(`Added ${this.player.FullName} to your friends list`);
     });
   }
 
   remove_friend() {
     this.friendService.removeFriend(this.friend.Id).then(x=>{
       this.friend = null;
-      this.toastrService.show(`Removed ${this.player.FullName} from your friend list`);
+      this.toastrService.show(`Removed ${this.player.FullName} from your friends list`);
     });
   }
 
+  add_competitor() {
+    const competitor = {
+      Id: `${this.loggedInUser.Id}-${this.player.Id}`,
+      UserId: this.loggedInUser.Id,
+      CompetitorPlayerId: this.player.Id,
+      FirstName: this.player.FirstName,
+      LastName: this.player.LastName,
+      FullName: this.player.FullName,
+      Gender: this.player.Gender,
+      State: this.player.State
+    } as Competitor;
 
+    this.competitorService.addCompetitor(competitor).then(x=>{
+      this.competitor = competitor;
+      this.toastrService.show(`Added ${this.player.FullName} to your competitors list`);
+    });
+  }
+
+  remove_competitor() {
+    this.competitorService.removeCompetitor(this.competitor.Id).then(x=>{
+      this.competitor = null;
+      this.toastrService.show(`Removed ${this.player.FullName} from your competitors list`);
+    });
+  }
 
 
   getDivision(player:Player){

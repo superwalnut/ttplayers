@@ -1,0 +1,25 @@
+<section class="event contact set-relative bg bg-img bg-about p-b-0 event-gradient" id="contact"  [ngStyle]="{'background-image': 'url(assets/images/event/bg1.jpg)'}" *ngIf="club">
+    <div class="container p-b-100">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="title title3">
+                    <div class="main-title">
+                        <h2 class=" text-white">Contact Us</h2>
+                    </div>
+                    <div class="sub-title">
+                        <P class="text-white">{{address}}</P>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 p-r-0 map">
+                <google-map
+                height="500px"
+                width="100%"
+                [zoom]="zoom"
+                [center]="center"
+                [options]="options"
+                ></google-map>
+            </div>
+        </div>
+    </div>
+</section>

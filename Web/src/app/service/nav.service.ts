@@ -35,7 +35,7 @@ export class NavService {
       menuItems.push({title: 'Rankings', type: 'link', path: '/rankings'});
       menuItems.push({title: 'Clubs', type: 'link', path: '/clubs'});
       menuItems.push({title: user.Email, type: 'sub', children:[
-         { path: '/profile', title: 'profile',  type: 'link' },
+         { path: '/dashboard', title: 'profile',  type: 'link' },
          { path: '/logout', title: 'logout',  type: 'link' }
       ]});
    

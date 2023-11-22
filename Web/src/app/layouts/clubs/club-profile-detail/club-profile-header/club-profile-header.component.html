@@ -1,0 +1,29 @@
+<!-- header Start-->
+<section class="gym header" id="club-home" *ngIf="club">
+    <div class="header5-content">
+        <div class="gym-header bg" [ngStyle]="{'background-image': 'url(assets/images/clubs/tt-club-bg.jpg)'}">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="center-text justify-content-center">
+                            <div class="text-center">
+                                <div class="header-text">
+                                    <h1><span class="bold-text">{{club.Nickname}}</span>
+                                        <br/>{{club.Name}}</h1>
+                                    <hr class="mt-5"/>
+                                    <h2 class="mt-5">{{club.State}}</h2>
+                                </div>
+                                <div class="header-sub-text">
+                                    <p class="text-white p-light" *ngIf="club.Phone">Phone: {{club.Phone}}</p>
+                                    <p class="text-white p-light pt-4" *ngIf="club.Email">Email: {{club.Email}}</p>
+                                    <p class="text-white p-light pt-4" *ngIf="club.Website"><a class="website-link" href="{{club.Website}}" target="_blank" rel="nofollow">{{club.Website}}</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- header end-->

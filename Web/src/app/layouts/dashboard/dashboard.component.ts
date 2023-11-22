@@ -1,7 +1,7 @@
-import { Component, OnInit, LOCALE_ID } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../service/auth.service';
 import { User } from 'src/app/models/user';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { UserProfileService } from 'src/app/service/user-profile.service';
 import { PlayerAutoComplete } from 'src/app/models/player-autocomplete';
 import { ToastrService } from 'ngx-toastr';
@@ -9,9 +9,7 @@ import { Profile } from 'src/app/models/profile';
 import { Player } from 'src/app/models/player';
 import { PlayerService } from 'src/app/service/player.service';
 import { FriendService } from 'src/app/service/friend.service';
-import { Friend } from 'src/app/models/friend';
-import { combineLatest, mergeMap, of, switchMap, zip } from 'rxjs';
-import { subscribe } from 'diagnostics_channel';
+import { of, switchMap, zip } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,60 +24,38 @@ export class DashboardComponent implements OnInit{
   selectedPlayerProfile:PlayerAutoComplete; // profile selected from the autocomplete
   player:Player; // once completed the profile, player will be populated with paired Rating Central Player
 
-  friends:Friend[];
-  firendPlayers:Player[];
-
   constructor(public authService: AuthService, 
     private toastrService: ToastrService, 
-    private profileService:UserProfileService, 
     private playerService:PlayerService,
-    private friendService:FriendService) { }
+    private profileService:UserProfileService
+    ) { }
     
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
     this.profileForm = new FormGroup({});
 
-    if(this.user.EmailVerified){
-      this.loadProfile();
-    }
+    this.loadProfile();
   }
 
   loadProfile() {
-    this.profileService.getProfile(this.user.Id).subscribe(profile=>{
-      // do nothing if user has't setup their profile yet.
-      if(!profile)
-        return;
+    this.profileService.getProfile(this.user.Id).pipe(
+      switchMap(profile=>{
+        if(profile){
+          this.completedProfile = profile;
+          console.log('profile', this.completedProfile);
+          return this.playerService.getPlayer(profile.PlayerId);
+        }
+        else {
+          return of(null);
+        }
+      })).subscribe(player=>{
+        console.log('player', player);
 
-      this.completedProfile = profile;
-      
-      // get the player if already has profile
-      this.loadYourselfAndFriends(this.completedProfile.PlayerId);
+        if(!player)
+          return;
+
+        this.player = player;
     });
-  }
-
-  loadYourselfAndFriends(profilePlayerId:string) {
-    // get user's friends
-    if(this.user.EmailVerified){
-      this.playerService.getPlayer(profilePlayerId).pipe(
-        switchMap(player=>{
-          this.player = player;
-          console.log('yourself player', this.player);
-          return zip(of(player),this.friendService.getFriends(this.user.Id));
-        }),
-        switchMap(([player, friends])=>{
-          this.friends = friends;
-          console.log('friends', this.friends);
-          const friendPlayerIds = this.friends.map(f => f.FriendPlayerId);
-          // load players by friend-player-IDs
-          return zip(of(player), this.playerService.getPlayerByPlayerIdList(friendPlayerIds));
-        })
-      ).subscribe(([mePlayer, players]) =>{
-        console.log('friend-players', this.firendPlayers);
-        players.push(mePlayer);
-        var sorted = this.sortPlayersByRating(players);
-        this.firendPlayers = sorted;
-      });
-    }
   }
 
   saveProfile() {
@@ -96,7 +72,6 @@ export class DashboardComponent implements OnInit{
       this.profileService.saveProfile(this.user.Id, profile).then(x=>{
         this.completedProfile = profile;
         this.toastrService.show('You have successfully paired your rating central player ID');
-        this.loadYourselfAndFriends(this.completedProfile.PlayerId);
       });
     }
     else {
@@ -104,10 +79,6 @@ export class DashboardComponent implements OnInit{
     }
   }
 
-  sortPlayersByRating(items:Player[]): Player[] {
-    // Use the sort method to sort players by rating
-    return items.sort((a, b) => b.Rating - a.Rating);
-  }
 
   handlePlayerAutoCompleteAction(profile:PlayerAutoComplete) {
     console.log('profile selected', profile);

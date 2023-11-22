@@ -25,7 +25,7 @@ export class ClubService {
         .where('Status', '==', 'Active')
         .orderBy('Name','asc')
         .limit(pageSize)
-      ).valueChanges().pipe(take(1));
+      ).valueChanges();
     } 
       
     return this.firestore.collection<Club>('Clubs', ref => 
@@ -33,7 +33,7 @@ export class ClubService {
         .where('Status', '==', 'Active')
         .orderBy('Name','asc')
         .limit(pageSize)
-      ).valueChanges().pipe(take(1));
+      ).valueChanges();
   }
 
   searchClubsWithPaging(keyword:string, state: string, pageSize:number, lastDoc:Club): Observable<Club[]> {
@@ -53,7 +53,7 @@ export class ClubService {
         .orderBy('Name','asc')
         .startAfter(lastDoc.Name)
         .limit(pageSize)
-      ).valueChanges().pipe();
+      ).valueChanges();
     }
 
     return this.firestore.collection<Club>('Clubs', ref =>
@@ -62,7 +62,7 @@ export class ClubService {
       .orderBy('Name','asc')
       .startAfter(lastDoc.Name)
       .limit(pageSize)
-    ).valueChanges().pipe();
+    ).valueChanges();
   }
 
   searchClubsForAutoComplete(keyword:string) : Observable<any[]>{

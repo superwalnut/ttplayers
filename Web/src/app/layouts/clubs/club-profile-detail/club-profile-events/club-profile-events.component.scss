@@ -1,0 +1,35 @@
+.border-shadow {
+    background-size:cover;
+    background-repeat: no-repeat;
+
+    border: 1px solid #f9f9f9;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 30px #e2e2e2;
+    box-shadow: 0 0 30px #e2e2e2;
+
+    margin:15px;
+    padding:15px;
+    overflow: hidden;
+    min-height:200px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center; /* Horizontal centering */
+    align-items: center;
+    text-align: center;
+
+    h3{
+        color:#fff;
+        font-size:1.1em;
+    }
+
+    a {
+        color:#fff;
+    }
+
+    .btn-sm {
+        padding: 5px 15px;
+        font-size: 0.9em;
+    }
+}

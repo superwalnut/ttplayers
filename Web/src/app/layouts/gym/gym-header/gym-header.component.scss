@@ -1,0 +1,9 @@
+.subscribe .form-group input {
+    padding: 30px 35% 30px 25px;
+}
+
+@media only screen and (max-width: 575px) {
+    .subscribe .form-group input {
+        padding: 30px 25px 30px 25px;
+    }
+}

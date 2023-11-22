@@ -45,12 +45,15 @@
                             <div class="portfolio-detail" *ngIf="player">
                                 <div class="container">
                                     <div class="row mb-4">
-                                        <div class="col-11 p-0 m-0">
+                                        <div class="col-10 p-0 m-0">
                                             <h1>{{player.FullName}}<span class="p-l-10 rc-id"><a href="https://www.ratingscentral.com/PlayerHistory.php?PlayerID={{player.Id}}" target="_blank" rel="nofollow">(RC ID: {{player.Id}})</a></span></h1>
                                         </div>
-                                        <div class="col-1 p-0 m-0 text-right">
-                                            <button class="btn btn-sm" [ngClass]="{'btn-outline-danger': friend!=null, 'btn-outline-secondary': friend == null}" (click)="action_friend(content)">
+                                        <div class="col-2 p-0 m-0 text-right">
+                                            <button class="btn btn-sm m-r-10" [ngClass]="{'btn-outline-danger': friend!=null, 'btn-outline-secondary': friend == null}" (click)="action_friend(content)">
                                                 <i class="fa" [ngClass]="{'fa-heart': friend!=null, 'fa-heart-o': friend == null}"></i>
+                                            </button>
+                                            <button class="btn btn-sm" [ngClass]="{'btn-outline-danger': competitor!=null, 'btn-outline-secondary': competitor == null}" (click)="action_competitor(content)">
+                                                <i class="fa fa-shield"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -66,6 +69,18 @@
 
                 <!-- Summary -->
                 <app-player-summary [player]="player" [stats]="stats"></app-player-summary>
+
+                <!-- Winning Rate -->
+                <app-player-win-rate [player]="player" [stats]="stats"></app-player-win-rate>
+
+                <!-- Rankings -->
+                <app-player-ranking [player]="player" [stats]="stats"></app-player-ranking>
+
+                <!-- Match summary -->
+                <app-player-match [player]="player"></app-player-match>
+
+                <!-- Opponents -->
+                <app-player-opponent [player]="player"></app-player-opponent>
 
                 <!-- Sets insights -->
                 <app-player-sets-statistics [player]="player"></app-player-sets-statistics>
@@ -126,7 +141,7 @@
         </div>
         <div class="modal-body text-center">
             <h3 class="m-b-20">Login Required</h3>
-            <p>To add players to your friend list, please log in to your account.</p>
+            <p>To add players to your friends/competitors list, please log in to your account.</p>
             <a aria-label="Register" class="btn btn-default primary-btn m-t-20" href="/register">register</a>
             <a aria-label="Login" class="btn btn-default primary-btn m-t-20" href="/login">login</a>
         </div>

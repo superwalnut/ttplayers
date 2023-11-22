@@ -11,20 +11,20 @@
                                     <h1><span class="bold-text">ttPlayers</span>&nbsp;Statistics & Ranking</h1>
                                 </div>
                                 <div class="header-sub-text">
-                                    <p class="text-white p-light">A comprehensive statistics about table tennis players in Australia</p>
+                                    <p class="text-white p-light">Please enter a player name or Rating Central ID to search.</p>
                                 </div>
                                 <section class="event subscribe subscribe-3 set-relative p-t-0">
                                     <div class="circle">
                                     </div>
                                     <div class="container">
                                         <div class="row">
-                                            <div class="col-md-8 offset-md-2">
+                                            <div class="col-md-10 offset-md-1">
                                                 <div class="subscribe">
                                                     <div class="center-content">
                                                         <div class="form-group">
                                                             <div class="flex">
                                                                 <input type="text" (keyup.enter)="search()" [(ngModel)]="searchTerm" class="form-control text-capitalize"
-                                                                       placeholder="Enter a player's name" id="username" name="username">
+                                                                       placeholder="Enter player's name or RatingCentral ID" id="username" name="username">
                                                                 <div class="button-primary">
                                                                     <button type="button" (click)="search()"
                                                                             class=" btn btn-default primary-btn text-white text-capitalize">

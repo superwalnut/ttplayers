@@ -5,7 +5,7 @@ import { PlayerListComponent } from './layouts/players/player-list/player-list.c
 import { PlayerDetailComponent } from './layouts/players/player-detail/player-detail.component';
 import { HomeComponent } from './layouts/home/home.component';
 import { ClubListComponent } from './layouts/clubs/club-list/club-list.component';
-import { ClubDetailComponent } from './layouts/clubs/club-detail/club-detail.component';
+import { ClubProfileDetailComponent } from './layouts/clubs/club-profile-detail/club-profile-detail.component';
 import { EventListComponent } from './layouts/events/event-list/event-list.component';
 import { EventDetailComponent } from './layouts/events/event-detail/event-detail.component';
 import { RankingComponent } from './layouts/players/ranking/ranking.component';
@@ -17,6 +17,8 @@ import { LoginComponent } from './layouts/login/login.component';
 import { ProfileComponent } from './layouts/profile/profile.component';
 import { LogoutComponent } from './layouts/logout/logout.component';
 import { ResendEmailVerificationComponent } from './layouts/resend-email-verification/resend-email-verification.component';
+import { FriendListComponent } from './layouts/dashboard/friend-list/friend-list.component';
+import { CompetitorListComponent } from './layouts/dashboard/competitor-list/competitor-list.component';
 
 export const routes: Routes = [
   {
@@ -45,7 +47,7 @@ export const routes: Routes = [
   },
   {
     path: 'club/:id',
-    component: ClubDetailComponent
+    component: ClubProfileDetailComponent
   },
   {
     path: 'events',
@@ -58,6 +60,14 @@ export const routes: Routes = [
   {
     path: 'rankings',
     component: RankingComponent
+  },
+  {
+    path: 'friends',
+    component: FriendListComponent
+  },
+  {
+    path: 'competitors',
+    component: CompetitorListComponent
   },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },

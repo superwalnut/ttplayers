@@ -45,23 +45,39 @@ export class PlayerListComponent implements OnInit {
   
   search() {
     console.log(this.keyword);
+    const trimKeyword = this.keyword.trim();
+    const isPlayerId = this.isNumber(trimKeyword);
+    if(isPlayerId) {
+      this.playerService.getPlayer(trimKeyword).subscribe(x=>{
+        if(x) {
+          this.players = [ x ];
+          this.showNoResult = false;
+        } else {
+          this.players = [];
+          this.showNoResult = true;
+        }
 
-    this.playerService.searchPlayerByName(this.keyword, this.state, this.pageSize).subscribe(players => {
-      console.log(this.players);
-
-      if(!players || players.length<=0){
-        this.showNoResult = true;
         this.lastPlayer = null;
-      } else {
-        this.showNoResult = false;
-        this.players = players;
-        this.lastPlayer = players[players.length-1];
-      }
-
-      if(players.length<this.pageSize){
-        this.lastPlayer = null;
-      }
-    });
+      });
+    } else {
+      this.playerService.searchPlayerByName(this.keyword, this.state, this.pageSize).subscribe(players => {
+        console.log(this.players);
+  
+        if(!players || players.length<=0){
+          this.players = [];
+          this.showNoResult = true;
+          this.lastPlayer = null;
+        } else {
+          this.showNoResult = false;
+          this.players = players;
+          this.lastPlayer = players[players.length-1];
+        }
+  
+        if(players.length<this.pageSize){
+          this.lastPlayer = null;
+        }
+      });
+    }
   }
 
   loadMorePlayers() {
@@ -78,7 +94,13 @@ export class PlayerListComponent implements OnInit {
         this.lastPlayer = players[players.length-1];
       }
     });
+  }
 
+  isNumber(value?: string | number): boolean
+  {
+    return ((value != null) &&
+            (value !== '') &&
+            !isNaN(Number(value.toString())));
   }
 }
 
