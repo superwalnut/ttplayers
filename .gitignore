@@ -45,4 +45,6 @@ UpgradeLog.htm
 mono_crash.*.json
 mono_crash.*.blob
 .angular
-dist/
+Web/dist/
+Web/dist/browser/
+Web/public/
