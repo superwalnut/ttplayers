@@ -69,6 +69,7 @@ namespace TtPlayers.Importer
             services.AddTransient<IRatingCentralClubImporter, RatingCentralClubImporter>();
             services.AddTransient<IRatingCentralScraper, RatingCentralScraper>();
             services.AddTransient<IStatisticsImporter, StatisticsImporter>();
+            services.AddTransient<IGoogleSiteMapGenerator, GoogleSiteMapGenerator>();
         }
     }
 }

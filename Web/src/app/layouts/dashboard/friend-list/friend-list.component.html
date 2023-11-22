@@ -16,7 +16,6 @@
                         <ul>
                             <li><a href="/"><i class="fa fa-home"></i></a></li>
                             <li><a href="/dashboard"><i class="fa fa-angle-double-right"></i> dashboard</a></li>
-                            <li><a><i class="fa fa-angle-double-right"></i> friends</a></li>
                         </ul>
                     </div>
                     <div>
@@ -33,12 +32,21 @@
     <div class="container">
         <div class="row p-0">
             <div class="col-12 p-0">
-                <h2>Friends Ladder</h2>
+                <h2><i class="fa fa-heart m-r-10"></i> Friends Ladder</h2>
                 <hr/>
             </div>
         </div>
     </div>
 </section>
+
+<div class="col-md-12 empty-cart-cls text-center mt-5 mb-5" *ngIf="!friendPlayers">
+    <img src="assets/images/empty-wishlist.png" alt="Empty cart" title="No Players Found">
+    <h3 class="mt-4"><b>You have no friends in your list</b></h3>
+    <h4>Please try search some players and <br/> click the <i class="fa fa-heart red"></i> icon on player's page <br/>to add them to your friends list.</h4>
+    <div class="btn-bottom mt-4">
+        <a href="/players" class="btn btn-default btn-white">Search Players</a>
+    </div>
+</div>
 
 <section class="dashboard-friends mb-4" *ngIf="friendPlayers">
     <div class="container">
@@ -56,7 +64,7 @@
             <div class="col-1 font-600 text-center friend-title-label"></div>
         </div>
         <ng-container *ngFor="let friendPlayer of friendPlayers;let i = index;">
-            <app-friend-detail-tile [player]="friendPlayer" [rank]="i+1" [yourself]="this.player" (removeFriend)="remove_friend($event)"></app-friend-detail-tile>
+            <app-friend-detail-tile [player]="friendPlayer" [rank]="i+1" [yourPlayerId]="this.player?.Id" (removeFriend)="remove_friend($event)"></app-friend-detail-tile>
         </ng-container>
     </div>
 </section>

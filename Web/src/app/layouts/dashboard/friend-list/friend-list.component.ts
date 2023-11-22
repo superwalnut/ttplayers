@@ -31,44 +31,40 @@ export class FriendListComponent implements OnInit{
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
 
-    this.loadProfile();
+    this.loadProfileAndFriends();
   }
 
-  loadProfile() {
-    this.profileService.getProfile(this.user.Id).subscribe(profile=>{
-      // do nothing if user has't setup their profile yet.
-      console.log('profile', profile);
-      if(!profile)
-        return;
-
-      this.profile = profile;
-      this.loadYourselfAndFriends(profile.PlayerId);
-    });
-  }
-
-  loadYourselfAndFriends(profilePlayerId:string) {
-    // get user's friends
-      this.playerService.getPlayer(profilePlayerId).pipe(
-        switchMap(player=>{
-          this.player = player;
-          console.log('yourself player', this.player);
-          return zip(of(player),this.friendService.getFriends(this.user.Id));
+  loadProfileAndFriends() {
+    this.profileService.getProfile(this.user.Id)
+    .pipe(
+      switchMap(profile=>{
+          if(!profile)
+            return zip(of(null), this.friendService.getFriends(this.user.Id));
+    
+          this.profile = profile;
+          console.log('profile', profile);
+          return zip(this.playerService.getPlayer(profile.PlayerId), this.friendService.getFriends(this.user.Id));
         }),
         switchMap(([player, friends])=>{
-          console.log('friends', friends);
+          this.player = player;
+          console.log('player', player);
+  
           const friendPlayerIds = friends.map(f => f.FriendPlayerId);
-          // load players by friend-player-IDs
+            // load players by friend-player-IDs
           return zip(of(player), this.playerService.getPlayerByPlayerIdList(friendPlayerIds));
         })
-      ).subscribe(([mePlayer, players]) =>{
-        console.log('mePlayer', mePlayer);
-        console.log('friend-players', players);
-        if(mePlayer){
-          players.push(mePlayer);
+      ).subscribe(([player, players])=>{
+        console.log('mePlayer', player);
+        console.log('players', players);
+
+        if(player){
+          
+          players.push(player);
         }
+
         var sorted = this.sortPlayersByRating(players);
         this.friendPlayers = sorted;
-      });
+    });
   }
 
   remove_friend(player:Player) {

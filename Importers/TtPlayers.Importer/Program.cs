@@ -106,6 +106,9 @@ namespace TtPlayers.Importer
 
             [Option("show-push-summary", Required = false, HelpText = "Show Push Summary.")]
             public bool ShowPushSummary { get; set; }
+
+            [Option("site-map", Required = false, HelpText = "Generate google sitemap.")]
+            public bool GoogleSitemap { get; set; }
         }
 
         static void Main(string[] args)
@@ -121,7 +124,7 @@ namespace TtPlayers.Importer
             var sndttaUpcomingEventImporter = host.Services.GetRequiredService<ISndttaUpcomingEventImporter>();
             var clubImporter = host.Services.GetRequiredService<IRatingCentralClubImporter>();
             var statisticImporter = host.Services.GetRequiredService<IStatisticsImporter>();
-
+            var sitemapGenerator = host.Services.GetRequiredService<IGoogleSiteMapGenerator>();
             var firebasePusher = host.Services.GetRequiredService<IFirebaseDeltaPushImporter>();
 
             try
@@ -261,6 +264,10 @@ namespace TtPlayers.Importer
                        else if(o.ShowPushSummary)
                        {
                            firebasePusher.ShowPendingPushSummary().GetAwaiter().GetResult();
+                       }
+                       else if(o.GoogleSitemap)
+                       {
+                           sitemapGenerator.Build().GetAwaiter().GetResult();
                        }
                        else
                        {

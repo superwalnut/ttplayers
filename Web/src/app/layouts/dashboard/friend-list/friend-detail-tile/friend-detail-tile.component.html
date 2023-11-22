@@ -1,4 +1,4 @@
-<div class="row friend-detail" [ngClass]="{'highlight': player.Id== yourself.Id}" *ngIf="player">
+<div class="row friend-detail" [ngClass]="{'highlight': player.Id== yourPlayerId}" *ngIf="player">
     <div class="col-1 rank friend-detail-label">
          <!-- #{{rank}} -->
          <div [innerHTML]="getSvg(player, rank)"></div>

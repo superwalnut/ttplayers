@@ -1,0 +1,17 @@
+<div class="row friend-detail" [ngClass]="{'highlight': player.Id== yourPlayerId}" *ngIf="player">
+    <div class="col-1 rank friend-detail-label">
+         <!-- #{{rank}} -->
+         <div [innerHTML]="getSvg(player, rank)"></div>
+    </div>
+    <div class="col-3 friend-detail-label">
+        <i id="gender-ico" class="fa" aria-hidden="true" [ngClass]="{'blue-text fa-male': player.Gender == 'M', 'red-text fa-female': player.Gender == 'F'}"></i>&nbsp;
+        <a href="/player/{{player.Id}}">{{player.FirstName}} {{player.LastName}}</a>
+        <br/>
+        {{toRating(player)}}
+    </div>    
+    <div class="col-1 text-center friend-detail-label">{{player.YearToDateWins / (player.YearToDateWins+player.YearToDateLoses) | percent }}</div>
+    <div class="col-2 text-center friend-detail-label"><span class="green">{{player.TotalWins}}</span>/{{player.TotalPlayedMatches}}</div>
+    <div class="col-2 text-center friend-detail-label"><span class="green">{{player.TotalBeatPlayersCount}}</span>/{{player.TotalOpponentCount}}</div>
+    <div class="col-2 text-center friend-detail-label" [ngClass]="{'green':player.RatingChangesQuarterly>0, 'red':player.RatingChangesQuarterly<0}">{{player.RatingChangesQuarterly>0?"+"+player.RatingChangesQuarterly:player.RatingChangesQuarterly}}</div>
+    <div class="col-1 text-center friend-detail-label"><a class="red remove-friend" (click)="remove_competitor(player)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div>
+</div>

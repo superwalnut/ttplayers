@@ -16,7 +16,6 @@
                         <ul>
                             <li><a href="/"><i class="fa fa-home"></i></a></li>
                             <li><a href="/dashboard"><i class="fa fa-angle-double-right"></i> dashboard</a></li>
-                            <li><a><i class="fa fa-angle-double-right"></i> competitors</a></li>
                         </ul>
                     </div>
                     <div class="breadcrumb-title">
@@ -30,5 +29,45 @@
 <!-- Breadcrumb end -->
 
 
+<section class="dashboard-friends-title mt-5">
+    <div class="container">
+        <div class="row p-0">
+            <div class="col-12 p-0">
+                <h2><i class="fa fa-shield m-r-10"></i>Competitors List</h2>
+                <hr/>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="col-md-12 empty-cart-cls text-center mt-5 mb-5" *ngIf="!competitorPlayers">
+    <img src="assets/images/empty-competitors.png" alt="Empty cart" title="No Players Found">
+    <h3 class="mt-4"><b>You have no competitors in your list</b></h3>
+    <h4>Please try search some players and <br/> click the <i class="fa fa-shield purple"></i> icon on player's page <br/>to add them to your competitors list.</h4>
+    <div class="btn-bottom mt-4">
+        <a href="/players" class="btn btn-default btn-white">Search Players</a>
+    </div>
+</div>
+
+<section class="dashboard-friends mb-5" *ngIf="competitorPlayers">
+    <div class="container">
+        <div class="row friend-title align-items-center">
+            <div class="col-1 font-600 text-center friend-title-label">Ladder</div>
+            <div class="col-3 font-600 text-center friend-title-label">Friend</div>
+            <div class="col-1 font-600 text-center friend-title-label">Wins% <small>(YTD)</small></div>
+            <div class="col-2 font-600 text-center friend-title-label">Matches <small>(<span class="green">Wins</span>/Total)</small></div>
+            <div class="col-2 font-600 text-center friend-title-label">Opponents <small>(<span class="green">Defeat</span>/Played)</small></div>
+            <div class="col-2 font-600 text-center friend-title-label">Rating 
+                <i class="fa fa-long-arrow-up green" aria-hidden="true"></i>
+                <i class="fa fa-long-arrow-down red" aria-hidden="true"></i>&nbsp;
+                <small>(3 Mths)</small>
+            </div>
+            <div class="col-1 font-600 text-center friend-title-label"></div>
+        </div>
+        <ng-container *ngFor="let competitorPlayer of competitorPlayers;let i = index;">
+            <app-competitor-detail-tile [player]="competitorPlayer" [rank]="i+1" [yourself]="this.player" (removeCompetitor)="remove_competitor($event)"></app-competitor-detail-tile>
+        </ng-container>
+    </div>
+</section>
 
 <app-gym-footer></app-gym-footer>

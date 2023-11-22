@@ -11,7 +11,7 @@ import { Player } from 'src/app/models/player';
 export class FriendDetailTileComponent implements OnInit {
   @Input() player:Player;
   @Input() rank:number;
-  @Input() yourself:Player;
+  @Input() yourPlayerId:string;
   @Output() removeFriend = new EventEmitter<Player>();
   
   time:any;

@@ -1,7 +1,80 @@
-.breadcrumb-list {
-    width:35% !important;
+
+.breadcrumb-section-main {
+    padding:30px;
 }
 
-.breadcrumb-title {
-    width: 65% !important;
+.dashboard-profile{
+    padding:0;
+}
+
+.dashboard-friends-title {
+    padding:0;
+    color:#000;
+
+    h2 {
+        margin-left: 0px;
+
+        .fa-shield {
+            color:rgb(111, 0, 255);
+        }
+    }
+}
+
+.purple {
+    color:rgb(111, 0, 255);
+}
+
+.dashboard-friends {
+    padding:0;
+
+    .container {
+        border:solid 1px #efefef;
+        border-radius: 16px;
+        filter: drop-shadow(0 0 10px #eee);
+        transition: all 0.3s;
+
+        .row {
+            background-color: #efefef;
+            padding-top:5px;
+            padding-bottom:5px;
+        }
+    }
+}
+
+.friend-title {
+    .font-600 {
+        font-weight: 600;
+    }
+
+    small {
+        font-size:0.8em !important;
+        font-weight: 500;
+    }
+}
+
+.green {
+    color:green;
+}
+
+.red {
+    color:red;
+}
+
+@media only screen and (max-width: 575px) {
+    .friend-title-label {
+        font-size:0.6em;
+        padding:0.1em !important;
+    }
+
+    .dashboard-friends-title {
+        h2 {
+            text-align: center;
+        }
+    }
+
+    .dashboard-profile {
+        h2 {
+            text-align: center;
+        }
+    }
 }

@@ -1,0 +1,71 @@
+.blue-text {
+    color: rgba(65, 163, 255, 1) !important;
+}
+
+.red-text {
+    color:#e3154f !important;
+}
+
+
+.rank {
+    font-size:2em;
+    font-weight:600;
+    color:#ffc107;
+}
+
+.highlight {
+    background: #dddddd;
+
+  
+}    
+
+.friend-detail {
+    padding:0.6em;
+
+    a {
+        color:#357fef;
+        text-decoration: underline;
+    }
+
+    .green {
+        color:#03b803;
+    }
+    
+    .red {
+        color:red;
+    }
+}
+
+.remove-friend {
+    font-size: 1.5em;
+}
+
+@media only screen and (max-width: 575px) {
+    .friend-detail {
+        padding:0em;
+    }
+
+    .rank {
+        font-size:1em;
+        font-weight:400;
+    }
+
+    .friend-detail-label {
+        padding:0.1em !important;
+        font-size:0.7em;
+
+        a {
+            font-size:0.8em;
+        }
+
+        .remove-friend {
+            font-size: 1.5em;
+        }
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .friend-detail {
+        padding:0.4em;
+    }
+}

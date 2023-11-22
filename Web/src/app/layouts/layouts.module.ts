@@ -54,10 +54,10 @@ import { ClubProfileAboutUsComponent } from './clubs/club-profile-detail/club-pr
 import { ClubProfileContactUsComponent } from './clubs/club-profile-detail/club-profile-contact-us/club-profile-contact-us.component';
 import { ClubProfileEventsComponent } from './clubs/club-profile-detail/club-profile-events/club-profile-events.component';
 import { ClubProfilePlayersComponent } from './clubs/club-profile-detail/club-profile-players/club-profile-players.component';
-import { GoogleMapsModule } from '@angular/google-maps';
 import { FriendListComponent } from './dashboard/friend-list/friend-list.component'
 import { FriendDetailTileComponent } from './dashboard/friend-list/friend-detail-tile/friend-detail-tile.component';
 import { CompetitorListComponent } from './dashboard/competitor-list/competitor-list.component';
+import { CompetitorDetailTileComponent } from './dashboard/competitor-list/competitor-detail-tile/competitor-detail-tile.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +78,8 @@ import { CompetitorListComponent } from './dashboard/competitor-list/competitor-
     ClubProfileEventsComponent,
     ClubProfilePlayersComponent,
     FriendListComponent,
-    CompetitorListComponent
+    CompetitorListComponent,
+    CompetitorDetailTileComponent
   ],
   imports: [
     CommonModule,
@@ -90,7 +91,6 @@ import { CompetitorListComponent } from './dashboard/competitor-list/competitor-
     ReactiveFormsModule,
     NgbModule,
     NgxGaugeModule,
-    GoogleMapsModule
   ],
   exports: [],
 })
