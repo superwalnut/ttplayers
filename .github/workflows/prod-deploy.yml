@@ -29,7 +29,6 @@ jobs:
           run: ng build --configuration production --output-path=public
 
         - uses: FirebaseExtended/action-hosting-deploy@v0
-          working-directory: ./Web
           with:
             repoToken: '${{ secrets.GITHUB_TOKEN }}'
             firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TTPLAYERS }}'
