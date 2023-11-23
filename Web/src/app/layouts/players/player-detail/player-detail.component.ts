@@ -22,6 +22,7 @@ import { StatisticsService } from 'src/app/service/statistics.service';
 import { Statistics } from 'src/app/models/statistics';
 import { Competitor } from './../../../models/competitor';
 import { CompetitorService } from './../../../service/competitor.service';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-player-detail',
@@ -52,7 +53,8 @@ export class PlayerDetailComponent implements OnInit {
     private modalService: NgbModal,
     private toastrService: ToastrService,
     private statsService:StatisticsService,
-    private competitorService:CompetitorService
+    private competitorService:CompetitorService,
+    private commonService:CommonService
     ) { }
 
   ngOnInit() {
@@ -259,5 +261,7 @@ export class PlayerDetailComponent implements OnInit {
       return `${firstInitial}${lastInitial}`;
   }
 
-
+  getSvg(player:Player) {
+    return this.commonService.getNameInitialSvg(player, null);
+  }
 }

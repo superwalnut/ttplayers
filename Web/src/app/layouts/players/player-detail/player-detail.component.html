@@ -36,19 +36,19 @@
             <div class="col-lg-9">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                            <div class="border-around overflow-hide"  [ngClass]="{'blue': player.Gender == 'M', 'red': player.Gender == 'F'}">
-                                <div class="init-img">{{toInitials(player)}}</div>
-                            </div>
-                        </div>
-                        <div class="col-lg-9 col-md-9 col-sm-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="portfolio-detail" *ngIf="player">
                                 <div class="container">
                                     <div class="row mb-4">
+                                        <div class="col-2 p-0 m-0 text-right">
+                                            <div [innerHTML]="getSvg(player)"></div>
+                                        </div>
                                         <div class="col-10 p-0 m-0">
                                             <h1>{{player.FullName}}<span class="p-l-10 rc-id"><a href="https://www.ratingscentral.com/PlayerHistory.php?PlayerID={{player.Id}}" target="_blank" rel="nofollow">(RC ID: {{player.Id}})</a></span></h1>
                                         </div>
-                                        <div class="col-2 p-0 m-0 text-right">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 p-0 m-0 text-right">
                                             <button class="btn btn-sm m-r-10" [ngClass]="{'btn-outline-danger': friend!=null, 'btn-outline-secondary': friend == null}" (click)="action_friend(content)">
                                                 <i class="fa" [ngClass]="{'fa-heart': friend!=null, 'fa-heart-o': friend == null}"></i>
                                             </button>
