@@ -19,14 +19,14 @@ export class PlayerRankingComponent {
   }
 
   toNationalRankingPosition() {
-    if(this.player.Gender =="M") {
+    if(this.player.Gender =="M" && this.player.NationalGenderRanking>0) {
       
       const pos = Math.round((this.stats.TotalMenPlayerCount - this.player.NationalGenderRanking) * 100 / this.stats.TotalMenPlayerCount);
       console.log('pos men', pos);
       return pos;
     }
 
-    if(this.player.Gender == "F") {
+    if(this.player.Gender == "F" && this.player.NationalGenderRanking) {
       const pos = Math.round((this.stats.TotalWomenPlayerCount - this.player.NationalGenderRanking) * 100 / this.stats.TotalWomenPlayerCount);
       console.log('pos men', pos);
       return pos;
@@ -41,17 +41,20 @@ export class PlayerRankingComponent {
       const totalPlayers = this.stats.StateMenPlayerCounts[this.player.State];
       console.log('state total men', totalPlayers);
 
-      const pos = Math.round((totalPlayers - this.player.StateGenderRanking) * 100 / totalPlayers);
-      return pos;
+      if(this.player.StateGenderRanking>0){
+        const pos = Math.round((totalPlayers - this.player.StateGenderRanking) * 100 / totalPlayers);
+        return pos;
+      }
     }
 
     if(this.player.Gender == "F") {
 
       const totalPlayers = this.stats.StateWomenPlayerCounts[this.player.State];
       console.log('state total women', totalPlayers);
-
-      const pos = Math.round((totalPlayers - this.player.StateGenderRanking) * 100 / totalPlayers);
-      return pos;
+      if(this.player.StateGenderRanking>0){
+        const pos = Math.round((totalPlayers - this.player.StateGenderRanking) * 100 / totalPlayers);
+        return pos;
+      }
     }
 
     return 0;
