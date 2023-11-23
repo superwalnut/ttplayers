@@ -6,10 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./gym-copyright.component.scss']
 })
 export class GymCopyrightComponent implements OnInit {
-
+  year:number;
   constructor() { }
 
   ngOnInit() {
+    this.year = (new Date()).getFullYear();
   }
 
 }

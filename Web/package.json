@@ -1,6 +1,6 @@
 {
   "name": "ultimate",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -71,7 +71,7 @@
     "@types/jasmine": "~4.0.3",
     "@types/jasminewd2": "^2.0.10",
     "@types/mousetrap": "^1.6.9",
-    "@types/node": "^18.0.3",
+    "@types/node": "^18.18.12",
     "codelyzer": "^6.0.2",
     "jasmine-core": "~4.2.0",
     "jasmine-spec-reporter": "~7.0.0",

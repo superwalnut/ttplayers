@@ -11,7 +11,7 @@ import { PlayerAutocompleteComponent } from './components/player-autocomplete/pl
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterFixedMobileMenuComponent } from './components/footer-fixed-mobile-menu/footer-fixed-mobile-menu.component';
-
+import { GymCopyrightComponent } from './components/gym-copyright/gym-copyright.component';
 @NgModule({
   declarations: [MenuComponent, 
     TapToTopComponent, 
@@ -19,7 +19,8 @@ import { FooterFixedMobileMenuComponent } from './components/footer-fixed-mobile
     GymFooterComponent, 
     GymNavComponent, 
     PlayerAutocompleteComponent, 
-    FooterFixedMobileMenuComponent
+    FooterFixedMobileMenuComponent,
+    GymCopyrightComponent
   ],
   exports: [
     MenuComponent,
@@ -28,6 +29,7 @@ import { FooterFixedMobileMenuComponent } from './components/footer-fixed-mobile
     GymFooterComponent,
     GymNavComponent,
     PlayerAutocompleteComponent,
+    GymCopyrightComponent
   ],
   imports: [
     CommonModule,

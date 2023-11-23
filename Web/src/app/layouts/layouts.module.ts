@@ -9,7 +9,6 @@ import { SharedModule } from '../shared/shared.module';
 import { GymAboutComponent } from './gym/gym-about/gym-about.component';
 import { GymBMIComponent } from './gym/gym-bmi/gym-bmi.component';
 import { GymBrandComponent } from './gym/gym-brand/gym-brand.component';
-import { GymCopyrightComponent } from './gym/gym-copyright/gym-copyright.component';
 import { GymCounterComponent } from './gym/gym-counter/gym-counter.component';
 import { GymPricingComponent } from './gym/gym-pricing/gym-pricing.component';
 import { GymScheduleComponent } from './gym/gym-schedule/gym-schedule.component';
@@ -58,10 +57,12 @@ import { FriendListComponent } from './dashboard/friend-list/friend-list.compone
 import { FriendDetailTileComponent } from './dashboard/friend-list/friend-detail-tile/friend-detail-tile.component';
 import { CompetitorListComponent } from './dashboard/competitor-list/competitor-list.component';
 import { CompetitorDetailTileComponent } from './dashboard/competitor-list/competitor-detail-tile/competitor-detail-tile.component';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { TermsComponent } from './terms/terms.component';
 
 @NgModule({
   declarations: [
-    GymComponent, GymAboutComponent, GymScheduleComponent, GymWorkoutAboutComponent, GymCounterComponent, HomeEventsComponent, GymTestimonialComponent, GymPricingComponent, GymBMIComponent, GymBrandComponent, GymCopyrightComponent, 
+    GymComponent, GymAboutComponent, GymScheduleComponent, GymWorkoutAboutComponent, GymCounterComponent, HomeEventsComponent, GymTestimonialComponent, GymPricingComponent, GymBMIComponent, GymBrandComponent, 
     PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent, PlayerHistoryComponent, PlayerTotalCounterComponent, PlayerSummaryComponent, PlayerSetsStatisticsComponent, ClubDetailComponent, TeamPlayersComponent, 
     HomeComponent, ClubListComponent, EventListComponent, EventDetailComponent, RankingComponent, DashboardComponent, ForgotPasswordComponent, LoginComponent, RegisterComponent, ProfileComponent, LogoutComponent, ResendEmailVerificationComponent,
     PlayerDetailBasicInfoComponent,
@@ -79,7 +80,9 @@ import { CompetitorDetailTileComponent } from './dashboard/competitor-list/compe
     ClubProfilePlayersComponent,
     FriendListComponent,
     CompetitorListComponent,
-    CompetitorDetailTileComponent
+    CompetitorDetailTileComponent,
+    PrivacyComponent,
+    TermsComponent
   ],
   imports: [
     CommonModule,

@@ -19,6 +19,8 @@ import { LogoutComponent } from './layouts/logout/logout.component';
 import { ResendEmailVerificationComponent } from './layouts/resend-email-verification/resend-email-verification.component';
 import { FriendListComponent } from './layouts/dashboard/friend-list/friend-list.component';
 import { CompetitorListComponent } from './layouts/dashboard/competitor-list/competitor-list.component';
+import { PrivacyComponent } from './layouts/privacy/privacy.component';
+import { TermsComponent } from './layouts/terms/terms.component';
 
 export const routes: Routes = [
   {
@@ -63,11 +65,11 @@ export const routes: Routes = [
   },
   {
     path: 'friends',
-    component: FriendListComponent
+    component: FriendListComponent, canActivate: [AuthGuard]
   },
   {
     path: 'competitors',
-    component: CompetitorListComponent
+    component: CompetitorListComponent, canActivate: [AuthGuard]
   },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
@@ -75,7 +77,9 @@ export const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'resend-email-verification', component: ResendEmailVerificationComponent },
   { path: 'dashboard', component: DashboardComponent , canActivate: [AuthGuard]},
-  { path: 'profile', component:ProfileComponent , canActivate: [AuthGuard]}
+  { path: 'profile', component:ProfileComponent , canActivate: [AuthGuard]},
+  { path: 'privacy', component:PrivacyComponent},
+  { path: 'terms', component: TermsComponent }
 ];
 
 @NgModule({
