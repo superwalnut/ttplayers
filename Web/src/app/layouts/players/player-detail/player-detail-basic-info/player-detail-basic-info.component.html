@@ -34,7 +34,7 @@
               <h5 class="text-left">RC ID:</h5>
             </div>
             <div class="portfolio-right">
-              <a href="https://www.ratingscentral.com/PlayerHistory.php?PlayerID={{player.Id}}" target="_blank" rel="nofollow" title="Rating Central ID">{{player.Id}}</a>
+              <h5><a href="https://www.ratingscentral.com/PlayerHistory.php?PlayerID={{player.Id}}" target="_blank" rel="nofollow" title="Rating Central ID" class="detail-link">{{player.Id}}</a></h5>
             </div>
           </div>
     </div>
@@ -49,10 +49,10 @@
           </div>
           <div class="detail-container d-flex">
             <div class="portfolio-left">
-              <h5 class="text-left">Ranking:</h5>
+              <h5 class="text-left">Rank ({{player.Gender}}):</h5>
             </div>
             <div class="portfolio-right">
-              <h5>{{player.NationalGenderRanking>0?player.NationalGenderRanking:'--'}} <small *ngIf="player.NationalGenderRanking>0">{{toGenderRanking(player)}}</small></h5>
+              <h5>{{player.NationalGenderRanking>0?player.NationalGenderRanking:'--'}}</h5>
             </div>
           </div>
           <div class="detail-container d-flex">
@@ -66,10 +66,10 @@
           </div>
           <div class="detail-container d-flex">
             <div class="portfolio-left">
-              <h5 class="text-left">TT NSW ID:</h5>
+              <h5 class="text-left">TT{{player.State}} ID:</h5>
             </div>
             <div class="portfolio-right">
-              {{player.TtaId}}
+              <h5>{{player.TtaId}}</h5>
             </div>
           </div>
     </div>

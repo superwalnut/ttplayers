@@ -2,11 +2,11 @@
 <div class="comment-list blog_comment" *ngIf="matchesByEvent">
     <div class="comment_sec" *ngFor="let eventId of getEventIds()">
         <article class="row">
-            <div class="col-12">
+            <div class="col-12 p-0">
                 <div class="blog_center">
                     <div class="blog_user arrow left">
                         <div class="panel-body">
-                            <div class="text-left">
+                            <div class="text-left ml-2 mr-2">
                                 <div class="comment-user"><i class="fa fa-calendar"></i>
                                     <h6>{{getEventName(eventId)}}</h6>
                                 </div>
@@ -19,8 +19,6 @@
                                     <table class="table table-borderless" *ngFor="let match of matchesByEvent[eventId]">
                                         <thead>
                                             <th width="60%"></th>
-                                            <th width="5%"></th>
-                                            <th width="5%"></th>
                                             <th width="5%"></th>
                                             <th width="5%"></th>
                                             <th width="5%"></th>

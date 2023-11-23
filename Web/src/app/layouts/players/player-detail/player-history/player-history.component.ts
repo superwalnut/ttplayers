@@ -80,7 +80,7 @@ export class PlayerHistoryComponent {
     var sets = [];
     if(match.WinnerId == this.player.Id){
       // I am winner
-      for(var i=0;i<7;i++){
+      for(var i=0;i<5;i++){
         if(match.WinnerSetScores && i < match.WinnerSetScores.length)
         {
           sets.push(match.WinnerSetScores[i]);
@@ -91,7 +91,7 @@ export class PlayerHistoryComponent {
     }
     if(match.LoserId == this.player.Id){
       // I am loser
-      for(var i=0;i<7;i++){
+      for(var i=0;i<5;i++){
         if(match.LoserSetScores && i < match.LoserSetScores.length)
         {
           sets.push(match.LoserSetScores[i]);
@@ -107,7 +107,7 @@ export class PlayerHistoryComponent {
     var sets = [];
     if(match.WinnerId == this.player.Id){
       // Opponent is loser
-      for(var i=0;i<7;i++){
+      for(var i=0;i<5;i++){
         if(match.LoserSetScores && i < match.LoserSetScores.length)
         {
           sets.push(match.LoserSetScores[i]);
@@ -119,7 +119,7 @@ export class PlayerHistoryComponent {
 
     if(match.LoserId == this.player.Id){
       // Opponent is winner
-      for(var i=0;i<7;i++){
+      for(var i=0;i<5;i++){
         if(match.WinnerSetScores && i < match.WinnerSetScores.length)
         {
           sets.push(match.WinnerSetScores[i]);

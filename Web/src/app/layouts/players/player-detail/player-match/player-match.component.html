@@ -6,7 +6,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6 col-md-6 p-4">
+        <div class="col-lg-6 col-md-6 p-4 p-b-0">
             <div *ngIf="player.TotalPlayedMatches>0" class="player-activity-summary mb-4">
                 <strong>{{player.FirstName}}</strong> played <strong>{{player.TotalPlayedMatches}}</strong> matches, 
                 <ul class="list-group list-group-flush">
@@ -18,7 +18,7 @@
                 And won <strong>{{player.TotalWinsWithoutLosingAnySet }}</strong> Clean Sheet matches <br/>(Without losing any set. i.e. 3:0)
             </div>
         </div>
-        <div class="col-lg-6 col-md-6 p-4">
+        <div class="col-lg-6 col-md-6 p-4 p-t-0">
             <ngx-gauge
                 class="match-chart"
                 [type]="gaugeType" 
