@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Player } from 'src/app/models/player';
 import { Statistics } from 'src/app/models/statistics';
 
@@ -7,18 +7,28 @@ import { Statistics } from 'src/app/models/statistics';
   templateUrl: './player-ranking.component.html',
   styleUrls: ['./player-ranking.component.scss']
 })
-export class PlayerRankingComponent {
+export class PlayerRankingComponent implements OnInit{
   @Input() player: Player;
   @Input() stats: Statistics;
 
-  /**
-   *
-   */
+  nationalRanking:number;
+  stateRanking:number;
+
+  totalPlayers:number;
+  stateTotalPlayers:number;
+
   constructor() {
     
   }
 
-  toNationalRankingPosition() {
+  ngOnInit(): void {
+    this.nationalRanking = this.toNationalRankingPosition();
+    this.stateRanking = this.toStateRankingPosition();
+    this.totalPlayers = this.toTotalPlayers();
+    this.stateTotalPlayers = this.toStateTotalPlayers();
+  }
+
+  toNationalRankingPosition() : number{
     if(this.player.Gender =="M" && this.player.NationalGenderRanking>0) {
       
       const pos = Math.round((this.stats.TotalMenPlayerCount - this.player.NationalGenderRanking) * 100 / this.stats.TotalMenPlayerCount);

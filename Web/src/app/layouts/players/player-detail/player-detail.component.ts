@@ -42,6 +42,8 @@ export class PlayerDetailComponent implements OnInit {
   stats:Statistics = null; // get latest statistics
   competitor: Competitor = null;
 
+  nameInitialSvg:any;
+
   constructor(private route: ActivatedRoute,
     private title: Title, 
     private playerService:PlayerService, 
@@ -66,6 +68,9 @@ export class PlayerDetailComponent implements OnInit {
     this.playerService.getPlayer(playerId).subscribe(player => {
       this.player = player;
       console.log(this.player);
+
+      // get name initial svg
+      this.nameInitialSvg = this.getSvg(player);
       
       this.loggedInUser = this.authService.getLoggedInUser();
       if(this.loggedInUser){
@@ -262,6 +267,6 @@ export class PlayerDetailComponent implements OnInit {
   }
 
   getSvg(player:Player) {
-    return this.commonService.getNameInitialSvg(player, null);
+    return this.commonService.getNameInitialSvg(player, 0);
   }
 }

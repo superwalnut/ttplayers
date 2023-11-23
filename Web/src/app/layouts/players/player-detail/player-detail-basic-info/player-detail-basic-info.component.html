@@ -29,6 +29,14 @@
               </h5>
             </div>
           </div>
+          <div class="detail-container d-flex">
+            <div class="portfolio-left">
+              <h5 class="text-left">RC ID:</h5>
+            </div>
+            <div class="portfolio-right">
+              <a href="https://www.ratingscentral.com/PlayerHistory.php?PlayerID={{player.Id}}" target="_blank" rel="nofollow" title="Rating Central ID">{{player.Id}}</a>
+            </div>
+          </div>
     </div>
     <div class="col-6 p-0">
         <div class="detail-container d-flex p-t-0 mt-2">
@@ -52,7 +60,16 @@
               <h5 class="text-left">Wins <span class="tiny">(YTD)</span>:</h5>
             </div>
             <div class="portfolio-right">
-              <h5>{{player.YearToDateWins / (player.YearToDateWins+player.YearToDateLoses) | percent }}</h5>
+              <h5 *ngIf="player.YearToDateWins==0 && player.YearToDateLoses == 0">--</h5>
+              <h5 *ngIf="player.YearToDateWins>0 || player.YearToDateLoses > 0">{{player.YearToDateWins / (player.YearToDateWins+player.YearToDateLoses) | percent }}</h5>
+            </div>
+          </div>
+          <div class="detail-container d-flex">
+            <div class="portfolio-left">
+              <h5 class="text-left">TT NSW ID:</h5>
+            </div>
+            <div class="portfolio-right">
+              {{player.TtaId}}
             </div>
           </div>
     </div>

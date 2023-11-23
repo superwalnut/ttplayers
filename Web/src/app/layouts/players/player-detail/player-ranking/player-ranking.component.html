@@ -11,19 +11,19 @@
                 <strong>{{player.FirstName}}</strong> has ranking of
                 <ul class="list-group list-group-flush">
                     <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.NationalGenderRanking }}</strong> in {{player.Gender=="M"?"Men":"Women"}} of Australia.</li>
-                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>top <strong>{{(100 - toNationalRankingPosition()) +'%'}}</strong> in {{player.Gender=="M"?"Men":"Women"}} of Australia.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>top <strong>{{(100 - nationalRanking) +'%'}}</strong> in {{player.Gender=="M"?"Men":"Women"}} of Australia.</li>
                 </ul>
             </div>
             <div class="player-ranking-container" *ngIf="player.NationalGenderRanking>0" >
                 <div class="top-label-wrapper">
-                    <span [ngStyle]="{ 'left': toNationalRankingPosition() + '%' }">{{player.FirstName}}</span>
-                    <i class="caret-label fa fa-caret-down" aria-hidden="true" [ngStyle]="{ 'left': toNationalRankingPosition() + '%'  }"></i>
+                    <span [ngStyle]="{ 'left': nationalRanking + '%' }">{{player.FirstName}}</span>
+                    <i class="caret-label fa fa-caret-down" aria-hidden="true" [ngStyle]="{ 'left': nationalRanking + '%'  }"></i>
                 </div>
                 
                 <div class="gradient-progress"></div>
             
                 <div class="bottom-label-wrapper">
-                    <span>#{{toTotalPlayers()}}</span>
+                    <span>#{{totalPlayers}}</span>
                     <span class="text-right">#1</span>
                 </div>
             </div>
@@ -37,19 +37,19 @@
                 <strong>{{player.FirstName}}</strong> has ranking of
                 <ul class="list-group list-group-flush">
                     <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i><strong>{{player.StateGenderRanking}}</strong> in {{player.Gender=="M"?"Men":"Women"}} of {{player.State}}.</li>
-                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>top <strong>{{(100 - toStateRankingPosition()) +'%'}}</strong> in {{player.Gender=="M"?"Men":"Women"}} of {{player.State}}.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>top <strong>{{(100 - stateRanking) +'%'}}</strong> in {{player.Gender=="M"?"Men":"Women"}} of {{player.State}}.</li>
                 </ul>
             </div>
             <div class="player-ranking-container" *ngIf="player.StateGenderRanking>0">
                 <div class="top-label-wrapper">
-                    <span [ngStyle]="{ 'left': toStateRankingPosition() + '%' }">{{player.FirstName}}</span>
-                    <i class="caret-label fa fa-caret-down" aria-hidden="true" [ngStyle]="{ 'left': toStateRankingPosition()  + '%' }"></i>
+                    <span [ngStyle]="{ 'left': stateRanking + '%' }">{{player.FirstName}}</span>
+                    <i class="caret-label fa fa-caret-down" aria-hidden="true" [ngStyle]="{ 'left': stateRanking  + '%' }"></i>
                 </div>
                 
                 <div class="gradient-progress"></div>
             
                 <div class="bottom-label-wrapper">
-                    <span>#{{toStateTotalPlayers()}}</span>
+                    <span>#{{stateTotalPlayers}}</span>
                     <span class="text-right">#1</span>
                 </div>
             </div>

@@ -34,19 +34,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-9">
-                <div class="container">
+                <div class="container p-0">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="portfolio-detail" *ngIf="player">
                                 <div class="container">
-                                    <div class="row mb-4">
-                                        <div class="col-2 p-0 m-0 text-right">
-                                            <div [innerHTML]="getSvg(player)"></div>
-                                        </div>
-                                        <div class="col-10 p-0 m-0">
-                                            <h1>{{player.FullName}}<span class="p-l-10 rc-id"><a href="https://www.ratingscentral.com/PlayerHistory.php?PlayerID={{player.Id}}" target="_blank" rel="nofollow">(RC ID: {{player.Id}})</a></span></h1>
-                                        </div>
-                                    </div>
                                     <div class="row">
                                         <div class="col-12 p-0 m-0 text-right">
                                             <button class="btn btn-sm m-r-10" [ngClass]="{'btn-outline-danger': friend!=null, 'btn-outline-secondary': friend == null}" (click)="action_friend(content)">
@@ -55,6 +47,14 @@
                                             <button class="btn btn-sm" [ngClass]="{'btn-outline-purple': competitor!=null, 'btn-outline-secondary': competitor == null}" (click)="action_competitor(content)">
                                                 <i class="fa fa-shield"></i>
                                             </button>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col-12 p-0 m-0">
+                                            <div class="d-flex">
+                                                <div class="name-svg" [innerHTML]="nameInitialSvg"></div>
+                                                <h1 class="full-name">{{player.FullName}}</h1>
+                                            </div>
                                         </div>
                                     </div>
                                     <app-player-detail-basic-info [player]="player"></app-player-detail-basic-info>

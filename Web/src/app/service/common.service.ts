@@ -23,13 +23,14 @@ export class CommonService {
     }
 
     const svgString = `
-    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" class="svg-initial">
+    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
       <circle cx="20" cy="20" r="15" fill="${circleColor}"/>
       <text x="20" y="20" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="bold" fill="white">${initial}</text>
       ${rankCircle}
     </svg>
     `;
 
+    console.log(svgString);
     return this.sanitizer.bypassSecurityTrustHtml(svgString);
   }
 
