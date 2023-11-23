@@ -14,7 +14,7 @@ jobs:
         working-directory: ./Web
     steps:
       - uses: actions/checkout@v3
-      - run: npm ci && npm run build --output-path=../public
+      - run: npm ci && npm run build --output-path=public
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
