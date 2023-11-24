@@ -30,7 +30,6 @@ export class CommonService {
     </svg>
     `;
 
-    console.log(svgString);
     return this.sanitizer.bypassSecurityTrustHtml(svgString);
   }
 

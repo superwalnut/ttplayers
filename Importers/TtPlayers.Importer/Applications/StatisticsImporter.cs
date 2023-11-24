@@ -130,6 +130,9 @@ namespace TtPlayers.Importer.Applications
 
             _logger.LogInformation($"count average win rate {averageRate}");
 
+            // count matches played by percentages
+
+
 
             var statistics = new Statistics
             {

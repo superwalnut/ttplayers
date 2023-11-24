@@ -57,6 +57,8 @@ export class FriendListComponent implements OnInit{
         console.log('mePlayer', player);
         console.log('players', players);
 
+        //reset friends
+        this.friendPlayers = [];
         if(player){
           
           players.push(player);

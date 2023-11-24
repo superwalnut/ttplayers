@@ -44,7 +44,7 @@
               <h5 class="text-left">Rating:</h5>
             </div>
             <div class="portfolio-right">
-              <h5>{{toRating(player)}}</h5>
+              <h5>{{ratingDisplay}}</h5>
             </div>
           </div>
           <div class="detail-container d-flex">
@@ -57,10 +57,10 @@
           </div>
           <div class="detail-container d-flex">
             <div class="portfolio-left">
-              <h5 class="text-left">Wins <span class="tiny">(YTD)</span>:</h5>
+              <h5 class="text-left">Wins <span class="tiny" *ngIf="hasWtdRate">(YTD)</span>:</h5>
             </div>
             <div class="portfolio-right">
-              <h5 *ngIf="player.YearToDateWins==0 && player.YearToDateLoses == 0">--</h5>
+              <h5 *ngIf="player.YearToDateWins==0 && player.YearToDateLoses == 0">{{player.TotalWins / player.TotalPlayedMatches | percent }}</h5>
               <h5 *ngIf="player.YearToDateWins>0 || player.YearToDateLoses > 0">{{player.YearToDateWins / (player.YearToDateWins+player.YearToDateLoses) | percent }}</h5>
             </div>
           </div>

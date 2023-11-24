@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using TtPlayers.Importer.Domain.Models;
 
 namespace TtPlayers.Importer.Extensions
@@ -267,6 +268,27 @@ namespace TtPlayers.Importer.Extensions
                 tags.Add(trimedWord);
             }
 
+            return tags;
+        }
+
+        public static List<string> GetNameComboTags(this Player player)
+        {
+            var tags = new List<string>();
+            tags.Add(player.FirstName.ToLower());
+            tags.Add(player.LastName.ToLower());
+            tags.Add(player.FullName.ToLower());
+
+            var firstNames = player.FirstName.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            
+            if(firstNames.Length > 1)
+            {
+                // any first name + lastname combo
+                foreach (var firstName in firstNames)
+                {
+                    tags.Add(firstName.ToLower());
+                    tags.Add($"{firstName.ToLower()} {player.LastName.ToLower()}");
+                }
+            }
             return tags;
         }
     }

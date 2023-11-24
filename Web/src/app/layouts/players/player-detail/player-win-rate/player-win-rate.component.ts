@@ -11,6 +11,8 @@ export class PlayerWinRateComponent implements OnInit {
   @Input() player: Player;
   @Input() stats: Statistics;
 
+  hasWtdRate:boolean;
+
   playerRate:number;
   nationalRate:number;
   /**
@@ -20,12 +22,18 @@ export class PlayerWinRateComponent implements OnInit {
     
   }
   ngOnInit(): void {
+    this.hasWtdRate = this.player.YearToDateWins+ this.player.YearToDateLoses > 0;
     this.playerRate = this.toPlayerWinRate();
     this.nationalRate = this.toNationalAverageRate();
   }
 
   toPlayerWinRate() {
-    const rate = this.player.YearToDateWins / (this.player.YearToDateWins+ this.player.YearToDateLoses);
+    if(this.player.YearToDateWins+ this.player.YearToDateLoses > 0) {
+      const rate = this.player.YearToDateWins / (this.player.YearToDateWins+ this.player.YearToDateLoses);
+      return Math.round(rate * 100);
+    }
+    
+    const rate = this.player.TotalWins / (this.player.TotalPlayedMatches);
     return Math.round(rate * 100);
   }
 

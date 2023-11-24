@@ -1,16 +1,16 @@
 <div class="containercounter bg-light-inner pt-3 pl-3 pr-3 mt-4">
     <div class="row">
         <div class="col-12">
-            <h4>Winning Rate (Year-to-Date)</h4>
+            <h4>Winning Rate <span *ngIf="hasWtdRate">(Year-to-Date)</span></h4>
             <hr/>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-6 col-md-6 p-4 p-b-0">
-            <div *ngIf="player.YearToDateWins>0" class="player-activity-summary mb-4">
+            <div class="player-activity-summary mb-4">
                 <strong>{{player.FirstName}}</strong> has achieved
                 <ul class="list-group list-group-flush">
-                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> winning rate (YTD) of <strong>{{playerRate + '%' }}</strong>.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> winning rate <span *ngIf="hasWtdRate">(YTD)</span> of <strong>{{playerRate + '%' }}</strong>.</li>
                     <li *ngIf="nationalRate <= playerRate"><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> is <strong>{{ (playerRate - nationalRate) + '%' }}</strong> higher than all players average ({{nationalRate +'%'}}).</li>
                     <li *ngIf="nationalRate > playerRate"><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> is <strong>{{ (nationalRate - playerRate) + '%' }}</strong> lower than all players average ({{nationalRate +'%'}}).</li>
                 </ul>

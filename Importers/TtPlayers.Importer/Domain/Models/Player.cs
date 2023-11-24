@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Google.Cloud.Firestore;
 using TtPlayers.Importer.Domain.Attributes;
+using TtPlayers.Importer.Extensions;
 
 namespace TtPlayers.Importer.Domain.Models
 {
@@ -32,11 +33,7 @@ namespace TtPlayers.Importer.Domain.Models
         public List<string> Names {
             get
             {
-                return new List<string> { 
-                    FirstName.ToLower(),
-                    LastName.ToLower(),
-                    FullName.ToLower()
-                };
+                return this.GetNameComboTags();
             }
         }
 

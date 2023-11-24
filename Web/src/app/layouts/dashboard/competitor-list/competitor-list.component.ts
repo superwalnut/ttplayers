@@ -57,6 +57,7 @@ export class CompetitorListComponent {
         console.log('mePlayer', player);
         console.log('players', players);
 
+        this.competitorPlayers = [];
         if(player){
           
           players.push(player);

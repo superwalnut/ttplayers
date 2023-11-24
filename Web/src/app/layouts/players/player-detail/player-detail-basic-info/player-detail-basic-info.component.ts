@@ -10,12 +10,16 @@ export class PlayerDetailBasicInfoComponent implements OnInit {
   @Input() player:Player;
 
   time:any;
+  hasWtdRate:boolean;
+  ratingDisplay:string;
 
   constructor() {
     
   }
   ngOnInit(): void {
     this.time = this.totalPlayedTime(this.player);
+    this.hasWtdRate = this.player.YearToDateWins+ this.player.YearToDateLoses > 0;
+    this.ratingDisplay = this.toRating(this.player);
   }
   
   totalPlayedTime(player:Player) : {year, month}{

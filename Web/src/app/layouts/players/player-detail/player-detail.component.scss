@@ -107,10 +107,15 @@ h5{
     line-height: 60px;
     height:60px;
     margin-top:0px;
+    font-weight: 400;
 }
 
 @media only screen and (max-width: 575px) {
     .border-around {
         display:none;
+    }
+
+    .full-name {
+        font-size:1.2em;
     }
 }
