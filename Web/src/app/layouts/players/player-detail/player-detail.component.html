@@ -68,13 +68,16 @@
                 <app-player-total-counter [player]="player"></app-player-total-counter>
 
                 <!-- Summary -->
-                <app-player-summary [player]="player" [stats]="stats"></app-player-summary>
+                <app-player-summary [player]="player" [stats]="stats" *ngIf="stats"></app-player-summary>
 
                 <!-- Winning Rate -->
-                <app-player-win-rate [player]="player" [stats]="stats"></app-player-win-rate>
+                <app-player-win-rate [player]="player" [stats]="stats" *ngIf="stats"></app-player-win-rate>
 
                 <!-- Rankings -->
-                <app-player-ranking [player]="player" [stats]="stats"></app-player-ranking>
+                <app-player-ranking [player]="player" [stats]="stats" *ngIf="stats"></app-player-ranking>
+
+                <!-- Match Count summary -->
+                <app-player-match-percentage [player]="player" [stats]="stats" *ngIf="stats"></app-player-match-percentage>
 
                 <!-- Match summary -->
                 <app-player-match [player]="player"></app-player-match>

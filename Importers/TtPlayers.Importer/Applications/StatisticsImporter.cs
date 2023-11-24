@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Amazon.Runtime.Internal.Transform;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -131,8 +132,23 @@ namespace TtPlayers.Importer.Applications
             _logger.LogInformation($"count average win rate {averageRate}");
 
             // count matches played by percentages
+            var groupedPlayers = allPlayers.GroupBy(p => (p.TotalPlayedMatches / 100) * 100)
+                                    .OrderBy(g => g.Key);
 
-
+            var matchedPlayedGroups = new Dictionary<string, int>();
+            var lastGroupCount = 0; // sum groups 1500, 1800, 2100, 2400 all together
+            foreach(var group in groupedPlayers)
+            {
+                if(group.Key >= 1000)
+                {
+                    lastGroupCount += group.Count();
+                }
+                else
+                {
+                    matchedPlayedGroups.Add(group.Key.ToString(), group.Count());
+                }
+            }
+            matchedPlayedGroups.Add("1000", lastGroupCount);
 
             var statistics = new Statistics
             {
@@ -157,6 +173,8 @@ namespace TtPlayers.Importer.Applications
                 StateMatchCounts = stateMatchCounts,
 
                 StateAverageRates = stateAverageRates,
+
+                MatchPlayedGroups = matchedPlayedGroups
             };
 
             await _statisticRepository.UpsertAsync(statistics, x => x.Id == statistics.Id);

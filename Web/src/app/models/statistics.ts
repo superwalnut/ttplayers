@@ -27,6 +27,8 @@ export interface Statistics {
 
     AverageWinRate:number;
     StateAverageRates:StateCounter;
+
+    MatchPlayedGroups: any;
 }
 
 export interface StateCounter {

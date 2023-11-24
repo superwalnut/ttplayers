@@ -59,6 +59,7 @@ import { CompetitorListComponent } from './dashboard/competitor-list/competitor-
 import { CompetitorDetailTileComponent } from './dashboard/competitor-list/competitor-detail-tile/competitor-detail-tile.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { TermsComponent } from './terms/terms.component';
+import { PlayerMatchPercentageComponent } from './players/player-detail/player-match-percentage/player-match-percentage.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { TermsComponent } from './terms/terms.component';
     CompetitorListComponent,
     CompetitorDetailTileComponent,
     PrivacyComponent,
-    TermsComponent
+    TermsComponent,
+    PlayerMatchPercentageComponent,
   ],
   imports: [
     CommonModule,

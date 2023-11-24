@@ -70,5 +70,8 @@ namespace TtPlayers.Importer.Domain.Models
         [FirestoreProperty]
         public Dictionary<string,double> StateAverageRates { get; set; }
 
+        [FirestoreProperty]
+        public Dictionary<string, int> MatchPlayedGroups { get; set; } 
+
     }
 }

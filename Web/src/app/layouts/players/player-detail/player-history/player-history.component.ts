@@ -166,4 +166,33 @@ export class PlayerHistoryComponent {
 
     return "";
   }
+
+  getPlayerPointChange(match:Match) {
+    if(this.isPlayerWinner(match))
+    {
+      return match.WinnerDelta>0?'+'+match.WinnerDelta:0;
+    }
+    else {
+      return match.LoserDelta;
+    }
+  }
+
+  getOpponentPointChange(match:Match) {
+    if(this.isOpponentWinner(match))
+    {
+      return match.WinnerDelta>0?'+'+match.WinnerDelta:0;
+    }
+    else {
+      return match.LoserDelta;
+    }
+  }
+
+  getOpponentRating(match:Match) {
+    if(this.isOpponentWinner(match)){
+      return `${match.LoserOpponentMean}±${match.LoserOpponentStDev}`;
+    } else {
+      return `${match.WinnerOpponentMean}±${match.WinnerOpponentStDev}`;
+    }
+  }
+
 }
