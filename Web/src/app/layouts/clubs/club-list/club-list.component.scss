@@ -42,10 +42,10 @@
     background-position: center;
 }
 
-.blog-info {
-    padding:10px !important;
-    min-height:100px;
+.card {
+    min-height:200px;
 }
+
 
 @media (max-width: 576px) {
     .subscribe .form-group input, .subscribe .form-group textarea {
@@ -54,6 +54,10 @@
 
     .club-img {
         height:30px;
+    }
+
+    .card {
+        min-height:150px;
     }
 }
 
