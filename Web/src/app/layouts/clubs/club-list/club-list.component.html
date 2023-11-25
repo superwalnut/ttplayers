@@ -29,7 +29,7 @@
 </section>
 <!-- Breadcrumb end -->
 
-<section class="agency blog blog-sec pt-4">
+<section class="agency pt-4">
     <div class="container no-side">
         <div class="row">
             <div class="col-12">
@@ -70,47 +70,37 @@
         </div>
         <div class="row">
             <div class="col-xl-4 col-md-6" *ngFor="let club of clubs">
-                <div class="blog-agency">
-                    <div class="blog-contain">
-                        <!-- <img src="assets/images/clubs/tt-club.png" alt="" class="img-fluid"> -->
-                        <div class="club-img" [ngStyle]="{'background-image': 'url(assets/images/clubs/tt-club.png)'}"></div>
+                <div class="card mb-4">
+                    <div class="card-img-top club-img" [ngStyle]="{'background-image': 'url(assets/images/events/AUS.jpg)'}">{{club.Nickname}}</div>
+                    <div class="card-body p-t-0 text-center">
+                      <h5 class="card-title mb-3"> <i class="fa fa-map-marker" aria-hidden="true"></i> {{club.City?club.City+',':''}} {{club.State}}</h5>
+                      <p class="card-text mb-3">{{club.Name}}</p>
+                      <a href="/club/{{club.Id}}?state={{state}}" class="btn btn-default btn-white btn-sm">View Details</a>
+                    </div>
+                </div>
+                <!-- <div class="blog-agency">
+                    <div class="blog-contain">                        
                         <div class="img-container center-content">
-                            <div>
-                                <div class="blog-info">
-                                    <div class="m-b-20">
-                                        <div class="center-text">
-                                            <i class="fa fa-map-marker m-r-10" aria-hidden="true"></i>
-                                            <h6 class="font-blog">{{club.City?club.City+',':''}} {{club.State}}</h6>
+                            <div class="blog-info container">
+                                <div class="row mb-2">
+                                    <div class="col-4">
+                                        <span class="nickname-title badge badge-primary">{{club.Nickname}}</span>
+                                        <div>
+                                           
                                         </div>
                                     </div>
-                                    <h5 class="blog-head font-600">{{club.Nickname}}</h5>
-                                    <h6>{{club.Name}}</h6>
-                                    <div class="para2 mt-4">
-                                        <div class="center-text mb-4">
-                                            <i class="fa fa-phone-square m-r-10" aria-hidden="true"></i>
-                                            <h6 class="font-blog"><a *ngIf="club.Phone" href="tel:{{club.Phone}}">{{club.Phone}}</a>{{!club.Phone?"-":""}}</h6>
+                                    <div class="col-8">
+                                        <h6>{{club.Name}}</h6>
+                                        <div class="btn-bottom m-t-20">
+                                            <a href="/club/{{club.Id}}?state={{state}}" class="btn btn-default btn-white btn-sm">View Details</a>
                                         </div>
-                                        <div class="center-text mb-4" >
-                                            <i class="fa fa-envelope m-r-10" aria-hidden="true"></i>
-                                            <h6 class="font-blog"><a *ngIf="club.Email" href="mailto:{{club.Email}}">{{club.Email}}</a>{{!club.Email?"-":""}}</h6>
-                                        </div>
-                                        <div class="center-text mb-4" >
-                                            <i class="fa fa-internet-explorer m-r-10" aria-hidden="true"></i>
-                                            <h6 class="font-blog"><a *ngIf="club.Website" class="text-wrap" href="{{club.Website}}" target="_blank" rel="nofollow">{{displayWebsite(club.Website)}}</a>{{!club.Website?"-":""}}</h6>
-                                        </div>
-                                        <div class="center-text" *ngIf="club.Address1">
-                                            <i class="fa fa-home m-r-10" aria-hidden="true"></i>
-                                            <h6 class="font-blog">{{club.Address1}} {{club.Address2}}, {{club.State}} {{club.PostalCode}}</h6>
-                                        </div>
-                                    </div>
-                                    <div class="btn-bottom m-t-20">
-                                        <a href="/club/{{club.Id}}?state={{state}}" class="btn btn-default btn-white">View Details</a>
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="row">

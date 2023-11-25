@@ -30,11 +30,21 @@
 }
 
 .club-img {
+    font-size:1.3em;
+    font-weight: 600;
+    color:#fff;
+    text-align: center;
+    background-color: rgb(0,0,0,0.7);
     width:100%;
-    height:100px;
+    height:30px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+}
+
+.blog-info {
+    padding:10px !important;
+    min-height:100px;
 }
 
 @media (max-width: 576px) {
@@ -43,7 +53,7 @@
     }
 
     .club-img {
-        height:70px;
+        height:30px;
     }
 }
 
@@ -59,7 +69,7 @@
     }
 
     .club-img {
-        height:80px;
+        height:30px;
     }
 
 }

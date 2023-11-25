@@ -23,10 +23,14 @@ export class PlayerWinRateComponent implements OnInit  {
   }
 
   ngOnInit(): void {
-    console.log('stats', this.stats);
+    console.log('win rate', this.stats);
     this.hasWtdRate = this.player.YearToDateWins+ this.player.YearToDateLoses > 0;
+    console.log('YTD wins', this.player.YearToDateWins);
+    console.log('YTD loses', this.player.YearToDateLoses);
     this.playerRate = this.toPlayerWinRate();
+    console.log('playerRate', this.playerRate);
     this.nationalRate = this.toNationalAverageRate();
+    console.log('nationalRate', this.nationalRate);
   }
 
   toPlayerWinRate() {

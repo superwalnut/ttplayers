@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-lg-6 col-md-6 p-4 p-b-0">
             <div class="player-activity-summary mb-4">
-                <strong>{{player.FirstName}}</strong> has achieved
+                <strong>{{player.FirstName}}</strong> played {{player.YearToDateWins+ player.YearToDateLoses}} matches this year, has achieved
                 <ul class="list-group list-group-flush">
                     <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> winning rate <span *ngIf="hasWtdRate">(YTD)</span> of <strong>{{playerRate + '%' }}</strong>.</li>
                     <li *ngIf="nationalRate <= playerRate"><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> is <strong>{{ (playerRate - nationalRate) + '%' }}</strong> higher than all players average ({{nationalRate +'%'}}).</li>
