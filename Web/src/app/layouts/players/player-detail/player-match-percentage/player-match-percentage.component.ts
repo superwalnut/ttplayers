@@ -15,6 +15,7 @@ export class PlayerMatchPercentageComponent {
   public matchPlayedchart: any;
   labels = ["<100","100-200", "200-300", "300-400", "400-500", "500-600", "600-700", "700-800", "800-900", "900-1000", "1000+"];
   values = [];
+  bgColor = [];
 
   playerBand:number;
 
@@ -49,10 +50,20 @@ export class PlayerMatchPercentageComponent {
 
     this.totalPlayerPercent = this.totalPlayer / this.stats.TotalPlayerCount;
 
-    this.createChart(this.labels, this.values);
+    this.bgColor = [];
+    for(var i =0;i<11;i++){
+      if(this.playerBand == i){
+        this.bgColor.push('red');
+      }
+      else {
+        this.bgColor.push('blue');
+      }
+    }
+
+    this.createChart(this.labels, this.values, this.bgColor);
   }
 
-  createChart(labels:string[], values:any[]){
+  createChart(labels:string[], values:any[], bgColor:string[]){
   
     this.matchPlayedchart = new Chart("MatchPlayedChart", {
       type: 'bar', //this denotes tha type of chart
@@ -63,7 +74,7 @@ export class PlayerMatchPercentageComponent {
           {
             label: "Players",
             data: values,
-            backgroundColor: 'blue'
+            backgroundColor: bgColor
           }
         ]
       },

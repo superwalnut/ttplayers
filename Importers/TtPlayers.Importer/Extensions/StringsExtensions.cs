@@ -84,7 +84,7 @@ namespace TtPlayers.Importer.Extensions
             foreach(var s in vals)
             {
                 int.TryParse(s, out var score);
-                if (score <= 0)
+                if (score < 0)
                 {
                     //winner lose
                     int winnerScore = Math.Abs(score);
@@ -121,7 +121,7 @@ namespace TtPlayers.Importer.Extensions
             foreach (var s in vals)
             {
                 int.TryParse(s, out var score);
-                if (score <= 0)
+                if (score < 0)
                 {
                     //winner lose
                     int winnerScore = Math.Abs(score);
@@ -162,8 +162,8 @@ namespace TtPlayers.Importer.Extensions
                     return result;
                 }).ToList();
 
-                var winnerSets = games.Count(x => x > 0);
-                var loserSets = games.Count(x => x <= 0);
+                var winnerSets = games.Count(x => x >= 0);
+                var loserSets = games.Count(x => x < 0);
 
                 var (winnerScores, loserScores) = GetWinnerLoserSetScores(games);
 
@@ -188,7 +188,7 @@ namespace TtPlayers.Importer.Extensions
             */
             foreach (var score in scores)
             {
-                if (score <= 0)
+                if (score < 0)
                 {
                     //winner lose
                     int winnerScore = Math.Abs(score);

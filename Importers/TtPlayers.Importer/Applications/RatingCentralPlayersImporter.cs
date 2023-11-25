@@ -1,22 +1,13 @@
-﻿using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
-using CsvHelper.Configuration;
-using CsvHelper;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Diagnostics;
-using System.Globalization;
-using System.Numerics;
 using TtPlayers.Importer.Applications.Base;
 using TtPlayers.Importer.Applications.Scraper;
 using TtPlayers.Importer.Configurations;
-using TtPlayers.Importer.data;
-using TtPlayers.Importer.Domain.CsvMapping;
 using TtPlayers.Importer.Domain.Models;
 using TtPlayers.Importer.Domain.Repositories;
 using TtPlayers.Importer.Extensions;
-using TtPlayers.Importer.Infrastructure;
 
 namespace TtPlayers.Importer.Applications
 {
@@ -306,20 +297,7 @@ namespace TtPlayers.Importer.Applications
             //_logger.LogInformation($"year to date - {sw.Elapsed.TotalMilliseconds}");
 
             // first - fifth games
-            var firstGameWins = matches.Select(x => WinGame(0, player.Id, x));
-            player.WinRateFirstGame = TryDivide(firstGameWins.Count(x => x == true), firstGameWins.Count(x => x.HasValue));
-                
-            var secondGameWins = matches.Select(y => WinGame(1, player.Id, y));
-            player.WinRateSecondGame = TryDivide(secondGameWins.Count(y => y == true), secondGameWins.Count(x => x.HasValue));
-
-            var thirdGameWins = matches.Select(x => WinGame(2, player.Id, x));
-            player.WinRateThirdGame = TryDivide(thirdGameWins.Count(x => x == true) , thirdGameWins.Count(x => x.HasValue));
-
-            var fourthGameWins = matches.Select(x => WinGame(3, player.Id, x));
-            player.WinRateFourthGame = TryDivide(fourthGameWins.Count(z => z == true) , fourthGameWins.Count(x => x.HasValue));
-
-            var fifthGameWins = matches.Select(x => WinGame(4, player.Id, x));
-            player.WinRateFifthGame = TryDivide(fifthGameWins.Count(x => x == true) , fifthGameWins.Count(x => x.HasValue));
+            SetMatchScoreStats(player, matches);
 
             //_logger.LogInformation($"5 games rate - {sw.Elapsed.TotalMilliseconds}");
 
@@ -390,6 +368,54 @@ namespace TtPlayers.Importer.Applications
             sw.Stop();
 
             return player;
+        }
+
+        private void SetMatchScoreStats(Player player, List<Match> matches)
+        {
+            // first - fifth games
+            var firstGameWins = matches.Select(x => WinGame(0, player.Id, x));
+            player.WinRateFirstGame = TryDivide(firstGameWins.Count(x => x == true), firstGameWins.Count(x => x.HasValue));
+
+            var secondGameWins = matches.Select(y => WinGame(1, player.Id, y));
+            player.WinRateSecondGame = TryDivide(secondGameWins.Count(y => y == true), secondGameWins.Count(x => x.HasValue));
+
+            var thirdGameWins = matches.Select(x => WinGame(2, player.Id, x));
+            player.WinRateThirdGame = TryDivide(thirdGameWins.Count(x => x == true), thirdGameWins.Count(x => x.HasValue));
+
+            var fourthGameWins = matches.Select(x => WinGame(3, player.Id, x));
+            player.WinRateFourthGame = TryDivide(fourthGameWins.Count(z => z == true), fourthGameWins.Count(x => x.HasValue));
+
+            var fifthGameWins = matches.Select(x => WinGame(4, player.Id, x));
+            player.WinRateFifthGame = TryDivide(fifthGameWins.Count(x => x == true), fifthGameWins.Count(x => x.HasValue));
+
+            // stats of each match score
+            var matchScoreStats = new List<MatchScoreStats>();
+            var winGroups = from m in matches
+                            where m.WinnerId == player.Id && !string.IsNullOrEmpty(m.Score.Trim())
+                            group m by new { Score = $"{m.WinnerSetWins}:{m.LoserSetWins}", TotalSets = m.WinnerSetWins.GetTotalSets() } into g1
+                            select new MatchScoreStats
+                            {
+                                Score = g1.Key.Score,
+                                TotalSets = g1.Key.TotalSets,
+                                IsWin = true,
+                                Count = g1.Count()
+                            };
+
+            matchScoreStats.AddRange(winGroups);
+
+            var loseGroups = from m in matches
+                            where m.LoserId == player.Id && !string.IsNullOrEmpty(m.Score.Trim())
+                             group m by new { Score = $"{m.LoserSetWins}:{m.WinnerSetWins}", TotalSets = m.WinnerSetWins.GetTotalSets() } into g1
+                            select new MatchScoreStats
+                            {
+                                Score = g1.Key.Score,
+                                TotalSets = g1.Key.TotalSets,
+                                IsWin = false,
+                                Count = g1.Count()
+                            };
+
+            matchScoreStats.AddRange(loseGroups);
+            player.MatchScoreStats = matchScoreStats;
         }
 
         private int RatingChangesInPeriod(string playerId, List<TtEventPlayer> eventPlayers, int months)

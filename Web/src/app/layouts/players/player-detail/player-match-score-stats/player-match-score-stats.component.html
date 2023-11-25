@@ -1,0 +1,29 @@
+<div class="container counter bg-light-inner pt-3 pl-3 pr-3 mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h4>Match Scores</h4>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 p-4 p-b-0">
+            <div *ngIf="player.TotalPlayedMatches>0" class="player-activity-summary mb-4">
+                <strong>{{player.FirstName}}</strong> played against <strong>{{player.TotalPlayedMatches}}</strong> matches, 
+                <ul class="list-group list-group-flush mt-2">
+                    <li class="pb-2" *ngFor="let match of player.MatchScoreStats">
+                        <i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> 
+                        <span class="badge badge-primary match-score">{{match.Score}}</span> for 
+                        <strong>{{match.Count }}</strong> matches.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 p-4 p-t-0">
+            <div class="chart-container">
+                <canvas  id="ScoreChart" >{{ scoreChart }}</canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+

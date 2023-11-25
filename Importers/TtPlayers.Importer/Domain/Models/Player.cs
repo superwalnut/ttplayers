@@ -116,6 +116,9 @@ namespace TtPlayers.Importer.Domain.Models
         public double WinRateFifthGame { get; set;}
 
         [FirestoreProperty]
+        public List<MatchScoreStats> MatchScoreStats { get; set; }
+
+        [FirestoreProperty]
         public int TotalBeatHigherRatingPlayers { get; set; }
 
         [FirestoreProperty]

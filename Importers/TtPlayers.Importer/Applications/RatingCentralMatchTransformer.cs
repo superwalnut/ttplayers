@@ -100,6 +100,7 @@ namespace TtPlayers.Importer.Applications
             // set transformed to false
             _logger.LogInformation($"Set RequireTransform flag to false for event-matches");
             eventMatch.RequireTransform = false;
+            eventMatch.LastUpdated= DateTime.Now;
             await _eventMatchesRepository.UpsertAsync(eventMatch, x => x.Id == evt.Id);
 
             _logger.LogInformation($"Upserted {evt.Name}:{evt.Id} matches");

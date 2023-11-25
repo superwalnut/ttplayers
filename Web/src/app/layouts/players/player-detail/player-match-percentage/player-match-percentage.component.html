@@ -1,7 +1,7 @@
 <div class="container counter bg-light-inner pt-3 pl-3 pr-3 mt-4">
     <div class="row">
         <div class="col-12">
-            <h4>Match Played</h4>
+            <h4>Play More</h4>
             <hr/>
         </div>
     </div>
@@ -10,8 +10,9 @@
             <div *ngIf="player.TotalPlayedMatches>0" class="player-activity-summary mb-4">
                 <strong>{{player.FirstName}}</strong> played <strong>{{player.TotalPlayedMatches}}</strong> matches,
                 <ul class="list-group list-group-flush">
-                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> more than {{totalPlayer}} players.</li>
-                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> more than <strong>{{totalPlayerPercent | percent }}</strong> of players.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> is among <strong>{{values[playerBand]}}</strong> players who played <strong>{{labels[playerBand]}}</strong> Matches.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> played more matches than <strong>{{totalPlayer}}</strong> players.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> played more matches than <strong>{{totalPlayerPercent | percent }}</strong> of players.</li>
                 </ul>
             </div>
         </div>

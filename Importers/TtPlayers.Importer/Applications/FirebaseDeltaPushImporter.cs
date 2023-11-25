@@ -7,10 +7,10 @@ namespace TtPlayers.Importer.Applications
 {
     public interface IFirebaseDeltaPushImporter
     {
-        Task PushPlayers();
+        Task PushPlayers(string playerId = null);
         Task PushPlayerHistories();
         Task PushEvents(bool forceAll = false);
-        Task PushEventPlayers(bool forceAll = false);
+        Task PushEventPlayers(bool forceAll = false, string playerId = null);
         Task PushEventMatches(string playerId = null, int? actionCount = null);
 
         Task PushClubs();
@@ -87,9 +87,18 @@ namespace TtPlayers.Importer.Applications
             _statisticsRepository = statisticsRepository;
         }
 
-        public async Task PushPlayers()
+        public async Task PushPlayers(string playerId = null)
         {
-            var players = await _playerRepository.FilterByAsync(x => x.RequireDeltaPush);
+            var players = new List<Player>();
+            if (!string.IsNullOrEmpty(playerId))
+            {
+                players = await _playerRepository.FilterByAsync(x => x.Id == playerId);
+            }
+            else
+            {
+                players = await _playerRepository.FilterByAsync(x => x.RequireDeltaPush);
+            }
+            
             _logger.LogInformation($"Pushing {players.Count} players to firebase");
 
             await _firebasePlayerRepository.UpdateBulk(players);
@@ -145,12 +154,19 @@ namespace TtPlayers.Importer.Applications
             _logger.LogInformation($"Pushing event to firebase completed with status {result}");
         }
 
-        public async Task PushEventPlayers(bool forceAll = false)
+        public async Task PushEventPlayers(bool forceAll = false, string playerId = null)
         {
             var eventPlayers = new List<TtEventPlayer>();
             if (!forceAll)
             {
-                eventPlayers = await _eventPlayerRepository.FilterByAsync(x => x.RequireDeltaPush);
+                if (string.IsNullOrEmpty(playerId))
+                {
+                    eventPlayers = await _eventPlayerRepository.FilterByAsync(x => x.RequireDeltaPush);
+                }
+                else
+                {
+                    eventPlayers = await _eventPlayerRepository.FilterByAsync(x => x.Id == playerId);
+                }
             } 
             else
             {

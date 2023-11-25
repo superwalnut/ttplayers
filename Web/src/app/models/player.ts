@@ -1,4 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
+import { MatchScoreStats } from './match-score-stats';
 
 export interface Player {
     Id: string;
@@ -56,6 +57,8 @@ export interface Player {
 
     NationalGenderRanking:number;
     StateGenderRanking:number;
+
+    MatchScoreStats:MatchScoreStats[];
 
     IsJunior:boolean;
 

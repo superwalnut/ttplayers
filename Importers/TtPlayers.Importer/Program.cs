@@ -227,7 +227,7 @@ namespace TtPlayers.Importer
                        // push firebase
                        else if(o.PushPlayers)
                        {
-                           firebasePusher.PushPlayers().GetAwaiter().GetResult();
+                           firebasePusher.PushPlayers(o.PlayerId).GetAwaiter().GetResult();
                        }
                        else if(o.PushPlayerHistory)
                        {
