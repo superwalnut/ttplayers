@@ -21,6 +21,7 @@ import { FriendListComponent } from './layouts/dashboard/friend-list/friend-list
 import { CompetitorListComponent } from './layouts/dashboard/competitor-list/competitor-list.component';
 import { PrivacyComponent } from './layouts/privacy/privacy.component';
 import { TermsComponent } from './layouts/terms/terms.component';
+import { CookiePolicyComponent } from './layouts/cookie-policy/cookie-policy.component';
 
 export const routes: Routes = [
   {
@@ -79,7 +80,8 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent , canActivate: [AuthGuard]},
   { path: 'profile', component:ProfileComponent , canActivate: [AuthGuard]},
   { path: 'privacy', component:PrivacyComponent},
-  { path: 'terms', component: TermsComponent }
+  { path: 'terms', component: TermsComponent },
+  { path: 'cookie', component: CookiePolicyComponent }
 ];
 
 @NgModule({

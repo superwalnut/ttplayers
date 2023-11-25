@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { CountToModule } from 'angular-count-to';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 
 import { SharedModule } from '../shared/shared.module';
@@ -61,6 +60,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { TermsComponent } from './terms/terms.component';
 import { PlayerMatchPercentageComponent } from './players/player-detail/player-match-percentage/player-match-percentage.component';
 import { PlayerMatchScoreStatsComponent } from './players/player-detail/player-match-score-stats/player-match-score-stats.component';
+import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
 
 @NgModule({
   declarations: [
@@ -87,13 +87,13 @@ import { PlayerMatchScoreStatsComponent } from './players/player-detail/player-m
     TermsComponent,
     PlayerMatchPercentageComponent,
     PlayerMatchScoreStatsComponent,
+    CookiePolicyComponent
   ],
   imports: [
     CommonModule,
     LayoutsRoutingModule,
     CarouselModule,
     SharedModule,
-    CountToModule,
     FormsModule,
     ReactiveFormsModule,
     NgbModule,

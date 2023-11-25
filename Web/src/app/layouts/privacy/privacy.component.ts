@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./privacy.component.scss']
 })
 export class PrivacyComponent {
-
+  date = new Date();
 }
