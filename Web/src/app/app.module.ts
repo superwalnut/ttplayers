@@ -28,10 +28,10 @@ import { GtagModule } from 'angular-gtag';
     HttpClientModule,
     CarouselModule,
     SharedModule,
-    AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AngularFireStorageModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    //AngularFireStorageModule,
     // GtagModule.forRoot({
     //   trackingId: environment.firebase.measurementId, // Replace with your tracking ID
     //   trackPageviews: true
