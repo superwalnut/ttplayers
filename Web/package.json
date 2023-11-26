@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --output-path=public",
+    "build": "ng build --configuration production --output-path=public",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -38,6 +38,7 @@
     "@nguniversal/express-engine": "^15.0.0",
     "acorn-dynamic-import": "^4.0.0",
     "angular-count-to": "0.0.3",
+    "angular-gtag": "^1.0.4",
     "animate-scss": "^3.2.1",
     "animate.css": "^4.1.1",
     "bootstrap-scss": "^4.6.1",

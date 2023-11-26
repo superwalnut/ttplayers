@@ -10,7 +10,6 @@ import { PlayerMatchEvent } from 'src/app/models/player-match-event';
 import { ClubService } from './../../../service/club.service';
 import { SndttaTeamService } from './../../../service/sndtta-team.service';
 import { Club } from 'src/app/models/club';
-import { Team } from 'src/app/models/team';
 import { TeamPlayer } from 'src/app/models/team-player';
 import { Friend } from '../../../models/friend';
 import { FriendService } from './../../../service/friend.service';
@@ -23,6 +22,7 @@ import { Statistics } from 'src/app/models/statistics';
 import { Competitor } from './../../../models/competitor';
 import { CompetitorService } from './../../../service/competitor.service';
 import { CommonService } from 'src/app/service/common.service';
+import { Gtag } from 'angular-gtag';
 
 @Component({
   selector: 'app-player-detail',
@@ -56,7 +56,8 @@ export class PlayerDetailComponent implements OnInit {
     private toastrService: ToastrService,
     private statsService:StatisticsService,
     private competitorService:CompetitorService,
-    private commonService:CommonService
+    private commonService:CommonService,
+    private gtag: Gtag
     ) { }
 
   ngOnInit() {
@@ -64,6 +65,8 @@ export class PlayerDetailComponent implements OnInit {
     var playerId = this.route.snapshot.params.id;
     this.keyword = this.route.snapshot.queryParams.keyword;
 
+    this.gtag.event('player_detail', { 'playerId': playerId });
+    
     // load player info
     this.playerService.getPlayer(playerId).subscribe(player => {
       this.player = player;

@@ -14,6 +14,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { environment } from '../environments/environment';
 import { AuthService } from "./service/auth.service";
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { GtagModule } from 'angular-gtag';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,10 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
+    GtagModule.forRoot({
+      trackingId: environment.firebase.measurementId, // Replace with your tracking ID
+      trackPageviews: true
+    }),
     RouterModule.forRoot(routes, { useHash: false, anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' })
   ],
   providers: [AuthService],
