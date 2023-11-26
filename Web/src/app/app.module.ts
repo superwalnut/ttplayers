@@ -33,11 +33,11 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
     AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebase),
     provideAuth(() => getAuth()),
-    //AngularFireStorageModule,
-    // GtagModule.forRoot({
-    //   trackingId: environment.firebase.measurementId, // Replace with your tracking ID
-    //   trackPageviews: true
-    // }),
+    AngularFireStorageModule,
+    GtagModule.forRoot({
+      trackingId: environment.firebase.measurementId, // Replace with your tracking ID
+      trackPageviews: true
+    }),
     RouterModule.forRoot(routes, { useHash: false, anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' })
   ],
   providers: [AuthService],
