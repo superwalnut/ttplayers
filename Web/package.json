@@ -73,7 +73,7 @@
     "@types/jasminewd2": "^2.0.10",
     "@types/mousetrap": "^1.6.9",
     "@types/node": "^18.18.12",
-    "codelyzer": "^0.0.28",
+    "codelyzer": "^6.0.2",
     "firebase": "^10.5.0",
     "jasmine-core": "~4.2.0",
     "jasmine-spec-reporter": "~7.0.0",

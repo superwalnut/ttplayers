@@ -8170,7 +8170,7 @@ breadcrumb-section css start
 .breadcrumb-section{
 
   &:not(.breadcrumb-left),&:not(.breadcrumb-right),&:not(.breadcrumb-slider){
-    background: url("../../images/inner-page/breadcrumb.jpg");
+    //background: url("../../images/inner-page/breadcrumb.jpg");
     background-position: center;
     background-size: cover;
     background-blend-mode: overlay;
@@ -8189,7 +8189,7 @@ breadcrumb-section css start
     background: linear-gradient(200deg, $light, $dark);
   }
   &.bg1 {
-    background: url("../../images/inner-page/breadcrumb-bg.jpg");
+    //background: url("../../images/inner-page/breadcrumb-bg.jpg");
     background-position: center;
     background-size: cover;
     background-blend-mode: overlay;
@@ -8323,7 +8323,7 @@ breadcrumb-section css start
     }
     .img-slider {
       .bg1 {
-        background: url("../../images/inner-page/breadcrumb-bg.jpg");
+        //background: url("../../images/inner-page/breadcrumb-bg.jpg");
         height: 60vh;
         background-size: cover;
         background-position: center;
@@ -8332,7 +8332,7 @@ breadcrumb-section css start
         background-color: #00000094;
       }
       .bg2 {
-        background: url("../../images/inner-page/blogs/1.jpg");
+        //background: url("../../images/inner-page/blogs/1.jpg");
         height: 60vh;
         background-size: cover;
         background-position: center;
@@ -8341,7 +8341,7 @@ breadcrumb-section css start
         background-color: #00000094;
       }
       .bg3 {
-        background: url("../../images/inner-page/breadcrumb-bg.jpg");
+        //background: url("../../images/inner-page/breadcrumb-bg.jpg");
         height: 60vh;
         background-size: cover;
         background-position: center;
@@ -8350,7 +8350,7 @@ breadcrumb-section css start
         background-color: #00000094;
       }
       .bg4 {
-        background: url("../../images/inner-page/blogs/1.jpg");
+        //background: url("../../images/inner-page/blogs/1.jpg");
         height: 60vh;
         background-size: cover;
         background-position: center;
@@ -12748,19 +12748,19 @@ error css end
 .multiple-carousel, .center-slide {
   height: 100vh;
   .img1 {
-    background: url("../../images/portfolio/multiple-carousel/5.jpg");
+    //background: url("../../images/portfolio/multiple-carousel/5.jpg");
   }
   .img2 {
-    background: url("../../images/portfolio/multiple-carousel/4.jpg");
+    //background: url("../../images/portfolio/multiple-carousel/4.jpg");
   }
   .img3 {
-    background: url("../../images/portfolio/multiple-carousel/3.jpg");
+    //background: url("../../images/portfolio/multiple-carousel/3.jpg");
   }
   .img4 {
-    background: url("../../images/portfolio/multiple-carousel/2.jpg");
+    //background: url("../../images/portfolio/multiple-carousel/2.jpg");
   }
   .img5 {
-    background: url("../../images/portfolio/multiple-carousel/1.jpg");
+    //background: url("../../images/portfolio/multiple-carousel/1.jpg");
   }
   .imgs-carousel {
     background-repeat: no-repeat;
@@ -12832,7 +12832,7 @@ error css end
   }
 }
 .maintenance-sec {
-  background: url("../../images/inner-page/maintain-soon/bg-maintenance.jpg");
+  //background: url("../../images/inner-page/maintain-soon/bg-maintenance.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
