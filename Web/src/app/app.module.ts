@@ -32,10 +32,10 @@ import { GtagModule } from 'angular-gtag';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-    GtagModule.forRoot({
-      trackingId: environment.firebase.measurementId, // Replace with your tracking ID
-      trackPageviews: true
-    }),
+    // GtagModule.forRoot({
+    //   trackingId: environment.firebase.measurementId, // Replace with your tracking ID
+    //   trackPageviews: true
+    // }),
     RouterModule.forRoot(routes, { useHash: false, anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' })
   ],
   providers: [AuthService],

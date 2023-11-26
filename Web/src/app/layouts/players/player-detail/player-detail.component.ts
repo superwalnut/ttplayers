@@ -22,7 +22,7 @@ import { Statistics } from 'src/app/models/statistics';
 import { Competitor } from './../../../models/competitor';
 import { CompetitorService } from './../../../service/competitor.service';
 import { CommonService } from 'src/app/service/common.service';
-import { Gtag } from 'angular-gtag';
+//import { Gtag } from 'angular-gtag';
 
 @Component({
   selector: 'app-player-detail',
@@ -59,7 +59,7 @@ export class PlayerDetailComponent implements OnInit {
     private statsService:StatisticsService,
     private competitorService:CompetitorService,
     private commonService:CommonService,
-    private gtag: Gtag
+    //private gtag: Gtag
     ) { }
 
   ngOnInit() {
@@ -67,7 +67,7 @@ export class PlayerDetailComponent implements OnInit {
     var playerId = this.route.snapshot.params.id;
     this.keyword = this.route.snapshot.queryParams.keyword;
 
-    this.gtag.event('player_detail', { 'playerId': playerId });
+    //this.gtag.event('player_detail', { 'playerId': playerId });
     
     // load player info
     this.playerService.getPlayer(playerId).subscribe(player => {
