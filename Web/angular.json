@@ -28,7 +28,7 @@
               "rxjs/operators",
               "mousetrap"
             ],
-            "outputPath": "dist/browser",
+            "outputPath": "public",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
