@@ -15,6 +15,7 @@ import { environment } from '../environments/environment';
 import { AuthService } from "./service/auth.service";
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { GtagModule } from 'angular-gtag';
+import { provideAuth, getAuth } from '@angular/fire/auth';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { GtagModule } from 'angular-gtag';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebase),
+    provideAuth(() => getAuth()),
     //AngularFireStorageModule,
     // GtagModule.forRoot({
     //   trackingId: environment.firebase.measurementId, // Replace with your tracking ID
