@@ -44,6 +44,8 @@ export class PlayerDetailComponent implements OnInit {
 
   nameInitialSvg:any;
 
+  active = 1; // tab
+
   constructor(private route: ActivatedRoute,
     private title: Title, 
     private playerService:PlayerService, 

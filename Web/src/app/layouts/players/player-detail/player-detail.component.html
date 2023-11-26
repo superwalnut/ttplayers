@@ -67,37 +67,53 @@
                 <!-- Overall Statistics -->
                 <app-player-total-counter [player]="player"></app-player-total-counter>
 
-                <!-- Summary -->
-                <app-player-summary [player]="player" [stats]="stats" *ngIf="stats"></app-player-summary>
+                <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs mt-4">
+                    <li [ngbNavItem]="1">
+                        <button ngbNavLink>Match History</button>
+                        <ng-template ngbNavContent>
+                            <!-- Match history -->
+                            <app-player-history [player]="player" [matchesByEvent]="matchesByEvent" *ngIf="matchesByEvent"></app-player-history>
+                            <div class="text-center" *ngIf="lastMatch">
+                                <a (click)="loadMoreMatches()" class="btn btn-default btn-white btn-sm">Load more</a>
+                            </div>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2">
+                        <button ngbNavLink>Statistics</button>
+                        <ng-template ngbNavContent>
+                            
+                            <!-- Summary -->
+                            <app-player-summary [player]="player" [stats]="stats" *ngIf="stats"></app-player-summary>
 
-                <!-- Winning Rate -->
-                <app-player-win-rate [player]="player" [stats]="stats" *ngIf="stats"></app-player-win-rate>
+                            <!-- Winning Rate -->
+                            <app-player-win-rate [player]="player" [stats]="stats" *ngIf="stats"></app-player-win-rate>
 
-                <!-- Rankings -->
-                <app-player-ranking [player]="player" [stats]="stats" *ngIf="stats"></app-player-ranking>
+                            <!-- Rankings -->
+                            <app-player-ranking [player]="player" [stats]="stats" *ngIf="stats"></app-player-ranking>
 
-                <!-- Match Count summary -->
-                <app-player-match-percentage [player]="player" [stats]="stats" *ngIf="stats"></app-player-match-percentage>
+                            <!-- Match Count summary -->
+                            <app-player-match-percentage [player]="player" [stats]="stats" *ngIf="stats"></app-player-match-percentage>
 
-                <!-- Match summary -->
-                <app-player-match [player]="player"></app-player-match>
+                            <!-- Match summary -->
+                            <app-player-match [player]="player"></app-player-match>
 
-                <!-- Opponents -->
-                <app-player-opponent [player]="player"></app-player-opponent>
+                            <!-- Opponents -->
+                            <app-player-opponent [player]="player"></app-player-opponent>
 
-                <!-- Player Match Scores -->
-                <app-player-match-score-stats [player]="player"></app-player-match-score-stats>
+                            <!-- Player Match Scores -->
+                            <app-player-match-score-stats [player]="player"></app-player-match-score-stats>
 
-                <!-- Sets insights -->
-                <app-player-sets-statistics [player]="player"></app-player-sets-statistics>
-
-                <!-- Comment Sec Start -->
-                <app-player-history [player]="player" [matchesByEvent]="matchesByEvent" *ngIf="matchesByEvent"></app-player-history>
-                <!-- Comment Sec End -->
+                            <!-- Sets insights -->
+                            <app-player-sets-statistics [player]="player"></app-player-sets-statistics>
+                        </ng-template>
+                    </li>
+                </ul>
                 
-                <div class="text-center" *ngIf="lastMatch">
-                    <a (click)="loadMoreMatches()" class="btn btn-default btn-white btn-sm">Load more</a>
-                </div>
+                <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                  
+
+
+                
 
             </div>
             <div class="col-lg-3">
