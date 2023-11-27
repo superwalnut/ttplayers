@@ -77,7 +77,7 @@ export class AuthService {
 
     SignInWithGooglePopUp() {
       const provider = new GoogleAuthProvider();
-      provider.addScope("email");
+      //provider.addScope("email");
       return this.auth.signInWithPopup(provider)
         .then((result) => {
           console.log('You have been successfully logged in!', result);
@@ -94,9 +94,9 @@ export class AuthService {
           const errorCode = error.code;
           const errorMessage = error.message;
           // The email of the user's account used.
-          const email = error.customData.email;
+          //const email = error.customData.email;
           // The AuthCredential type that was used.
-          const credential = GoogleAuthProvider.credentialFromError(error);
+          //const credential = GoogleAuthProvider.credentialFromError(error);
           // ...
         });
     }
@@ -158,7 +158,7 @@ export class AuthService {
 
     SignInWithFacebookRedirect() {
       const provider = new FacebookAuthProvider();
-      this.auth.signInWithRedirect(provider);
+      return this.auth.signInWithRedirect(provider);
     }
 
     getFacebookRedirectResult() {
