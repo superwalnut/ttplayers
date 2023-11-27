@@ -32,6 +32,8 @@ export class PlayerListComponent implements OnInit {
       if(keyword){
         this.keyword = keyword;
         this.search();
+      }else {
+        this.showNoResult = true;
       }
 
       this.statsService.getLatest().subscribe(x=>{

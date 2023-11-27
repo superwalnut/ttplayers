@@ -71,7 +71,7 @@
                         <div class="col-md-12 empty-cart-cls text-center mt-5" *ngIf='showNoResult'>
                             <img src="assets/images/empty-wishlist.png" alt="Empty cart" title="No Players Found">
                             <h3 class="mt-4"><b>No Players Found</b></h3>
-                            <h4>Please try another search.</h4>
+                            <h4>Please enter a player's name and do another search.</h4>
                         </div>
                         <ng-container *ngFor="let player of players">
                             <app-player-list-tile [player]="player" [keyword]="keyword"></app-player-list-tile>
