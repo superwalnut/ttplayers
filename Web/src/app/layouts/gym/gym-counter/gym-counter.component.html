@@ -1,6 +1,6 @@
 
 <!--counter section start-->
-<section class="gym counter  bg-img3 bg1" [ngStyle]="{'background-image': 'url(assets/images/gym/counter/bg.jpg)'}">
+<section class="gym counter  bg-img3 bg1" [ngStyle]="{'background-image': 'url(assets/images/gym/counter/bg.jpg)'}" *ngIf="stats">
         <div class="container" *ngIf="stats">
             <div class="row">
                 <div class="col-sm-3 col-6 counter-container" *ngFor="let data of counter">
@@ -8,8 +8,7 @@
                         <img [src]="data.img" alt="" class="img-fluid counter-img">
                         <div class="counter-text">
                             <div class="count-number">
-                                <h2 class="text-white counts"><span class="counter" [CountTo]="data.count"
-                                  [from]="0" [duration]="2"></span></h2>
+                                <h2 class="text-white counts"><span class="counter">{{data.count}}</span></h2>
                             </div>
                             <div class="count-desc">
                                 <h5 class="text-white">{{data.type}}</h5>

@@ -1,36 +1,36 @@
 <!--trainer section start-->
 <section class="gym trainers">
     <div class="container overflow-hide">
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-12">
                 <div class="title">
                     <div class="text-center">
                         <div>
-                            <h6 class=" borders-before"><span>Recent</span></h6>
+                            <h6 class=" borders-before"><span>PREVIEWS</span></h6>
                         </div>
                         <div class="main-title">
-                            <h2>Table Tennis Events</h2>
+                            <h2>Match History & Statistics Previews</h2>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-12">
-                <owl-carousel-o [options]="trainercarouselOptions" class="trainers-slider" *ngIf="events">
-                    <ng-container *ngFor="let evt of events">
+        </div>
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <owl-carousel-o [options]="trainercarouselOptions" class="demo-slider">
+                    <ng-container *ngFor="let img of images">
                         <ng-template carouselSlide class="item">
-                            <!-- <img [src]="trainer.img" alt="" class="img-fluid"> -->
-                            <div class="img-fluid border-shadow" [ngStyle]="{'background-image': 'url(assets/images/events/AUS-dark.jpg)'}">
-                                <h3 class="m-b-10">{{evt.Name}}</h3>
-                                <a href="/event/{{evt.Id}}" class="btn btn-default btn-white btn-sm">View Detail</a>
-                            </div>
-                            <div class="text-center trainers-info">
-                                <h5>{{evt.Name}}</h5>
-                                <div>{{toDisplayDate(evt) | date: 'dd/MM/yyyy'}}</div>
+                            <div class="demo-img"><img [src]="img.src" [alt]="img.title" class="img-fluid"></div>
+                            <div class="demo-info">
+                                <h5>{{img.title}}</h5>
+                                <div class="demo-desc">{{img.description}}</div>
                             </div>
                         </ng-template>
                     </ng-container>
                 </owl-carousel-o>
             </div>
+            <div class="col-lg-3"></div>
         </div>
     </div>
 </section>

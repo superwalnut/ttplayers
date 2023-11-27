@@ -19,6 +19,7 @@ export class GymCounterComponent implements OnInit {
     this.statsService.getLatest().subscribe(x=>{
       this.stats = x;
       this.setCounters(x.TotalPlayerCount, x.TotalEventCount, x.TotalMatchCount, x.ActivePlayerCount);
+      console.log('stats', this.stats);
     });
   }
 
