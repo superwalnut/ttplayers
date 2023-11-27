@@ -1,0 +1,116 @@
+
+.card {
+    margin:10px;
+    margin-top: 0px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(133, 133, 133, 0.2);
+}
+
+.card-body{
+    padding:0.8em;
+}
+
+.ranking-number {
+    font-size:1.7em;
+    font-weight:600;
+}
+
+.ranking-name {
+    a {
+        font-weight:600;
+    }
+    
+}
+
+.no-wrap{
+    white-space: nowrap;
+}
+
+
+.player-1 {
+    width:49%;
+    margin-left:25%;
+
+}
+
+.trpophy {
+    display: none;
+}
+
+.trophy-1 {
+    display: block !important;
+    font-size: 3em;
+    color:#FFD700;
+}
+
+.trophy-2 {
+    display: block !important;
+    font-size: 3em;
+    color:#C0C0C0;
+}
+
+.trophy-3 {
+    display: block !important;
+    font-size: 3em;
+    color:#CD7F32;
+}
+
+@media only screen and (max-width: 575px) {
+    .player-1 {
+        width:auto;
+        margin-left:10px;
+    }
+}
+
+.m-ranking {
+    width:30px;
+    font-size: 1.3em;
+    font-weight: 800;
+    color:#357fef;
+    line-height: 55px;
+    text-align: center;
+    vertical-align: middle;
+}
+.name-svg {
+    width:55px;
+}
+
+.full-name {
+    align-items: center;
+    justify-content: center;
+    font-size:1.1em;
+    height: 55px;
+    padding-top:15px;
+    margin-bottom: 0px;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.m-state {
+    padding-top:3px;
+    color:#979797;
+}
+
+.m-trpophy {
+    display: none;
+    height: 21px;
+    font-size:1.5em;
+    position: absolute;
+    right: 10px;
+    top: 0;
+}
+
+.m-rating {
+    font-size: 1.1em;
+    font-weight: 400;
+    color:#357fef;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top:-25px;
+    align-items: center;
+    justify-content: center;
+    line-height: 55px;
+}

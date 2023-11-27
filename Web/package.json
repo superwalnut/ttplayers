@@ -51,6 +51,7 @@
     "ng-animate": "^2.0.1",
     "ng-gallery": "^7.0.0",
     "ng5-slider": "^1.2.4",
+    "ngx-device-detector": "^5.0.1",
     "ngx-gauge": "^7.0.0",
     "ngx-masonry": "^13.0.0",
     "ngx-owl-carousel-o": "^15.0.0",

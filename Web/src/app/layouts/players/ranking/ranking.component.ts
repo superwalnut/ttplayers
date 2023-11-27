@@ -38,6 +38,11 @@ export class RankingComponent implements OnInit {
   }
 
   search() {
+    this.player1 = null;
+    this.player2 = null;
+    this.player3 = null;
+    this.rankings = [];
+    
     this.playerService.getRankings(this.gender, this.state, this.pageSize).subscribe(x=>{      
       if(x.length<=0){
         this.lastPlayer = null;
@@ -88,19 +93,6 @@ export class RankingComponent implements OnInit {
     this.state = state;
     this.search();
     this.router.navigate(['/rankings/'], {queryParams: { gender: this.gender, state: this.state }});
-  }
-
-  toRating(player:Player)
-  {
-    return `${player.Rating}±${player.StDev}`;
-  }
-  
-  toRanking(player:Player) {
-    if(this.state){
-      return player.StateGenderRanking;
-    } else {
-      return player.NationalGenderRanking;
-    }
   }
 
   displayBreadcrumb() {

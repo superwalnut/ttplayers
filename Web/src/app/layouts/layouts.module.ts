@@ -61,6 +61,7 @@ import { TermsComponent } from './terms/terms.component';
 import { PlayerMatchPercentageComponent } from './players/player-detail/player-match-percentage/player-match-percentage.component';
 import { PlayerMatchScoreStatsComponent } from './players/player-detail/player-match-score-stats/player-match-score-stats.component';
 import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
+import { RankingItemComponent } from './players/ranking/ranking-item/ranking-item.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
     TermsComponent,
     PlayerMatchPercentageComponent,
     PlayerMatchScoreStatsComponent,
-    CookiePolicyComponent
+    CookiePolicyComponent,
+    RankingItemComponent
   ],
   imports: [
     CommonModule,

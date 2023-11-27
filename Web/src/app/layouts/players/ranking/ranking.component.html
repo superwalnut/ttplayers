@@ -83,97 +83,23 @@
     <div class="row">
         <div class="col-xl-3 col-sm-0 p-0"></div>
         <div class="col-xl-6 col-sm-12 p-0">
-            <div class="card first-player" *ngIf="player1">
-                <div class="card-body">
-                    <div class="container p-0">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="mb-2"><img src="assets/images/players/male.png"></div>
-                                <div class="no-wrap ranking-name"><a href="/player/{{player1.Id}}">{{player1.FullName}}</a></div>
-                                <div>{{player1.State}}</div>
-                            </div>
-                            <div class="col-5 text-right">
-                                <div class="ranking-number">#{{toRanking(player1)}}</div>
-                                <div>{{toRating(player1)}}</div>
-                                <div class="gold">
-                                    <i class="fa fa-trophy" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
+            <app-ranking-item [player]="player1" [state]="state" *ngIf="player1"></app-ranking-item>
         </div>
         <div class="col-xl-3 col-sm-0 p-0"></div>
     </div>
     <div class="row">
         <div class="col-xl-3 col-sm-0 p-0"></div>
         <div class="col-xl-3 col-sm-6 p-0">
-            <div class="card second-player" *ngIf="player2">
-                <div class="card-body">
-                    <div class="container p-0">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="mb-2"><img src="assets/images/players/male.png"></div>
-                                <div class="no-wrap ranking-name"><a href="/player/{{player2.Id}}">{{player2.FullName}}</a></div>
-                                <div>{{player2.State}}</div>
-                                
-                            </div>
-                            <div class="col-5 text-right">
-                                <div class="ranking-number">#{{toRanking(player2)}}</div>
-                                <div>{{toRating(player2)}}</div>
-                                <div class="silver">
-                                    <i class="fa fa-trophy" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
+            <app-ranking-item [player]="player2" [state]="state" *ngIf="player2"></app-ranking-item>
         </div>
         <div class="col-xl-3 col-sm-6 p-0">
-            <div class="card third-player" *ngIf="player3">
-                <div class="card-body">
-                    <div class="container p-0">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="mb-2"><img src="assets/images/players/male.png"></div>
-                                <div class="no-wrap ranking-name"><a href="/player/{{player3.Id}}">{{player3.FullName}}</a></div>
-                                <div>{{player3.State}}</div>
-                            </div>
-                            <div class="col-5 text-right">
-                                <div class="ranking-number">#{{toRanking(player3)}}</div>
-                                <div>{{toRating(player3)}}</div>
-                                <div class="bronze">
-                                    <i class="fa fa-trophy" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
+            <app-ranking-item [player]="player3" [state]="state" *ngIf="player3"></app-ranking-item>
         </div>
         <div class="col-xl-3 col-sm-0 p-0"></div>
     </div>
     <div class="row">
         <div class="col-xl-3 col-sm-6 p-0" itemprop="associatedMedia" *ngFor="let player of rankings; let i = index;">
-            <div class="card">
-                <div class="card-body">
-                    <div class="container p-0">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="mb-2"><img src="assets/images/players/male.png"></div>
-                                <div class="no-wrap ranking-name"><a href="/player/{{player.Id}}">{{player.FullName}}</a></div>
-                                <div>{{player.State}}</div>
-                            </div>
-                            <div class="col-5 text-right">
-                                <div class="ranking-number">#{{toRanking(player)}}</div>
-                                <div>{{toRating(player)}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
+            <app-ranking-item [player]="player" [state]="state" *ngIf="player"></app-ranking-item>
         </div>
     </div>
     <div class="row mt-4">
