@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Player } from 'src/app/models/player';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { CommonService } from 'src/app/service/common.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ranking-item',
@@ -19,15 +20,8 @@ export class RankingItemComponent implements OnInit {
 
   nameInitialSvg:any;
 
-  constructor(private deviceService: DeviceDetectorService, private commonService:CommonService) {
-    const deviceInfo = this.deviceService.getDeviceInfo();
+  constructor(private deviceService: DeviceDetectorService, private commonService:CommonService, private router:Router) {
      this.isMobile = this.deviceService.isMobile();
-      const isTablet = this.deviceService.isTablet();
-      const isDesktopDevice = this.deviceService.isDesktop();
-      console.log('info',deviceInfo);
-      console.log('mobile',this.isMobile);  // returns if the device is a mobile device (android / iPhone / windows-phone etc)
-      console.log('tablet',isTablet);  // returns if the device us a tablet (iPad etc)
-      console.log('desktop',isDesktopDevice); // returns if the app is running on a Desktop browser.
   }
 
   ngOnInit(): void {
@@ -53,6 +47,10 @@ export class RankingItemComponent implements OnInit {
     } else {
       return player.NationalGenderRanking;
     }
+  }
+
+  playerClick(playerId:string) {
+    this.router.navigate([`/player/${playerId}`]);
   }
 
 }
