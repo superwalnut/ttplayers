@@ -1,6 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 .player-list-header{
-    min-height:70px;
+    min-height:65px;
+}
+
+@media only screen and (max-width: 575px) {
+    .player-list-header{
+        min-height:55px;
+    }
+    
 }
 
 .modal-backdrop {
@@ -16,14 +23,3 @@ input.ng-invalid {
     border: solid 1px red;
 }
 
-.header5-content {
-    height:65px;
-}
-
-
-@media only screen and (max-width: 575px) {
-    .header5-content {
-        height:55px;
-    }
-    
-}
