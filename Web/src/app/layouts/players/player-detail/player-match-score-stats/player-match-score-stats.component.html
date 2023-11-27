@@ -5,25 +5,11 @@
             <hr/>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-6 col-md-6 p-4 p-b-0">
-            <div *ngIf="player.TotalPlayedMatches>0" class="player-activity-summary mb-4">
-                <strong>{{player.FirstName}}</strong> played against <strong>{{player.TotalPlayedMatches}}</strong> matches, 
-                <ul class="list-group list-group-flush mt-2">
-                    <li class="pb-2" *ngFor="let match of player.MatchScoreStats">
-                        <i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> 
-                        <span class="badge badge-primary match-score">{{match.Score}}</span> for 
-                        <strong>{{match.Count }}</strong> matches.
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-lg-6 col-md-6 p-4 p-t-0">
-            <div class="chart-container">
-                <canvas  id="ScoreChart" >{{ scoreChart }}</canvas>
-            </div>
-        </div>
-    </div>
+    <app-player-match-score-stats-item-three-sets [matchStatsSets]="matchStats3Sets" [player]="player" *ngIf="matchStats3Sets.length>0"></app-player-match-score-stats-item-three-sets>
+    
+    <app-player-match-score-stats-item-five-sets [matchStatsSets]="matchStats5Sets" [player]="player" *ngIf="matchStats5Sets.length>0"></app-player-match-score-stats-item-five-sets>
+
+    <app-player-match-score-stats-item-seven-sets [matchStatsSets]="matchStats7Sets" [player]="player" *ngIf="matchStats7Sets.length>0"></app-player-match-score-stats-item-seven-sets>
 </div>
 
 

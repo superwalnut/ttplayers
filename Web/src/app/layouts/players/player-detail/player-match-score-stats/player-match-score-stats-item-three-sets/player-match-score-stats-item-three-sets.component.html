@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="col-lg-6 col-md-6 p-4 p-b-0">
+        <div class="player-activity-summary mb-4">
+            <strong>{{player.FirstName}}</strong> played <strong>{{totalMatches}}</strong> three-sets matches, 
+            <ul class="list-group list-group-flush mt-2">
+                <li class="pb-2" *ngFor="let match of matchStatsSets">
+                    <i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> 
+                    <span class="badge badge-primary match-score">{{match.Score}}</span> for 
+                    <strong>{{match.Count }}</strong> matches.
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-6 p-4 p-t-0">
+        <div class="chart-container">
+            <canvas id="Sets3Chart">{{ chart }}</canvas>
+        </div>
+    </div>
+</div>

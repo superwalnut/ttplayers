@@ -31,15 +31,15 @@ export class PlayerRankingComponent implements OnInit{
   toNationalRankingPosition() : number{
     if(this.player.Gender =="M" && this.player.NationalGenderRanking>0) {
       
-      const pos = Math.round((this.stats.TotalMenPlayerCount - this.player.NationalGenderRanking) * 100 / this.stats.TotalMenPlayerCount);
-      console.log('pos men', pos);
-      return pos;
+      const pos = (this.stats.TotalMenPlayerCount - this.player.NationalGenderRanking) * 100 / this.stats.TotalMenPlayerCount;
+      console.log('pos men', Math.floor(pos));
+      return Math.floor(pos);
     }
 
     if(this.player.Gender == "F" && this.player.NationalGenderRanking) {
-      const pos = Math.round((this.stats.TotalWomenPlayerCount - this.player.NationalGenderRanking) * 100 / this.stats.TotalWomenPlayerCount);
-      console.log('pos men', pos);
-      return pos;
+      const pos = (this.stats.TotalWomenPlayerCount - this.player.NationalGenderRanking) * 100 / this.stats.TotalWomenPlayerCount;
+      console.log('pos women', Math.floor(pos));
+      return Math.floor(pos);
     }
 
     return 0;
@@ -52,8 +52,8 @@ export class PlayerRankingComponent implements OnInit{
       console.log('state total men', totalPlayers);
 
       if(this.player.StateGenderRanking>0){
-        const pos = Math.round((totalPlayers - this.player.StateGenderRanking) * 100 / totalPlayers);
-        return pos;
+        const pos = (totalPlayers - this.player.StateGenderRanking) * 100 / totalPlayers;
+        return Math.floor(pos);
       }
     }
 
@@ -62,8 +62,8 @@ export class PlayerRankingComponent implements OnInit{
       const totalPlayers = this.stats.StateWomenPlayerCounts[this.player.State];
       console.log('state total women', totalPlayers);
       if(this.player.StateGenderRanking>0){
-        const pos = Math.round((totalPlayers - this.player.StateGenderRanking) * 100 / totalPlayers);
-        return pos;
+        const pos = (totalPlayers - this.player.StateGenderRanking) * 100 / totalPlayers;
+        return Math.floor(pos);
       }
     }
 

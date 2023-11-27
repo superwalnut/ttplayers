@@ -62,6 +62,9 @@ import { PlayerMatchPercentageComponent } from './players/player-detail/player-m
 import { PlayerMatchScoreStatsComponent } from './players/player-detail/player-match-score-stats/player-match-score-stats.component';
 import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
 import { RankingItemComponent } from './players/ranking/ranking-item/ranking-item.component';
+import { PlayerMatchScoreStatsItemThreeSetsComponent } from './players/player-detail/player-match-score-stats/player-match-score-stats-item-three-sets/player-match-score-stats-item-three-sets.component';
+import { PlayerMatchScoreStatsItemFiveSetsComponent } from './players/player-detail/player-match-score-stats/player-match-score-stats-item-five-sets/player-match-score-stats-item-five-sets.component';
+import { PlayerMatchScoreStatsItemSevenSetsComponent } from './players/player-detail/player-match-score-stats/player-match-score-stats-item-seven-sets/player-match-score-stats-item-seven-sets.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +92,10 @@ import { RankingItemComponent } from './players/ranking/ranking-item/ranking-ite
     PlayerMatchPercentageComponent,
     PlayerMatchScoreStatsComponent,
     CookiePolicyComponent,
-    RankingItemComponent
+    RankingItemComponent,
+    PlayerMatchScoreStatsItemThreeSetsComponent,
+    PlayerMatchScoreStatsItemFiveSetsComponent,
+    PlayerMatchScoreStatsItemSevenSetsComponent
   ],
   imports: [
     CommonModule,
