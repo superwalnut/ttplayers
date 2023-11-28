@@ -33,7 +33,7 @@ namespace TtPlayers.Importer.Domain.Models
         public string Country { get; set; }
 
         [FirestoreProperty]
-        public DateTime SubmittedDate { get; set; }
+        public DateTime? SubmittedDate { get; set; }
         [FirestoreProperty]
         public DateTime? RevisedDate { get; set; }
         [FirestoreProperty]

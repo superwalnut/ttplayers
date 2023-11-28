@@ -11,7 +11,8 @@ namespace TtPlayers.Importer.Applications
         Task PushPlayerHistories();
         Task PushEvents(bool forceAll = false);
         Task PushEventPlayers(bool forceAll = false, string playerId = null);
-        Task PushEventMatches(string playerId = null, int? actionCount = null);
+        Task PushEventMatches(string playerId = null, int? actionCount = 10000);
+        Task PushEventMatchesForActivePlayers(int? actionCount = 10000);
 
         Task PushClubs();
 
@@ -184,12 +185,16 @@ namespace TtPlayers.Importer.Applications
 
             var result = await _eventPlayerRepository.UpsertManyAsync(eventPlayers);
             _logger.LogInformation($"Pushing event to firebase completed with status {result}");
-
         }
 
         public async Task PushEventMatches(string playerId = null, int? actionCount = 10000)
         {
             var matches = new List<Match>();
+
+            if (!actionCount.HasValue)
+            {
+                actionCount = 10000;
+            }
             
             if(!string.IsNullOrEmpty(playerId))
             {
@@ -211,6 +216,36 @@ namespace TtPlayers.Importer.Applications
 
             var result = await _matchRepository.UpsertManyAsync(matches);
             _logger.LogInformation($"Pushing matches to firebase completed with status {result}");
+        }
+
+        public async Task PushEventMatchesForActivePlayers(int? actionCount = 10000)
+        {
+            var matches = new List<Match>();
+            if (!actionCount.HasValue)
+            {
+                actionCount = 10000;
+            }
+
+            var players = await _playerRepository.FilterByAsync(x => x.LastPlayed > DateTime.Now.AddYears(-1));
+            var index = players.Count;
+
+            foreach (var player in players)
+            {
+                matches = await _matchRepository.FilterByAsyncOrderByDesending(x => x.RequireDeltaPush && (x.WinnerId == player.Id || x.LoserId == player.Id), x => x.MatchDate, 0, actionCount.Value);
+                _logger.LogInformation($"{index} - Pushing {player.FullName}:{player.Id} - {matches.Count} matches with match details to firebase");
+
+                await _firebaseEventMatchesRepository.UpdateBulk(matches);
+
+                matches.ForEach(x => {
+                    x.RequireDeltaPush = false;
+                    x.LastDeltaPushDate = DateTime.Now;
+                });
+
+                var result = await _matchRepository.UpsertManyAsync(matches);
+                _logger.LogInformation($"Pushing matches to firebase completed with status {result}");
+
+                index--;
+            }
         }
 
         public async Task PushClubs()

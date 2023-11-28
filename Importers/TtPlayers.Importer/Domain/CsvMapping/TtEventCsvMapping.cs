@@ -21,9 +21,9 @@ namespace TtPlayers.Importer.Domain.CsvMapping
             Map(m => m.Province).Index(5);
             Map(m => m.Country).Index(6);
             Map(m => m.Sport).Index(7);
-            //Map(m => m.SubmittedDate).Index(8).TypeConverterOption.Format("yyyy-MM-ddTHH:mm:sszzz");
-            //Map(m => m.RevisedDate).Index(9).TypeConverterOption.Format("yyyy-MM-ddTHH:mm:sszzz");
-            //Map(m => m.LastProcessedDate).Index(10).TypeConverterOption.Format("yyyy-MM-ddTHH:mm:sszzz");
+            Map(m => m.SubmittedDate).Index(8).TypeConverterOption.Format("yyyy-MM-ddTHH:mm:sszzz");
+            Map(m => m.RevisedDate).Index(9).TypeConverterOption.Format("yyyy-MM-ddTHH:mm:sszzz");
+            Map(m => m.LastProcessedDate).Index(10).TypeConverterOption.Format("yyyy-MM-ddTHH:mm:sszzz");
             Map(m => m.ClubId).Index(11);
             Map(m => m.ITTF_Year).Index(12);
             Map(m => m.ITTF_ID).Index(13);

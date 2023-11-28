@@ -114,9 +114,9 @@ namespace TtPlayers.Importer.Applications.Scraper
                 Director = x.Director,
                 State = x.Province,
                 Country = x.Country,
-                //SubmittedDate = x.SubmittedDate,
-                //RevisedDate = x.RevisedDate,
-                //LastProcessedDate = x.LastProcessedDate,
+                SubmittedDate = x.SubmittedDate,
+                RevisedDate = x.RevisedDate,
+                LastProcessedDate = x.LastProcessedDate,
                 ClubId = x.ClubId,
                 LastUpdated = DateTime.Now
             }).ToList();

@@ -17,9 +17,11 @@ namespace TtPlayers.Importer.Applications
 {
     public interface IRatingCentralEventsImporter
     {
-        Task ImportEvents(bool forceAll = false);
+        Task ImportEvents(bool forceAll = false, string eventId = null);
         Task ImportEventMatches();
         Task ImportEventPlayers(bool forceAll = false);
+
+        Task ReviseEvents(string? eventId = null);
 
         Task Refresh_EventMatchAndPlayers_Counts();
 
@@ -37,6 +39,7 @@ namespace TtPlayers.Importer.Applications
         private readonly IDocumentRepository<Club> _clubRepository;
         private readonly IDocumentRepository<TtEventPlayer> _eventPlayerRepository;
         private readonly IDocumentRepository<Player> _playerRepository;
+        private readonly IDocumentRepository<Match> _matchRepository;
 
         private readonly IRatingCentralScraper _rcScraper;
 
@@ -51,6 +54,7 @@ namespace TtPlayers.Importer.Applications
             IDocumentRepository<Club> clubRepository,
             IDocumentRepository<TtEventPlayer> eventPlayerRepository,
             IDocumentRepository<Player> playerRepository,
+            IDocumentRepository<Match> matchRepository,
             IRatingCentralScraper rcScraper)
             :base(logger)
         {
@@ -61,10 +65,11 @@ namespace TtPlayers.Importer.Applications
             _clubRepository= clubRepository;
             _eventPlayerRepository = eventPlayerRepository;
             _playerRepository= playerRepository;
+            _matchRepository = matchRepository;
             _logger = logger;
         }
 
-        public async Task ImportEvents(bool forceAll = false)
+        public async Task ImportEvents(bool forceAll = false, string eventId = null)
         {
             var events = await _rcScraper.DownloadEventsAsync();
 
@@ -75,9 +80,17 @@ namespace TtPlayers.Importer.Applications
                 var pendingEvents = events;
                 if(!forceAll)
                 {
-                    var importedEvents = await _eventRepository.FilterByAsync(x => true);
-                    var importedIds = importedEvents.Select(x => x.Id).ToList();
-                    pendingEvents = events.Where(x => !importedIds.Contains(x.Id)).ToList();
+                    if (!string.IsNullOrEmpty(eventId))
+                    {
+                        pendingEvents = pendingEvents.Where(x=>x.Id == eventId).ToList();
+                    }
+                    else
+                    {
+                        var importedEvents = await _eventRepository.FilterByAsync(x => true);
+                        var importedIds = importedEvents.Select(x => x.Id).ToList();
+
+                        pendingEvents = events.Where(x => !importedIds.Contains(x.Id)).ToList();
+                    }
                 }
                 
                 _logger.LogInformation($"There are {events.Count()} events found, need to import {pendingEvents.Count()} events.");
@@ -100,6 +113,71 @@ namespace TtPlayers.Importer.Applications
                 }
 
                 await _eventRepository.UpsertManyAsync(pendingEvents);
+
+                _logger.LogInformation($"Finish upserting {pendingEvents.Count()} events.");
+            }
+        }
+
+        public async Task ReviseEvents(string? eventId = null)
+        {
+            //if submitted != revised, and LastUpdated < LastProcessedDate, then it requires revise!
+            var events = await _rcScraper.DownloadEventsAsync();
+
+            if (events.Any())
+            {
+                var clubs = await _clubRepository.FilterByAsync(x => true);
+
+                var importedEvents = await _eventRepository.FilterByAsync(x => true);
+                var importedIds = importedEvents.Select(x => x.Id).ToList();
+                
+                // only revise existing events
+                var pendingEvents = events.Where(x => importedIds.Contains(x.Id)).ToList();
+
+                if (!string.IsNullOrEmpty(eventId))
+                {
+                    pendingEvents = pendingEvents.Where(x=>x.Id == eventId).ToList();
+                } 
+                else
+                {
+                    pendingEvents = pendingEvents.Where(x => x.SubmittedDate.HasValue &&
+                        x.RevisedDate.HasValue &&
+                        x.LastProcessedDate.HasValue &&
+                        x.SubmittedDate.Value != x.RevisedDate.Value
+                    ).ToList();
+                }
+
+                foreach (var evt in pendingEvents)
+                {
+                    var imported = importedEvents.FirstOrDefault(x => x.Id == evt.Id);
+
+                    if (imported == null)
+                        continue;
+
+                    // indicates the we updated after they have processed, so no need to re-import
+                    if (imported.LastUpdated > evt.LastProcessedDate && string.IsNullOrEmpty(eventId))
+                        continue;
+
+                    _logger.LogInformation($"Need to revise event {evt.Id}:{evt.Name}.");
+
+                    // update event
+
+                    // enrich state & club name from club entities
+                    EnrichClubInfo(evt, clubs);
+                    // update
+                    evt.RequireDeltaPush = true;
+                    // set tags
+                    evt.Tags = SetEventTags(evt);
+                    await _eventRepository.UpsertAsync(evt, x=>x.Id == evt.Id);
+
+                    // delete event-player & re-import
+                    await _eventPlayerRepository.DeleteByIdAsync(evt.Id);
+
+                    // delete event-matches & re-import
+                    await _eventMatchesRepository.DeleteByIdAsync(evt.Id);
+
+                    // delete all matches for this event & transform matches
+                    await _matchRepository.DeleteManyAsync(x => x.EventId == evt.Id);
+                }
 
                 _logger.LogInformation($"Finish upserting {pendingEvents.Count()} events.");
             }

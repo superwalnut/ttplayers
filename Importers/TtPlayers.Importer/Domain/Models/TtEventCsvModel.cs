@@ -19,9 +19,9 @@ namespace TtPlayers.Importer.Domain.Models
 
         public string Sport { get; set; } // not used
 
-        //public DateTime? SubmittedDate { get; set; }
-        //public DateTime? RevisedDate { get; set; }
-        //public DateTime? LastProcessedDate { get; set; }
+        public DateTime? SubmittedDate { get; set; }
+        public DateTime? RevisedDate { get; set; }
+        public DateTime? LastProcessedDate { get; set; }
 
         public string ClubId { get; set; }
 
