@@ -21,8 +21,6 @@ namespace TtPlayers.Importer.Applications
         Task ImportEventMatches();
         Task ImportEventPlayers(bool forceAll = false);
 
-        Task ReviseEvents(string? eventId = null);
-
         Task Refresh_EventMatchAndPlayers_Counts();
 
         Task Refresh_EventDate_EventPlayers();
@@ -113,71 +111,6 @@ namespace TtPlayers.Importer.Applications
                 }
 
                 await _eventRepository.UpsertManyAsync(pendingEvents);
-
-                _logger.LogInformation($"Finish upserting {pendingEvents.Count()} events.");
-            }
-        }
-
-        public async Task ReviseEvents(string? eventId = null)
-        {
-            //if submitted != revised, and LastUpdated < LastProcessedDate, then it requires revise!
-            var events = await _rcScraper.DownloadEventsAsync();
-
-            if (events.Any())
-            {
-                var clubs = await _clubRepository.FilterByAsync(x => true);
-
-                var importedEvents = await _eventRepository.FilterByAsync(x => true);
-                var importedIds = importedEvents.Select(x => x.Id).ToList();
-                
-                // only revise existing events
-                var pendingEvents = events.Where(x => importedIds.Contains(x.Id)).ToList();
-
-                if (!string.IsNullOrEmpty(eventId))
-                {
-                    pendingEvents = pendingEvents.Where(x=>x.Id == eventId).ToList();
-                } 
-                else
-                {
-                    pendingEvents = pendingEvents.Where(x => x.SubmittedDate.HasValue &&
-                        x.RevisedDate.HasValue &&
-                        x.LastProcessedDate.HasValue &&
-                        x.SubmittedDate.Value != x.RevisedDate.Value
-                    ).ToList();
-                }
-
-                foreach (var evt in pendingEvents)
-                {
-                    var imported = importedEvents.FirstOrDefault(x => x.Id == evt.Id);
-
-                    if (imported == null)
-                        continue;
-
-                    // indicates the we updated after they have processed, so no need to re-import
-                    if (imported.LastUpdated > evt.LastProcessedDate && string.IsNullOrEmpty(eventId))
-                        continue;
-
-                    _logger.LogInformation($"Need to revise event {evt.Id}:{evt.Name}.");
-
-                    // update event
-
-                    // enrich state & club name from club entities
-                    EnrichClubInfo(evt, clubs);
-                    // update
-                    evt.RequireDeltaPush = true;
-                    // set tags
-                    evt.Tags = SetEventTags(evt);
-                    await _eventRepository.UpsertAsync(evt, x=>x.Id == evt.Id);
-
-                    // delete event-player & re-import
-                    await _eventPlayerRepository.DeleteByIdAsync(evt.Id);
-
-                    // delete event-matches & re-import
-                    await _eventMatchesRepository.DeleteByIdAsync(evt.Id);
-
-                    // delete all matches for this event & transform matches
-                    await _matchRepository.DeleteManyAsync(x => x.EventId == evt.Id);
-                }
 
                 _logger.LogInformation($"Finish upserting {pendingEvents.Count()} events.");
             }

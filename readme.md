@@ -1,53 +1,45 @@
 # Import Steps
 
 
-## For players
+## Import All
+```
+dotnet TtPlayers.Importer.dll --all
+```
 
-### 1. import players 
+## Push All - push all require-delta-push = true
+```
+dotnet TtPlayers.Importer.dll --push-all
+```
+
+## Show Push Summary
+```
+dotnet TtPlayers.Importer.dll --show-push-summary
+```
+
+## If event has been revised, 
+
+need to run, this will delete related records and push new records.
+
+```
+dotnet TtPlayers.Importer.dll --revise-event --event-id=xxx
+```
+
+also need to update players & push players
+
+```
+dotnet TtPlayers.Importer.dll --player
+dotnet TtPlayers.Importer.dll --push-player
+```
+
+
+## Import players
+
 --------------------
-only import new players OR player's rating has changed
+Update all players and do the, player import, sndtta-team import, player-ranking import, player-summary import
 ------------------------------------------------------
 
 ```
 dotnet TtPlayers.Importer.dll --player
-```
-
-### 2. import sndtta-players 
-----------------------------
-this will set player with sndtta flag and import Teams
-------------------------------------------------------
-
-```
-dotnet TtPlayers.Importer.dll --sndtta-player
-```
-
-### 3. import player histories
-------------------------------
-if a player's match history has changed, we will import the player histories. Currently only import sndtta players
-------------------------------------------------------
-
-```
-dotnet TtPlayers.Importer.dll --history
-```
-
-## For Events
-
-### 1. import events
-------------------------------
-Only import new events
-------------------------------------------------------
-
-```
-dotnet TtPlayers.Importer.dll --event
-```
-
-### 2. import event matches
-------------------------------
-Only import new event matches OR events held within the last 10 days (in case the matches recorded are not complete.)
-------------------------------------------------------
-
-```
-dotnet TtPlayers.Importer.dll --match
 ```
 
 ## For Sntta upcoming events
@@ -67,13 +59,11 @@ This will push everything with RequireDeltaUpdate = true
 
 ```
 dotnet TtPlayers.Importer.dll --push-player
-dotnet TtPlayers.Importer.dll --push-player-history
 dotnet TtPlayers.Importer.dll --push-event
 dotnet TtPlayers.Importer.dll --push-event-match
 dotnet TtPlayers.Importer.dll --push-sndtta-team
 dotnet TtPlayers.Importer.dll --push-sndtta-upcoming
 ```
-
 
 
 # TTnet-Pytorch 

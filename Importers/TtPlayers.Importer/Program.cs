@@ -86,6 +86,9 @@ namespace TtPlayers.Importer
 
             // pushing to firestore
 
+            [Option("push-all", Required = false, HelpText = "Push all.")]
+            public bool PushAll { get; set; }
+
             [Option("push-player", Required = false, HelpText = "Push players.")]
             public bool PushPlayers { get; set; }
 
@@ -136,6 +139,8 @@ namespace TtPlayers.Importer
             var sitemapGenerator = host.Services.GetRequiredService<IGoogleSiteMapGenerator>();
             var firebasePusher = host.Services.GetRequiredService<IFirebaseDeltaPushImporter>();
 
+            var eventReviser = host.Services.GetRequiredService<IRatingCentralEventReviser>();
+
             try
             {
                 Parser.Default.ParseArguments<Options>(args)
@@ -173,21 +178,30 @@ namespace TtPlayers.Importer
                        }
                        else if (o.ReviseEvent)
                        {
-                           eventImporter.ReviseEvents(o.EventId).GetAwaiter().GetResult();
+                           var appliedEvents = new List<string>();
+
+                           if (string.IsNullOrEmpty(o.EventId))
+                           {
+                               appliedEvents = eventReviser.ReviseEvents().GetAwaiter().GetResult();
+                           }
+                           else
+                           {
+                               eventReviser.ReviseEvent(o.EventId).GetAwaiter().GetResult();
+                               appliedEvents.Add(o.EventId);
+                           }
+                           
                            // import event-players
                            eventImporter.ImportEventPlayers().GetAwaiter().GetResult();
                            // import event-matches
                            eventImporter.ImportEventMatches().GetAwaiter().GetResult();
                            // transform matches
                            matchTransformer.TransformMatches(o.ForceAll).GetAwaiter().GetResult();
-                           // import players (include import player-history)
-                           playerImporter.ImportPlayer().GetAwaiter().GetResult();
-                           // import sndtta team
-                           playerImporter.ImportSndttaTeam().GetAwaiter().GetResult();
-                           // import ranking
-                           playerImporter.ImportPlayerRanking().GetAwaiter().GetResult();
-                           // import summary
-                           playerImporter.ImportPlayerSummary().GetAwaiter().GetResult();
+
+                           foreach(var id in appliedEvents)
+                           {
+                               firebasePusher.PushEventPlayersByEventId(id).GetAwaiter().GetResult();
+                               firebasePusher.PushEventMatchesByEventId(id).GetAwaiter().GetResult();
+                           }
                        }
                        else if (o.EventMatchesImport)
                        {
@@ -252,12 +266,21 @@ namespace TtPlayers.Importer
                            statisticImporter.ImportStatistics().GetAwaiter().GetResult();
                        }
                        // push firebase
+                       else if (o.PushAll)
+                       {
+                           firebasePusher.PushClubs().GetAwaiter().GetResult();
+                           firebasePusher.PushEvents().GetAwaiter().GetResult();
+                           firebasePusher.PushEventPlayers().GetAwaiter().GetResult();
+                           firebasePusher.PushEventMatches().GetAwaiter().GetResult();
+                           firebasePusher.PushPlayers().GetAwaiter().GetResult();
+                       }
                        else if(o.PushPlayers)
                        {
                            firebasePusher.PushPlayers(o.PlayerId).GetAwaiter().GetResult();
                        }
                        else if(o.PushPlayerHistory)
                        {
+                           // Obselete
                            firebasePusher.PushPlayerHistories().GetAwaiter().GetResult();
                        }
                        else if(o.PushEvent)
@@ -274,7 +297,7 @@ namespace TtPlayers.Importer
                        }
                        else if (o.PushEventMatches && o.Ytd)
                        {
-                           firebasePusher.PushEventMatchesForActivePlayers(o.ActionCount);
+                           firebasePusher.PushEventMatchesForActivePlayers();
                        }
                        else if (o.PushSndttaTeam)
                        {

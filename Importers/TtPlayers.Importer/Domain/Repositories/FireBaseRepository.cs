@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -24,6 +25,8 @@ namespace TtPlayers.Importer.Domain.Repositories
         Task<bool> UpdateBulk(IList<TDocument> records);
 
         Task<bool> Delete(TDocument record);
+        Task<bool> DeleteBulk(IList<TDocument> records);
+
         Task<TDocument> Get(TDocument record);
 
         Task<List<TDocument>> GetAll();
@@ -89,6 +92,25 @@ namespace TtPlayers.Importer.Domain.Repositories
         {
             DocumentReference recordRef = _collection.Document(record.Id);
             await recordRef.DeleteAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteBulk(IList<TDocument> records)
+        {
+            // Create a list of document references to delete
+            List<DocumentReference> documentsToDelete = new List<DocumentReference>();
+
+            foreach(var record in records)
+            {
+                documentsToDelete.Add(_collection.Document(record.Id));
+            }
+
+            // Perform bulk delete
+            foreach (var documentRef in documentsToDelete)
+            {
+                await documentRef.DeleteAsync();
+            }
+
             return true;
         }
 

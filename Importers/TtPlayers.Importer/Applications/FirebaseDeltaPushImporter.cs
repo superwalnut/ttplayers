@@ -10,9 +10,13 @@ namespace TtPlayers.Importer.Applications
         Task PushPlayers(string playerId = null);
         Task PushPlayerHistories();
         Task PushEvents(bool forceAll = false);
+        
         Task PushEventPlayers(bool forceAll = false, string playerId = null);
+        Task PushEventPlayersByEventId(string eventId);
+
         Task PushEventMatches(string playerId = null, int? actionCount = 10000);
-        Task PushEventMatchesForActivePlayers(int? actionCount = 10000);
+        Task PushEventMatchesForActivePlayers();
+        Task PushEventMatchesByEventId(string eventId);
 
         Task PushClubs();
 
@@ -114,6 +118,7 @@ namespace TtPlayers.Importer.Applications
             _logger.LogInformation($"Pushed player to firebase completed with status {result}");
         }
 
+        [Obsolete]
         public async Task PushPlayerHistories()
         {
             var histories = await _playerHistoryRepository.FilterByAsync(x => x.RequireDeltaPush);
@@ -187,6 +192,22 @@ namespace TtPlayers.Importer.Applications
             _logger.LogInformation($"Pushing event to firebase completed with status {result}");
         }
 
+        public async Task PushEventPlayersByEventId(string eventId)
+        {
+            var eventPlayers = await _eventPlayerRepository.FilterByAsync(x => x.RequireDeltaPush && x.Id == eventId);
+            _logger.LogInformation($"Pushing {eventPlayers.Count} event-players to firebase");
+
+            await _firebaseEventPlayerRepository.UpdateBulk(eventPlayers);
+
+            eventPlayers.ForEach(x => {
+                x.RequireDeltaPush = false;
+                x.LastDeltaPushDate = DateTime.Now;
+            });
+
+            var result = await _eventPlayerRepository.UpsertManyAsync(eventPlayers);
+            _logger.LogInformation($"Pushing event to firebase completed with status {result}");
+        }
+
         public async Task PushEventMatches(string playerId = null, int? actionCount = 10000)
         {
             var matches = new List<Match>();
@@ -218,20 +239,32 @@ namespace TtPlayers.Importer.Applications
             _logger.LogInformation($"Pushing matches to firebase completed with status {result}");
         }
 
-        public async Task PushEventMatchesForActivePlayers(int? actionCount = 10000)
+        public async Task PushEventMatchesByEventId(string eventId)
+        {
+            var matches = await _matchRepository.FilterByAsync(x => x.RequireDeltaPush && x.EventId == eventId);
+            _logger.LogInformation($"Pushing {matches.Count} matches with match details to firebase");
+
+            await _firebaseEventMatchesRepository.UpdateBulk(matches);
+
+            matches.ForEach(x => {
+                x.RequireDeltaPush = false;
+                x.LastDeltaPushDate = DateTime.Now;
+            });
+
+            var result = await _matchRepository.UpsertManyAsync(matches);
+            _logger.LogInformation($"Pushing matches to firebase completed with status {result}");
+        }
+
+        public async Task PushEventMatchesForActivePlayers()
         {
             var matches = new List<Match>();
-            if (!actionCount.HasValue)
-            {
-                actionCount = 10000;
-            }
-
-            var players = await _playerRepository.FilterByAsync(x => x.LastPlayed > DateTime.Now.AddYears(-1));
+            
+            var players = await _playerRepository.FilterByAsync(x => x.LastPlayed > DateTime.Now.AddMonths(-1));
             var index = players.Count;
 
             foreach (var player in players)
             {
-                matches = await _matchRepository.FilterByAsyncOrderByDesending(x => x.RequireDeltaPush && (x.WinnerId == player.Id || x.LoserId == player.Id), x => x.MatchDate, 0, actionCount.Value);
+                matches = await _matchRepository.FilterByAsyncOrderByDesending(x => x.RequireDeltaPush && (x.WinnerId == player.Id || x.LoserId == player.Id), x => x.MatchDate, 0, 20000);
                 _logger.LogInformation($"{index} - Pushing {player.FullName}:{player.Id} - {matches.Count} matches with match details to firebase");
 
                 await _firebaseEventMatchesRepository.UpdateBulk(matches);
