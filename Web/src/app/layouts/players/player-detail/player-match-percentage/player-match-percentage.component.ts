@@ -24,7 +24,7 @@ export class PlayerMatchPercentageComponent {
 
   ngOnInit(): void {
     console.log('match played stats', this.stats);
-
+    
     this.values =  [
       this.stats.MatchPlayedGroups["0"], 
       this.stats.MatchPlayedGroups["100"], 

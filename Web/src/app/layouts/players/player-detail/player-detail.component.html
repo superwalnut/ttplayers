@@ -92,7 +92,7 @@
                             <app-player-ranking [player]="player" [stats]="stats" *ngIf="stats"></app-player-ranking>
 
                             <!-- Match Count summary -->
-                            <app-player-match-percentage [player]="player" [stats]="stats" *ngIf="stats"></app-player-match-percentage>
+                            <app-player-match-percentage [player]="player" [stats]="stats" *ngIf="stats && stats.MatchPlayedGroups"></app-player-match-percentage>
 
                             <!-- Match summary -->
                             <app-player-match [player]="player"></app-player-match>
