@@ -73,35 +73,35 @@ export class RegisterComponent implements OnInit {
       this.errors =[];
 
       if(this.registrationForm.get('firstName').errors){
-        this.errors.push({ field: "First Name", message : "Please enter your first name" });
+        this.errors.push({ field: "First Name", message : "Please enter your first name." });
       }
 
       if(this.registrationForm.get('lastName').errors){
-        this.errors.push({ field: "Last Name", message : "Please enter your last name" });
+        this.errors.push({ field: "Last Name", message : "Please enter your last name." });
       }
 
       if(!this.selectedPlayerProfile){
-        this.errors.push({ field: "Rating Central ID", message : "Please select your rating central ID" });
+        this.errors.push({ field: "Rating Central ID", message : "Please select your rating central ID." });
       }
 
       if(this.registrationForm.get('birthYear').errors){
-        this.errors.push({ field: "Birth Year", message : "Please enter your birth year" });
+        this.errors.push({ field: "Birth Year", message : "Please enter your birth year." });
       }
 
       if(this.registrationForm.get('postcode').errors){
-        this.errors.push({ field: "postcode", message : "Please enter your postcode" });
+        this.errors.push({ field: "postcode", message : "Please enter your postcode." });
       }
 
       if(this.registrationForm.get('grip').errors){
-        this.errors.push({ field: "grip", message : "Please enter your racket grip" });
+        this.errors.push({ field: "Racket Grip", message : "Please enter your racket grip." });
       }
 
       if(this.registrationForm.get('email').errors){
-        this.errors.push({ field: "Email", message : "Please enter your email" });
+        this.errors.push({ field: "Email", message : "Please enter your email." });
       }
 
       if(this.registrationForm.get('password').errors){
-        this.errors.push({ field: "Password", message : "Please enter a valid password. Allows only letters (uppercase and lowercase) and digits, requiring a minimum length of 8 characters." });
+        this.errors.push({ field: "Password", message : "Please enter a valid password. Allows only letters (uppercase & lowercase) and digits, requiring a minimum length of 8 characters." });
       }
 
       return;

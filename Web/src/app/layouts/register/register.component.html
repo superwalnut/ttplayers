@@ -61,8 +61,8 @@
                         <div class="buttons">
                             <div class="alert alert-danger" role="alert" *ngIf="errors.length>0">
                                 <ul>
-                                    <li *ngFor="let error of errors">
-                                        <strong>{{error.field}}</strong> - {{error.message}}
+                                    <li *ngFor="let error of errors" class="field-error">
+                                        <span class="field-name"><strong >{{error.field}}:</strong></span><span class="field-message">{{error.message}}</span>
                                     </li>
                                 </ul>    
                             </div>
