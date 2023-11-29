@@ -10,5 +10,7 @@ namespace TtPlayers.Importer.Domain.Models
     {
         public string Name { get; set; }
         public string ShortName { get; set; }
+
+        public string ClubId { get; set; }
     }
 }

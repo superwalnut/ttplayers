@@ -31,6 +31,9 @@ namespace TtPlayers.Importer.Domain.Models
         public List<SndttaTeamPlayer> Players { get; set; }
 
         [FirestoreProperty]
+        public string ClubId { get; set; }
+
+        [FirestoreProperty]
         public DateTime LastUpdated { get; set; }
 
         // properties to push to firebase

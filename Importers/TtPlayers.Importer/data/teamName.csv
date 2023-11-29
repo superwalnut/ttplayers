@@ -1,71 +1,71 @@
-Name, ShortName
-Annangrove Next Time,AnnaNext
-Annangrove Winners,AnnaWin
-Cherrybrook Fighter,CherFig
-Cherrybrook Nadassi IX,CherIX
-Cherrybrook Junior,CherJun
-Cherrybrook Nadassi VIII,CherVIII
-Forestville Eagles,ForEag
-Forest Gump,ForGump
-Forestville King Pong,ForKP
-Forest Owlet,ForOwl
-Forestville Pioneers,ForPion
-Forest Rising,ForRis
-Forestville Spin Koala,ForSK
-Forestville Woodchucks,ForWood
-Hornsby Black,HornBl
-Hornsby Orange,HornOr
+Name, ShortName, ClubId
+Annangrove Next Time,AnnaNext, 
+Annangrove Winners,AnnaWin,
+Cherrybrook Fighter,CherFig, 973
+Cherrybrook Nadassi IX,CherIX, 973
+Cherrybrook Junior,CherJun, 973
+Cherrybrook Nadassi VIII,CherVIII, 973
+Forestville Eagles,ForEag,
+Forest Gump,ForGump,
+Forestville King Pong,ForKP,
+Forest Owlet,ForOwl,
+Forestville Pioneers,ForPion,
+Forest Rising,ForRis,
+Forestville Spin Koala,ForSK,
+Forestville Woodchucks,ForWood,
+Hornsby Black,HornBl, 978
+Hornsby Orange,HornOr, 978
 JJW Champions,JJWCham
 JJW Heroes,JJWHero
 JJW Samurai,JJWSam
 JJW Spin Miracles,JJWSM
 JJW Smilies,JJWSmil
 JJW Thunder,JJWThun
-MacAdvance,MacAdv
-MacChallengers,MacChal
-MacPioneers,MacPio
-MacPirates,MacPir
-MacPremier,MacPrem
-MacSmashers,MacSmas
-MacStrivers,MacStri
-Macadamias,MADAM
+MacAdvance,MacAdv, 979
+MacChallengers,MacChal, 979
+MacPioneers,MacPio, 979
+MacPirates,MacPir, 979
+MacPremier,MacPrem, 979
+MacSmashers,MacSmas, 979
+MacStrivers,MacStri, 979
+Macadamias,MADAM, 979
 Norwest 3D,Norw3D
 Norwest 4D,Norw4D
 Norths Brown Bears,NthBB
 Norths Nets,NthNets
-PCYC 1A,PCYC1A
-PCYC 2A,PCYC2A
-PCYC 3A,PCYC3A
-PCYC 4A,PCYC4A
-PCYC 4B,PCYC4B
-PCYC 5A,PCYC5A
-PCYC 5C,PCYC5C
-PCYC 5D,PCYC5D
-PCYC 5E,PCYC5E
-PCYC 5F,PCYC5F
-PCYC Falcons,PCYCFalc
-PCYC Premier,PCYCPrem
+PCYC 1A,PCYC1A, 977
+PCYC 2A,PCYC2A, 977
+PCYC 3A,PCYC3A, 977
+PCYC 4A,PCYC4A, 977
+PCYC 4B,PCYC4B, 977
+PCYC 5A,PCYC5A, 977
+PCYC 5C,PCYC5C, 977
+PCYC 5D,PCYC5D, 977
+PCYC 5E,PCYC5E, 977
+PCYC 5F,PCYC5F, 977
+PCYC Falcons,PCYCFalc, 977
+PCYC Premier,PCYCPrem, 977
 Pymble Div 3,PymD3
 Pymble Long Spear,PymLS
 Pymble Lucky,PymLuck
 Pymble Rabbit,PymRab
-RTTC Div 2,RTTCD2
-RTTC Div 3,RTTCD3
-RTTC Div 4,RTTCD4
-RTTC Div 5,RTTCD5
-RTTC Premier,RTTCPrem
-STTC Div 3,STTCDiv3
-SUNS Alpha,SUNSAlph
-SUNS Avengers,SUNSAv
-SUNS Blaze,SUNSBla
-SUNS Cheetah,SUNSCh
-SUNS Cyclone,SUNSCyc
-SUNS Dandelions,SUNSDand
-SUNS Dynamos,SUNSDyn
-SUNS Energy,SUNSEne
-SUNS Evergreen,SUNSEver
-SUNS Rises,SUNSRis
+RTTC Div 2,RTTCD2, 1480
+RTTC Div 3,RTTCD3, 1480
+RTTC Div 4,RTTCD4, 1480
+RTTC Div 5,RTTCD5, 1480
+RTTC Premier,RTTCPrem, 1480
+STTC Div 3,STTCDiv3, 1542
+SUNS Alpha,SUNSAlph, 981
+SUNS Avengers,SUNSAv, 981
+SUNS Blaze,SUNSBla, 981
+SUNS Cheetah,SUNSCh, 981
+SUNS Cyclone,SUNSCyc, 981
+SUNS Dandelions,SUNSDand, 981
+SUNS Dynamos,SUNSDyn, 981
+SUNS Energy,SUNSEne, 981
+SUNS Evergreen,SUNSEver, 981
+SUNS Rises,SUNSRis, 981
 To Be Coronated,TBC
 Terrey Hills D5,THD5
-Willoughby Blue,WillBlue
-Willoughby Red,WillRed
+Willoughby Blue,WillBlue, 983
+Willoughby Red,WillRed, 983

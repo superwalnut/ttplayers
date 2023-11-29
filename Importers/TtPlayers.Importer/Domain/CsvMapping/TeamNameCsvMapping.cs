@@ -14,6 +14,7 @@ namespace TtPlayers.Importer.Domain.CsvMapping
         {
             Map(m => m.Name).Index(0);
             Map(m => m.ShortName).Index(1);
+            Map(m => m.ClubId).Index(2);
         }
     }
 }

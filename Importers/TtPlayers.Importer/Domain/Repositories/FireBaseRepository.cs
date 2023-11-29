@@ -77,7 +77,7 @@ namespace TtPlayers.Importer.Domain.Repositories
                 {
                     DocumentReference recordRef = _collection.Document(record.Id);
                     operation.Set(recordRef, record);
-                    _logger.LogInformation($"Firebase - add document:{record.Id} to batch-{index}.");
+                    //_logger.LogInformation($"Firebase - add document:{record.Id} to batch-{index}.");
                 }
                 var result = await operation.CommitAsync();
                 resultCount += result.Count;

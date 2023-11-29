@@ -19,12 +19,14 @@ dotnet TtPlayers.Importer.dll --show-push-summary
 ## If event has been revised, 
 
 need to run, this will delete related records and push new records.
+---------------------------------------------------------------------------
 
 ```
 dotnet TtPlayers.Importer.dll --revise-event --event-id=xxx
 ```
 
 also need to update players & push players
+-------------------------------------------
 
 ```
 dotnet TtPlayers.Importer.dll --player

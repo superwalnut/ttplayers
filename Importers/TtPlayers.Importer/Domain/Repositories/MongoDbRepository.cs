@@ -151,7 +151,7 @@ namespace TtPlayers.Importer.Domain.Repositories
                         IsUpsert= true
                     };
                     bulkWrites.Add(replaceOne);
-                    _logger.LogInformation($"Mongo - add document:{document.Id} to batch-{index}.");
+                    //_logger.LogInformation($"Mongo - add document:{document.Id} to batch-{index}.");
                 }
 
                 var result = await _collection.BulkWriteAsync(bulkWrites);

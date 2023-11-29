@@ -46,6 +46,9 @@ namespace TtPlayers.Importer.Domain.Models
         [FirestoreProperty]
         public string PrimaryClubId { get; set; }
 
+        [FirestoreProperty] 
+        public List<string> ClubIds { get; set; }
+
         [FirestoreProperty]
         public string State { get; set; }
 

@@ -259,12 +259,12 @@ namespace TtPlayers.Importer.Applications
         {
             var matches = new List<Match>();
             
-            var players = await _playerRepository.FilterByAsync(x => x.LastPlayed > DateTime.Now.AddMonths(-1));
+            var players = await _playerRepository.FilterByAsync(x => x.LastPlayed > DateTime.Now.AddMonths(-3));
             var index = players.Count;
 
             foreach (var player in players)
             {
-                matches = await _matchRepository.FilterByAsyncOrderByDesending(x => x.RequireDeltaPush && (x.WinnerId == player.Id || x.LoserId == player.Id), x => x.MatchDate, 0, 20000);
+                matches = await _matchRepository.FilterByAsync(x => x.RequireDeltaPush && (x.WinnerId == player.Id || x.LoserId == player.Id));
                 _logger.LogInformation($"{index} - Pushing {player.FullName}:{player.Id} - {matches.Count} matches with match details to firebase");
 
                 await _firebaseEventMatchesRepository.UpdateBulk(matches);

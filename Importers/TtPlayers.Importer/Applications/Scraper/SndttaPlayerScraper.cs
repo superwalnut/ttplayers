@@ -83,6 +83,7 @@ namespace TtPlayers.Importer.Applications.Scraper
                     {
                         Id = teamName,
                         ShortName = teamNameDict?.FirstOrDefault(x => x.Name.Equals(teamName))?.ShortName,
+                        ClubId = teamNameDict?.FirstOrDefault(x => x.Name.Equals(teamName))?.ClubId,
                     });
                     continue;
                 }
