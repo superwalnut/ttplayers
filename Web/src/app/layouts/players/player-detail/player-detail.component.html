@@ -8,24 +8,9 @@
 <!-- header end-->
 
 <!-- Breadcrumb -->
-<section class="breadcrumb-section-main inner-3">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="breadcrumb-contain">
-                    <div>
-                        <ul>
-                            <li><a href="/"><i class="fa fa-home"></i></a></li>
-                            <li><a href="/players/{{keyword}}"><i class="fa fa-angle-double-right"></i> players</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h2 class="breadcrumb-txt">{{player?.FullName??""}}</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<section class="breadcrumb-container inner-3">
+    <a class="breadcrumb-back btn btn-secondary" href="/players/{{keyword}}"><i class="fa fa-chevron-circle-left"></i> back</a>
+    <h2 class="breadcrumb-txt">{{player?.FullName??""}}</h2>
 </section>
 <!-- Breadcrumb end -->
 
