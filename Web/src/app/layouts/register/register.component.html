@@ -42,9 +42,9 @@
                             <div class="col-md-6">
                                 <label for="grip">Racket Grips</label>
                                 <select class="form-control form-select" aria-label="select racket grips" formControlName="grip">
-                                    <option selected>--</option>
-                                    <option value="Shakehand">Shakehand</option>
+                                    <option selected value="Shakehand">Shakehand</option>
                                     <option value="Penhold">Penhold</option>
+                                    <option value="Others">Others</option>
                                 </select>
                             </div>
                         </div>
@@ -56,6 +56,15 @@
                             <div class="col-md-6">
                                 <label for="review">Password</label>
                                 <input type="password" class="form-control" id="review" placeholder="Enter your password" required="true" formControlName="password">
+                            </div>                            
+                        </div>
+                        <div class="buttons">
+                            <div class="alert alert-danger" role="alert" *ngIf="errors.length>0">
+                                <ul>
+                                    <li *ngFor="let error of errors">
+                                        <strong>{{error.field}}</strong> - {{error.message}}
+                                    </li>
+                                </ul>    
                             </div>
                             <button type="submit" class="btn primary-btn btn-default radius-0">create Account</button>
                         </div>

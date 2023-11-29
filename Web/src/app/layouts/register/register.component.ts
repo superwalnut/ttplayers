@@ -19,6 +19,10 @@ export class RegisterComponent implements OnInit {
 
   selectedPlayerProfile:PlayerAutoComplete; // profile selected from the autocomplete
 
+  passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$';
+
+  errors:any[] = [];
+
   constructor(
     private firebaseService: AuthService,
     private toastrService: ToastrService,
@@ -30,11 +34,11 @@ export class RegisterComponent implements OnInit {
     this.registrationForm = new FormGroup({
       firstName: new FormControl<string>('', [
         Validators.required,
-        Validators.maxLength(100),
+        Validators.maxLength(50),
       ]),
       lastName: new FormControl<string>('', [
         Validators.required,
-        Validators.maxLength(100),
+        Validators.maxLength(50),
       ]),
       email: new FormControl<string>('', [
         Validators.required,
@@ -47,8 +51,13 @@ export class RegisterComponent implements OnInit {
         Validators.required,
         Validators.pattern('^[0-9]*$')
       ]), 
-      grip:new FormControl<string>('', []), 
-      password: new FormControl<string>('', [Validators.required]),
+      grip:new FormControl<string>('', [
+        Validators.required, 
+      ]), 
+      password: new FormControl<string>('', [
+        Validators.required, 
+        Validators.pattern(this.passwordPattern)
+      ]),
     });
   }
 
@@ -58,7 +67,43 @@ export class RegisterComponent implements OnInit {
 
   createUser(): void {
     if (this.registrationForm.invalid) {
+
       console.log('form is invalid');
+
+      this.errors =[];
+
+      if(this.registrationForm.get('firstName').errors){
+        this.errors.push({ field: "First Name", message : "Please enter your first name" });
+      }
+
+      if(this.registrationForm.get('lastName').errors){
+        this.errors.push({ field: "Last Name", message : "Please enter your last name" });
+      }
+
+      if(!this.selectedPlayerProfile){
+        this.errors.push({ field: "Rating Central ID", message : "Please select your rating central ID" });
+      }
+
+      if(this.registrationForm.get('birthYear').errors){
+        this.errors.push({ field: "Birth Year", message : "Please enter your birth year" });
+      }
+
+      if(this.registrationForm.get('postcode').errors){
+        this.errors.push({ field: "postcode", message : "Please enter your postcode" });
+      }
+
+      if(this.registrationForm.get('grip').errors){
+        this.errors.push({ field: "grip", message : "Please enter your racket grip" });
+      }
+
+      if(this.registrationForm.get('email').errors){
+        this.errors.push({ field: "Email", message : "Please enter your email" });
+      }
+
+      if(this.registrationForm.get('password').errors){
+        this.errors.push({ field: "Password", message : "Please enter a valid password. Allows only letters (uppercase and lowercase) and digits, requiring a minimum length of 8 characters." });
+      }
+
       return;
     }
 
