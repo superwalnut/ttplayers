@@ -7,3 +7,35 @@
         }
     }
 }
+
+.field-error {
+    display: flex;
+    margin-bottom: 5px;
+
+    .field-name {
+        display: inline-block;
+        width:150px;
+    }
+
+    .field-message {
+        display: inline-block;
+        width:100%;
+        margin-left:15px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .field-error {
+        display: block;
+
+        .field-name {
+            display: block;
+            width:150px;
+        }
+
+        .field-message {
+            display: block;
+            margin-left:0px;
+        }
+    }
+}

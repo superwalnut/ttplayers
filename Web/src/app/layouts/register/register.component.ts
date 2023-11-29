@@ -66,7 +66,7 @@ export class RegisterComponent implements OnInit {
   }
 
   createUser(): void {
-    if (this.registrationForm.invalid) {
+    if (this.registrationForm.invalid || !this.selectedPlayerProfile) {
 
       console.log('form is invalid');
 

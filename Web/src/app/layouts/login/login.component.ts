@@ -14,6 +14,9 @@ export class LoginComponent implements OnInit {
   showPassword = false;
   loading = false;
 
+  passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$';
+  errors:any[] = [];
+
   constructor(
     private readonly authService: AuthService,
     private readonly toastrService: ToastrService,
@@ -26,7 +29,10 @@ export class LoginComponent implements OnInit {
         Validators.required,
         Validators.email,
       ]),
-      password: new FormControl<string>('', [Validators.required]),
+      password: new FormControl<string>('', [
+        Validators.required, 
+        Validators.pattern(this.passwordPattern)
+      ]),
     });
   }
 
@@ -36,6 +42,16 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.loginForm.invalid) {
+      this.errors = [];
+
+      if(this.loginForm.get('email').errors){
+        this.errors.push({ field: "Email", message : "Please enter your email." });
+      }
+
+      if(this.loginForm.get('password').errors){
+        this.errors.push({ field: "Password", message : "Please enter a valid password. Allows only letters (uppercase & lowercase) and digits, requiring a minimum length of 8 characters." });
+      }
+
       return;
     }
 

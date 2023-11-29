@@ -22,6 +22,15 @@
                           <label for="review">Password</label>
                           <input type="password" class="form-control" id="review" placeholder="Enter your password" required="true" formControlName="password">
                       </div>
+                      <div>
+                        <div class="alert alert-danger" role="alert" *ngIf="errors.length>0">
+                            <ul>
+                                <li *ngFor="let error of errors" class="field-error">
+                                    <span class="field-name"><strong >{{error.field}}:</strong></span><span class="field-message">{{error.message}}</span>
+                                </li>
+                            </ul>    
+                        </div>
+                      </div>
                       <button class="btn primary-btn btn-default radius-0" type="submit">Login</button>
                   </form>
                   <hr/>
