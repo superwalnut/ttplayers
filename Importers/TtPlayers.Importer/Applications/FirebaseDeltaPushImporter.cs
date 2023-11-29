@@ -258,9 +258,12 @@ namespace TtPlayers.Importer.Applications
         public async Task PushEventMatchesForActivePlayers()
         {
             var matches = new List<Match>();
-            
-            var players = await _playerRepository.FilterByAsync(x => x.LastPlayed > DateTime.Now.AddMonths(-3));
+
+            var date = DateTime.Now.AddMonths(-3);
+            var players = await _playerRepository.FilterByAsync(x => x.LastPlayed > date);
             var index = players.Count;
+
+            _logger.LogInformation($"found {players.Count} players to import their matches");
 
             foreach (var player in players)
             {

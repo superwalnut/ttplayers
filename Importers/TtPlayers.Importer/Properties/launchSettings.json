@@ -2,7 +2,7 @@
   "profiles": {
     "TtPlayers.Importer": {
       "commandName": "Project",
-      "commandLineArgs": "--revise-event --event-id=48828"
+      "commandLineArgs": "--push-match --ytd"
     }
   }
 }

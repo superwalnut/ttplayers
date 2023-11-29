@@ -69,12 +69,12 @@ export class AuthService {
           // Signed in 
           const user = userCredential.user;
           console.log('signed in', user);
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(`login error ${errorCode} - ${errorMessage}`);
+          throw error;
         });
     }
 

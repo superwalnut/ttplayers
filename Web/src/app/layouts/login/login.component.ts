@@ -60,10 +60,13 @@ export class LoginComponent implements OnInit {
     this.authService
       .signInWithEmailAndPassword(this.loginForm.value.email, this.loginForm.value.password)
       .then(() => {
-        this.toastrService.show('User logged in successfuly');
-        this.router.navigate(['/', 'dashboard']);
+          this.toastrService.show('User logged in successfuly');
+          this.router.navigate(['/', 'dashboard']);
       })
-      .catch((error) => this.toastrService.error(error.message))
+      .catch((error) => {
+        this.errors = [];
+        this.errors.push({field: "Password", message: "The password you entered doesn't match our record, please try again."});
+      })
       .finally(() => (this.loading = false));
   }
 

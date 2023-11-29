@@ -291,13 +291,13 @@ namespace TtPlayers.Importer
                        {
                            firebasePusher.PushEventPlayers(o.ForceAll).GetAwaiter().GetResult();
                        }
-                       else if(o.PushEventMatches)
+                       else if(o.PushEventMatches && !o.Ytd)
                        {
                            firebasePusher.PushEventMatches(o.PlayerId, o.ActionCount).GetAwaiter().GetResult();
                        }
                        else if (o.PushEventMatches && o.Ytd)
                        {
-                           firebasePusher.PushEventMatchesForActivePlayers();
+                           firebasePusher.PushEventMatchesForActivePlayers().GetAwaiter().GetResult();
                        }
                        else if (o.PushSndttaTeam)
                        {
