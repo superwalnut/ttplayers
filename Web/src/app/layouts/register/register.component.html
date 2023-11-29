@@ -26,6 +26,30 @@
                         </div>
                         <div class="form-row">
                             <div class="col-md-6">
+                                <label for="rcId">RatingCentral ID</label>
+                                <app-player-autocomplete (actionTriggered)="handlePlayerAutoCompleteAction($event)"></app-player-autocomplete>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="birthYear">Birth Year</label>
+                                <input type="text" class="form-control" id="birthYear" placeholder="Enter your birth year" required="true" formControlName="birthYear">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="postcode">Postcode</label>
+                                <input type="text" class="form-control" id="postcode" placeholder="Postcode" required="true" formControlName="postcode">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="grip">Racket Grips</label>
+                                <select class="form-control form-select" aria-label="select racket grips" formControlName="grip">
+                                    <option selected>--</option>
+                                    <option value="Shakehand">Shakehand</option>
+                                    <option value="Penhold">Penhold</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
                                 <label for="email">email</label>
                                 <input type="email" class="form-control" id="email" placeholder="Email" required="true" formControlName="email">
                             </div>

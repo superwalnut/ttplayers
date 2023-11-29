@@ -1,0 +1,24 @@
+.form-select {
+    height:48px;
+    font-size:0.9em;
+    border-radius: 0;
+    margin-bottom: 20px
+}
+
+// input.ng-invalid {
+//     border:solid 1px #ff0000 !important;
+// }
+
+@media only screen and (max-width: 575px) {
+    .form-select {
+        height:40px;
+        border-radius: 0;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .form-select {
+        height:40px;
+        border-radius: 0;
+    }
+}

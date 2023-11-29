@@ -8,4 +8,7 @@ export interface Profile {
     LastName: string;
     State: string;
     Gender: string;
+    BornYear:number;
+    Postcode:string;
+    Grip:string;
 }

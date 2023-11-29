@@ -5,7 +5,7 @@
         <span class="m-r-10">{{r.Rating}}±{{r.StDev}}</span>
         <span class="badge bg-dark state-badge">{{r.State}}</span>
     </ng-template>
-    <input type="text" class="form-control" placeholder="Enter Player Name" name="searchPlayerId"
+    <input type="text" class="form-control" placeholder="Enter Player Name (Last Name + First Name) to Search" name="searchPlayerId"
         [(ngModel)]="playerAutoCompleteModel" 
         [ngbTypeahead]="searchPlayer"
         [resultTemplate]="rt"

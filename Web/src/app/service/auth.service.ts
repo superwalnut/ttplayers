@@ -42,7 +42,7 @@ export class AuthService {
       });
     }
 
-    createUserWithEmailAndPassword(email:string, password:string) {
+    createUserWithEmailAndPassword(email:string, password:string) : Promise<string>{
       return this.auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
           console.log('register success');
@@ -53,10 +53,13 @@ export class AuthService {
               console.log("email verification sent to user");
             });
           }
+
+          return user.uid;
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
+          return null;
         });
     }
 
