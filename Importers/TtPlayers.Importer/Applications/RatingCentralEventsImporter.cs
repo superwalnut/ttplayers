@@ -105,7 +105,8 @@ namespace TtPlayers.Importer.Applications
                     evt.RequireDeltaPush = true;
 
                     // set tags
-                    evt.Tags = SetEventTags(evt);
+                    var extraTags = evt.GetEventNameComboTags();
+                    evt.Tags.AddRange(extraTags);
 
                     index--;
                 }
@@ -294,11 +295,9 @@ namespace TtPlayers.Importer.Applications
                     //if not able to transform, apply club's state
                     evt.State = club.State.ToStateShortform();
                 }
+
+                evt.Tags = club.GetClubNameComboTags();
             }
-            /*
-             Bulk update collection scripts
-                db.Events.updateMany({state:"Queensland"}, {$set:{state:"QLD"}})
-             */
         }
 
         private async Task<IList<TtEventPlayerRating>> GetPlayerRatingChanges(TtEvent evt)
@@ -321,26 +320,6 @@ namespace TtPlayers.Importer.Applications
             {
                 await _playerUpdateRepository.UpsertAsync(update, x => x.Id == update.Id);
             }
-        }
-
-        private List<string> SetEventTags(TtEvent evt)
-        {
-            var tags = new List<string>();
-
-            if (!string.IsNullOrEmpty(evt.Name))
-            {
-                tags.Add(evt.Name.Trim().ToLower());
-            }
-
-            if (!string.IsNullOrEmpty(evt.ClubName))
-            {
-                tags.Add(evt.ClubName.Trim().ToLower());
-            }
-
-            var tagsFromName = evt.Name.GetTagWords();
-            tags.AddRange(tagsFromName);
-
-            return tags;
         }
 
     }

@@ -19,22 +19,45 @@ export class EventService {
     return this.firestore.doc<EventPlayer>(`EventPlayers/${id}`).valueChanges();
   } 
 
-  searchEvents(state:string, pageSize:number) : Observable<TtEvent[]>{
+  searchEvents(keyword:string, state:string, pageSize:number) : Observable<TtEvent[]>{
     console.log('search state', state);
+    if(keyword){
+      const wordsArray = keyword.toLocaleLowerCase().split(" ");
+      return this.firestore.collection<TtEvent>('Events', ref => 
+        ref.where('State', 'in', [state,""])
+        .where('Tags', 'array-contains-any', wordsArray)
+        .orderBy('Date','desc')
+        .orderBy('Id','asc')
+        .limit(pageSize)
+      ).valueChanges();
+    }
+
     return this.firestore.collection<TtEvent>('Events', ref => 
       ref.where('State', 'in', [state,""])
       .orderBy('Date','desc')
       .orderBy('Id','asc')
       .limit(pageSize)
-    ).valueChanges().pipe();
+    ).valueChanges();
   }
 
-  searchEventsWithPaging(state: string,  pageSize:number, lastDoc:TtEvent): Observable<TtEvent[]> {
+  searchEventsWithPaging(keyword:string, state: string,  pageSize:number, lastDoc:TtEvent): Observable<TtEvent[]> {
     console.log('search state w paging', state);
     console.log('last doc', lastDoc);
     if(!lastDoc)
     {
       return of();
+    }
+
+    if(keyword) {
+      const wordsArray = keyword.toLocaleLowerCase().split(" ");
+      return this.firestore.collection<TtEvent>('Events', ref =>
+        ref.where('State', 'in', [state,""])
+        .where('Tags', 'array-contains-any', wordsArray)
+        .orderBy('Date','desc')
+        .orderBy('Id','asc')
+        .startAfter(lastDoc.Date, lastDoc.Id)
+        .limit(pageSize)
+      ).valueChanges();
     }
 
     return this.firestore.collection<TtEvent>('Events', ref =>
@@ -43,7 +66,7 @@ export class EventService {
       .orderBy('Id','asc')
       .startAfter(lastDoc.Date, lastDoc.Id)
       .limit(pageSize)
-    ).valueChanges().pipe();
+    ).valueChanges();
   }
 
 

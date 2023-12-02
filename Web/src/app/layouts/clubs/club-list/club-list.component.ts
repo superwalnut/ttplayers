@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Club } from 'src/app/models/club';
 import { ClubService } from 'src/app/service/club.service';
 
@@ -17,8 +18,17 @@ export class ClubListComponent {
 
     pageSize:number = 6;
 
-    constructor(private clubService:ClubService) {
-        this.state = this.getLocalState();
+    constructor(private clubService:ClubService, private route: ActivatedRoute) {
+        const queryState = this.route.snapshot.queryParams.state;
+        if(queryState){
+            //redirected from a query string with state
+            this.setLocalState(queryState);
+            this.state = queryState;
+        }
+        else {
+            this.state = this.getLocalState();
+        }
+
         if(!this.state)
         {
         this.state = "NSW";
@@ -29,6 +39,7 @@ export class ClubListComponent {
 
    search() {
         this.setLocalState(this.state);
+        this.clubs = [];
         this.clubService.searchClubs(this.keyword, this.state, this.pageSize).subscribe(x=>{
             this.clubs = x;
             if(x.length<=0){

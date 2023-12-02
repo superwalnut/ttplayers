@@ -12,12 +12,15 @@ import { ClubService } from 'src/app/service/club.service';
 export class ClubProfileDetailComponent implements OnInit {
   club:Club;
 
+  state:string;
+
   constructor(private route: ActivatedRoute,private clubService:ClubService,
     private title: Title) { }
 
   ngOnInit() {
     this.title.setTitle(this.route.snapshot.data['title']);
     var clubId = this.route.snapshot.params.id;
+    this.state = this.route.snapshot.queryParams.state;
 
     this.clubService.getClub(clubId).subscribe(x=>{
       this.club = x;

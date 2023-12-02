@@ -99,7 +99,7 @@ namespace TtPlayers.Importer.Applications
                     }
 
                     //update tags
-                    club.Tags = SetTags(club);
+                    club.Tags = club.GetClubNameComboTags();
 
                     club.LastUpdated = DateTime.Now;
                     club.RequireDeltaPush = true;
@@ -110,29 +110,6 @@ namespace TtPlayers.Importer.Applications
             }
         }
 
-        private static List<string> NoiseWords = new List<string>()
-        {
-            "table", "tennis", "club", "assoc", "association", "inc", "league", "assn", "tabletennis", "tta", "ttc", "asscn"
-        };
-
-        private List<string> SetTags(Club club)
-        {
-            var tags = new List<string>();
-
-            if(!string.IsNullOrEmpty(club.Nickname))
-            {
-                tags.Add(club.Nickname.Trim().ToLower());
-            }
-
-            if(!string.IsNullOrEmpty(club.Name))
-            {
-                tags.Add(club.Name.Trim().ToLower());
-            }
-
-            var tagsFromName = club.Name.GetTagWords(NoiseWords);
-            tags.AddRange(tagsFromName);
-
-            return tags;
-        }
+        
     }
 }

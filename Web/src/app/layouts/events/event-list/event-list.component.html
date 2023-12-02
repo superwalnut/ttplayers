@@ -54,6 +54,24 @@
                 </div> 
             </div>
         </div>
+        <div class="row" *ngIf="!events || events.length<=0">
+            <div class="col-12">
+                <div class="alert alert-danger" role="alert">
+                    <h3> 
+                        <i class="fa fa-frown-o" aria-hidden="true"></i>
+                        Oops! No events matched your query.
+                    </h3>
+                    <div class="mt-4">A few things that might help:
+                    </div>
+                    <ul class="mt-3">
+                        <li>Try search with the one or two words from the event name.</li>
+                        <li>Try search with the full event name.</li>
+                        <li>Check if you have selected the correct <strong>state</strong>.</li>
+                        <li>If you reckon this is an issue to find your event, please <a href="mailto:support@ttplayers.com.au">drop us an email</a>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12 blog-sec blog-list" *ngFor="let evt of events">
                 <div class="blog-agency">

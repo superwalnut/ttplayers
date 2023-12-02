@@ -50,7 +50,7 @@ export class RankingItemComponent implements OnInit {
   }
 
   playerClick(playerId:string) {
-    this.router.navigate([`/player/${playerId}`]);
+    this.router.navigate([`/player/${playerId}`], { queryParams: { referrer: 'ranking' } });
   }
 
 }

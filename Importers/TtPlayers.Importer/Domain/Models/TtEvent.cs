@@ -14,6 +14,11 @@ namespace TtPlayers.Importer.Domain.Models
     [FirestoreData]
     public class TtEvent : IDocument
     {
+        public TtEvent()
+        {
+            Tags = new List<string>();
+        }
+
         [BsonElement("_id")]
         [BsonId]
         [FirestoreProperty]

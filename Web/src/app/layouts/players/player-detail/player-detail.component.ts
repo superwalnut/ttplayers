@@ -35,7 +35,10 @@ export class PlayerDetailComponent implements OnInit {
   club:Club;
   teamPlayers:TeamPlayer[] = [];
   matchesByEvent: { [eventId: string]: Match[] } = {};
+  
   keyword:string;
+  referrer:string;
+
   lastMatch:Match = null;
   friend: Friend = null;
   loggedInUser: User = null;
@@ -66,6 +69,7 @@ export class PlayerDetailComponent implements OnInit {
     this.title.setTitle(this.route.snapshot.data['title']);
     var playerId = this.route.snapshot.params.id;
     this.keyword = this.route.snapshot.queryParams.keyword;
+    this.referrer = this.route.snapshot.queryParams.referrer;
 
     this.gtag.event('player_detail', { 'playerId': playerId });
     

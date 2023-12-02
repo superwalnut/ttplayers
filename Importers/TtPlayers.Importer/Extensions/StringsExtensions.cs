@@ -291,5 +291,45 @@ namespace TtPlayers.Importer.Extensions
             }
             return tags;
         }
+
+        public static List<string> GetClubNameComboTags(this Club club)
+        {
+            var tags = new List<string>();
+
+            if (!string.IsNullOrEmpty(club.Nickname))
+            {
+                tags.Add(club.Nickname.Trim().ToLower());
+            }
+
+            if (!string.IsNullOrEmpty(club.Name))
+            {
+                tags.Add(club.Name.Trim().ToLower());
+            }
+
+            var tagsFromName = club.Name.GetTagWords(ClubNoiseWords);
+            tags.AddRange(tagsFromName);
+
+            return tags;
+        }
+
+        public static List<string> GetEventNameComboTags(this TtEvent evt)
+        {
+            var tags = new List<string>();
+            if (!string.IsNullOrEmpty(evt.Name))
+            {
+                tags.Add(evt.Name.Trim().ToLower());
+            }
+
+            var tagsFromName = evt.Name.GetTagWords();
+            tags.AddRange(tagsFromName);
+
+            return tags;
+        }
+
+        private static List<string> ClubNoiseWords = new List<string>()
+        {
+            "table", "tennis", "club", "assoc", "association", "inc", "league", "assn", "tabletennis", "tta", "ttc", "asscn"
+        };
+
     }
 }

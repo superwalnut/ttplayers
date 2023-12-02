@@ -26,8 +26,9 @@ export class EventListComponent {
    }
 
   search() {
+      this.events = [];
       this.setLocalState(this.state);
-      this.eventService.searchEvents(this.state, this.pageSize).subscribe(x=>{
+      this.eventService.searchEvents(this.keyword, this.state, this.pageSize).subscribe(x=>{
         this.events = x;
         if(x.length<=0){
           this.lastEvent = null;
@@ -39,7 +40,7 @@ export class EventListComponent {
 
   loadMoreEvents() {
     console.log('click!');
-    this.eventService.searchEventsWithPaging(this.state, this.pageSize, this.lastEvent).subscribe(events =>{
+    this.eventService.searchEventsWithPaging(this.keyword, this.state, this.pageSize, this.lastEvent).subscribe(events =>{
       console.log('response with paging', events);
 
       if(events.length<=0){
