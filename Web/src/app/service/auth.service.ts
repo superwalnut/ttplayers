@@ -1,8 +1,9 @@
 
 import { Injectable,NgZone } from '@angular/core';
-import { FacebookAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import { FacebookAuthProvider, GoogleAuthProvider } from "@angular/fire/auth";
 import { User } from '../models/user';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Profile } from '../models/profile';
 
 @Injectable({
   providedIn: 'root'
@@ -77,13 +78,31 @@ export class AuthService {
           throw error;
         });
     }
-
-    SignInWithGooglePopUp() {
+    
+    SignInWithGooglePopUp() : Promise<Profile>{
       const provider = new GoogleAuthProvider();
-      //provider.addScope("email");
+      provider.addScope("email");
       return this.auth.signInWithPopup(provider)
         .then((result) => {
           console.log('You have been successfully logged in!', result);
+
+          const info = result?.additionalUserInfo?.profile;
+          console.log('info', info);
+          
+          const uid = result.user.uid;
+          const email = result.user.email;
+          const phone = result.user.phoneNumber;
+          const photoUrl = result.user.photoURL;
+
+          return {
+            UserId:uid,
+            FullName: `${info["given_name"]??""} ${info["family_name"]??""}`,
+            FirstName: `${info["given_name"]??""}`,
+            LastName: `${info["family_name"]??""}`,
+            Email: email,
+            Phone: phone,
+            PhotoUrl: photoUrl
+          } as Profile;
           // This gives you a Google Access Token. You can use it to access the Google API.
           //const token = result.user.getIdToken();
           //console.log('token', token);
@@ -93,9 +112,13 @@ export class AuthService {
           // ...
         }).catch((error) => {
           console.log('google signin error', error);
+          console.log('error code', error.code);
+          console.log('error message', error.message);
           // Handle Errors here.
           const errorCode = error.code;
           const errorMessage = error.message;
+
+          return null;
           // The email of the user's account used.
           //const email = error.customData.email;
           // The AuthCredential type that was used.
@@ -131,7 +154,7 @@ export class AuthService {
       });
     }
 
-    signInWithFacebookPopup() {
+    signInWithFacebookPopup() : Promise<Profile>{
       const provider = new FacebookAuthProvider();
       return this.auth.signInWithPopup(provider)
         .then((result) => {
@@ -141,10 +164,28 @@ export class AuthService {
           // This gives you a Facebook Access Token. You can use it to access the Facebook API.
           const accessToken = result.user.getIdToken();
 
+          const uid = result.user.uid;
+          const email = result.user.email;
+          const phone = result.user.phoneNumber;
+          const photoUrl = result.user.photoURL;
+       
+          const info = result?.additionalUserInfo?.profile;
+          console.log('info', info);
+
           console.log('user', user);
           console.log('access token', accessToken);
           // IdP data available using getAdditionalUserInfo(result)
           // ...
+
+          return {
+            UserId:uid,
+            FullName: `${info["first_name"]??""} ${info["last_name"]??""}`,
+            FirstName: `${info["first_name"]??""}`,
+            LastName: `${info["last_name"]??""}`,
+            Email: email,
+            Phone: phone,
+            PhotoUrl: photoUrl
+          } as Profile;
         })
         .catch((error) => {
           // Handle Errors here.
@@ -155,7 +196,7 @@ export class AuthService {
           // The AuthCredential type that was used.
           const credential = FacebookAuthProvider.credentialFromError(error);
 
-          // ...
+          return null;
         });
     }
 

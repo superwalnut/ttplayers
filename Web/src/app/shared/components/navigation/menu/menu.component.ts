@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Menu, NavService } from '../../../../service/nav.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { User } from 'src/app/models/user';
+import { UserProfileService } from 'src/app/service/user-profile.service';
+import { Profile } from 'src/app/models/profile';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -17,14 +20,25 @@ export class MenuComponent implements OnInit {
   public overlay: boolean = false;
 
   public user:User;
+  public profile:Profile;
   
-  constructor(public navServices: NavService, private authService:AuthService) { }
+  constructor(public navServices: NavService, private authService:AuthService,private profileService:UserProfileService) { }
  
   ngOnInit() {
     this.user = this.authService.getLoggedInUser();
-    this.navServices.getMenuItems(this.user).subscribe(menuItems => {
-      this.menuItems = menuItems
-    });
+    if(this.user){
+      this.profileService.getProfile(this.user.Id).pipe(
+        switchMap(profile=>{
+          return this.navServices.getMenuItems(profile);
+        })
+      ).subscribe(menus =>{
+        this.menuItems = menus;
+      });
+    } else {
+      this.navServices.getMenuItems(null).subscribe(menuItems => {
+        this.menuItems = menuItems
+      });
+    }
   }
 
   toggleSidebar(){

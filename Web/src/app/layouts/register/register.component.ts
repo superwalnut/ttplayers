@@ -121,6 +121,7 @@ export class RegisterComponent implements OnInit {
             FullName: this.selectedPlayerProfile.FullName,
             FirstName: this.selectedPlayerProfile.FirstName,
             LastName: this.selectedPlayerProfile.LastName,
+            Email: form.email,
             State: this.selectedPlayerProfile.State,
             Gender: this.selectedPlayerProfile.Gender,
             BornYear: form.birthYear,

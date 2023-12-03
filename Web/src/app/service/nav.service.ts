@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { User } from '../models/user';
+import { Profile } from '../models/profile';
 
 // Menu
 export interface Menu {
@@ -24,17 +25,17 @@ export class NavService {
 
   constructor() {   }
 
-  getMenuItems(user:User) {
+  getMenuItems(profile:Profile) {
    var menuItems: Menu[] = [];
 
-   if(user){
+   if(profile){
       // logged in
       menuItems.push({title: 'Dashboard', type: 'link', path: '/dashboard'});
       menuItems.push({title: 'Players', type: 'link', path: '/players'});
       menuItems.push({title: 'Events', type: 'link', path:'/events'});
       menuItems.push({title: 'Rankings', type: 'link', path: '/rankings'});
       menuItems.push({title: 'Clubs', type: 'link', path: '/clubs'});
-      menuItems.push({title: user.Email, type: 'sub', children:[
+      menuItems.push({title: profile.FullName, type: 'sub', children:[
          { path: '/dashboard', title: 'profile',  type: 'link' },
          { path: '/logout', title: 'logout',  type: 'link' }
       ]});

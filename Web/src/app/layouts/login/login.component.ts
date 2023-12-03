@@ -3,6 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from './../../service/auth.service';
+import { UserProfileService } from 'src/app/service/user-profile.service';
+import { LocalstorageService } from 'src/app/service/localstorage.service';
+import { GlobalConstants } from 'src/app/service/global.constants';
+import { Profile } from 'src/app/models/profile';
 
 @Component({
   selector: 'app-login',
@@ -16,11 +20,13 @@ export class LoginComponent implements OnInit {
 
   passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$';
   errors:any[] = [];
-
+  
   constructor(
     private readonly authService: AuthService,
     private readonly toastrService: ToastrService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly profileService: UserProfileService,
+    private readonly lsService:LocalstorageService
   ) {}
 
   ngOnInit() {
@@ -71,14 +77,53 @@ export class LoginComponent implements OnInit {
   }
 
   googleLogin() {
-    this.authService.SignInWithGooglePopUp().then(x=>{
-      console.log('sign in with google');
+    const user = this.authService.getLoggedInUser();
+    if(user) {
+      // if already sign in, nothing happens
+      this.router.navigate(['/', 'dashboard']);
+      return;
+    }
+
+    const existingProfile = this.lsService.getItemWithExpiration(GlobalConstants.USER_PROFILE) as Profile;
+    this.authService.SignInWithGooglePopUp().then(profile=>{
+      console.log('sign in with google', profile);
+      if(existingProfile && existingProfile.UserId == profile.UserId){
+        // this user already logged in previously, no need to save profile
+        console.log('profile already created previously');
+        this.router.navigate(['/', 'dashboard']);
+      }
+      else {
+        this.profileService.saveProfile(profile.UserId, profile).then(x=>{
+          this.toastrService.show('User registred successfuly');
+          this.router.navigate(['/', 'dashboard']);
+        });
+      }
     });
   }
 
   facebookLogin() {
-    this.authService.signInWithFacebookPopup().then(x=>{
-      console.log('sign in with facebook');
+    const user = this.authService.getLoggedInUser();
+    if(user) {
+      // if already sign in, nothing happens
+      this.router.navigate(['/', 'dashboard']);
+      return;
+    }
+
+    const existingProfile = this.lsService.getItemWithExpiration(GlobalConstants.USER_PROFILE) as Profile;
+    this.authService.signInWithFacebookPopup().then(profile=>{
+      console.log('sign in with facebook', profile);
+      if(existingProfile && existingProfile.UserId == profile.UserId){
+        // this user already logged in previously, no need to save profile
+        console.log('profile already created previously');
+        this.router.navigate(['/', 'dashboard']);
+      }
+      else {
+        this.profileService.saveProfile(profile.UserId, profile).then(x=>{
+          this.toastrService.show('User registred successfuly');
+          this.router.navigate(['/', 'dashboard']);
+        });
+      }
     });
   }
+
 }
