@@ -15,7 +15,6 @@ import { Profile } from 'src/app/models/profile';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  showPassword = false;
   loading = false;
 
   passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$';
@@ -42,10 +41,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  toggleDisplayPassword(): void {
-    this.showPassword = !this.showPassword;
-  }
-
   login() {
     if (this.loginForm.invalid) {
       this.errors = [];
@@ -66,7 +61,7 @@ export class LoginComponent implements OnInit {
     this.authService
       .signInWithEmailAndPassword(this.loginForm.value.email, this.loginForm.value.password)
       .then(() => {
-          this.toastrService.show('User logged in successfuly');
+          this.toastrService.success('User logged in successfully');
           this.router.navigate(['/', 'dashboard']);
       })
       .catch((error) => {
@@ -129,7 +124,7 @@ export class LoginComponent implements OnInit {
       else {
         // new registered user
         this.profileService.saveProfile(profile.UserId, profile).then(x=>{
-          this.toastrService.show('User registered successfully');
+          this.toastrService.success('User registered successfully');
           this.router.navigate(['/', 'profile']);
         });
       }

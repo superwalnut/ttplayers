@@ -244,7 +244,7 @@ export class AuthService {
     }
 
     sendPasswordResetEmail(email:string) {
-      this.auth.sendPasswordResetEmail(email)
+      return this.auth.sendPasswordResetEmail(email)
         .then(() => {
           // Password reset email sent!
           // ..

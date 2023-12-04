@@ -29,6 +29,8 @@ export class ProfileComponent implements OnInit{
   user:User;
   profile:Profile;
 
+  showDashboard:boolean;
+
   constructor(    
     private authService: AuthService,
     private toastrService: ToastrService,
@@ -179,6 +181,7 @@ export class ProfileComponent implements OnInit{
         this.toastrService.success('Your profile is updated successfuly');
         this.errors =[];
         this.profile = profile;
+        this.showDashboard = true;
       });
     }
     else {
