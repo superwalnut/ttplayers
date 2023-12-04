@@ -14,14 +14,12 @@ import { UserProfileService } from 'src/app/service/user-profile.service';
 })
 export class RegisterComponent implements OnInit {
   registrationForm!: FormGroup;
-  showPassword = false;
   loading = false;
 
   selectedPlayerProfile:PlayerAutoComplete; // profile selected from the autocomplete
-
   passwordPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$';
-
   errors:any[] = [];
+  
 
   constructor(
     private firebaseService: AuthService,
@@ -31,6 +29,7 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
     this.registrationForm = new FormGroup({
       firstName: new FormControl<string>('', [
         Validators.required,
@@ -44,6 +43,9 @@ export class RegisterComponent implements OnInit {
         Validators.required,
         Validators.email,
       ]),
+      suburb: new FormControl<string>('', [
+        Validators.required,
+      ]),
       postcode: new FormControl<string>('', [
         Validators.maxLength(4),
       ]),
@@ -52,17 +54,16 @@ export class RegisterComponent implements OnInit {
         Validators.pattern('^[0-9]*$')
       ]), 
       grip:new FormControl<string>('', [
-        Validators.required, 
+        Validators.maxLength(20),
+      ]), 
+      rubber:new FormControl<string>('', [
+        Validators.maxLength(20),
       ]), 
       password: new FormControl<string>('', [
         Validators.required, 
         Validators.pattern(this.passwordPattern)
       ]),
     });
-  }
-
-  toggleDisplayPassword(): void {
-    this.showPassword = !this.showPassword;
   }
 
   createUser(): void {
@@ -92,8 +93,16 @@ export class RegisterComponent implements OnInit {
         this.errors.push({ field: "postcode", message : "Please enter your postcode." });
       }
 
+      if(this.registrationForm.get('suburb').errors){
+        this.errors.push({ field: "Suburb", message : "Please enter your suburb." });
+      }
+
       if(this.registrationForm.get('grip').errors){
         this.errors.push({ field: "Racket Grip", message : "Please enter your racket grip." });
+      }
+
+      if(this.registrationForm.get('rubber').errors){
+        this.errors.push({ field: "Rubber Type", message : "Please enter your rubber type." });
       }
 
       if(this.registrationForm.get('email').errors){
@@ -126,18 +135,22 @@ export class RegisterComponent implements OnInit {
             Gender: this.selectedPlayerProfile.Gender,
             BornYear: form.birthYear,
             Postcode: form.postcode,
-            Grip: form.grip
+            Suburb: form.suburb,
+            Grip: form.grip,
+            RubberType: form.rubber,
+            IsCompleted:true,
+            LastUpdated: new Date()
           } as Profile;
           this.profileService.saveProfile(uid, profile).then(x=>{
-            this.toastrService.show('User registred successfuly');
+            this.toastrService.success('User registered successfully');
             this.router.navigate(['/', 'dashboard']);
           });
         }
         else {
-          this.toastrService.show('You must select a rating central player');
+          this.toastrService.error('You must select a rating central player');
         }
       })
-      .catch((error) => this.toastrService.error(error.message))
+      .catch((error) => this.toastrService.error("There is an error to register."))
       .finally(() => (this.loading = false));
   }
 

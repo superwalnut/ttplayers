@@ -7,57 +7,99 @@
 <!-- header end-->
 
 <!-- Breadcrumb -->
-<section class="breadcrumb-section-main inner-3">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="breadcrumb-contain">
-                    <div>
-                        <ul>
-                            <li><a href="/"><i class="fa fa-home"></i></a></li>
-                            <li><a><i class="fa fa-angle-double-right"></i> dashboard</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h2 class="breadcrumb-txt">dashboard</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<section class="breadcrumb-container inner-3">
+    <a class="breadcrumb-back btn btn-secondary" href="/dashboard">
+        <i class="fa fa-angle-left m-r-10" aria-hidden="true"></i>
+         <i class="fa fa-home" aria-hidden="true"></i>
+    </a>
+    <h2 class="breadcrumb-txt">My Profile</h2>
 </section>
 <!-- Breadcrumb end -->
 
-<!-- Login-popup section start -->
-<section class="login-popup">
+<section class="register-page section-b-space pt-4">
     <div class="container">
+        <div class="row" *ngIf="!profile?.IsCompleted">
+            <div class="col-12">
+                <div class="alert alert-warning" role="alert">
+                    <i class="fa fa-info m-r-10"></i>Please fill the form and save your profile to unlock the following features, <br/>
+                    <ul class="mt-2 ml-2">
+                        <li class="mb-2"><strong>1. your matches history</strong></li>
+                        <li class="mb-2"><strong>2. your play statistics</strong></li>
+                        <li class="mb-2"><strong>3. friends list</strong></li>
+                        <li class="mb-2"><strong>4. competitors list</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <div class="text-center">
-                    <h2 class="m-b-20">click here for the Modal popup</h2>
-                    <a class="popup-with-form btn btn-default primary-btn" (click)="openVerticallyCentered(content)">click here
-                    </a>
-                    <ng-template #content let-modal>
-                            <div class="login-modal">
-                                                <div class="modal-header">
-                                                    <button aria-label="Close" (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal" type="button">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body text-center">
-                                                    <h3 class="m-b-20">modal description</h3>
-                                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-                                                        the industry's standard dummy text ever since the 1500s.</p>
-                                                    <a aria-label="Close" class="btn btn-default primary-btn m-t-20" data-dismiss="modal">close
-                                                    </a>
-                                                </div>
-                                            </div>
-                </ng-template>
+            <div class="col-12">
+                <div class="theme-card">
+                    <form class="theme-form" [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="email">First Name</label>
+                                <input type="text" class="form-control" id="fname" placeholder="First Name" required="true" formControlName="firstName">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="review">Last Name</label>
+                                <input type="text" class="form-control" id="lname" placeholder="Last Name" required="true" formControlName="lastName">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="rcId">RatingCentral ID</label>
+                                <app-player-autocomplete [playerAutoCompleteModel]="selectedPlayerProfile" (actionTriggered)="handlePlayerAutoCompleteAction($event)"></app-player-autocomplete>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="birthYear">Birth Year</label>
+                                <input type="text" class="form-control" id="birthYear" placeholder="Enter your birth year" required="true" formControlName="birthYear">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="suburb">Suburb</label>
+                                <input type="text" class="form-control" id="suburb" placeholder="Suburb" required="true" formControlName="suburb">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="postcode">Postcode</label>
+                                <input type="text" class="form-control" id="postcode" placeholder="Postcode" required="true" formControlName="postcode">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="grip">Racket Grips</label>
+                                <select class="form-control form-select" aria-label="select racket grips" formControlName="grip">
+                                    <option selected value="Shakehand">Shakehand</option>
+                                    <option value="Penhold">Penhold</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="rubber">Rubber Types</label>
+                                <select class="form-control form-select" aria-label="select racket grips" formControlName="rubber">
+                                    <option selected value="Inverted">Inverted</option>
+                                    <option value="ShortPips">Short pips</option>
+                                    <option value="LongPips">Long pips</option>
+                                    <option value="Antispin">Antispin</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <div class="alert alert-danger" role="alert" *ngIf="errors.length>0">
+                                <ul>
+                                    <li *ngFor="let error of errors" class="field-error">
+                                        <span class="field-name"><strong >{{error.field}}:</strong></span><span class="field-message">{{error.message}}</span>
+                                    </li>
+                                </ul>    
+                            </div>
+                            <button type="submit" class="btn primary-btn btn-default radius-0 mt-4">Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- Login-popup section end -->
 
 <app-gym-footer></app-gym-footer>

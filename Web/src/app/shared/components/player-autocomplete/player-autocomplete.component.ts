@@ -9,11 +9,11 @@ import { PlayerAutoComplete } from '../../../models/player-autocomplete';
   styleUrls: ['./player-autocomplete.component.scss']
 })
 export class PlayerAutocompleteComponent {
+  @Input() playerAutoCompleteModel:any;
   @Output() actionTriggered = new EventEmitter<PlayerAutoComplete>();
 
   searching = false;
   searchFailed = false;
-  public playerAutoCompleteModel: any;
 
   constructor(private playerService:PlayerService) {
   }

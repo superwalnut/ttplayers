@@ -7,24 +7,8 @@
 <!-- header end-->
 
 <!-- Breadcrumb -->
-<section class="breadcrumb-section-main inner-3">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="breadcrumb-contain">
-                    <div>
-                        <ul>
-                            <li><a href="/"><i class="fa fa-home"></i></a></li>
-                            <li><a><i class="fa fa-angle-double-right"></i> dashboard</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h2 class="breadcrumb-txt">dashboard</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<section class="breadcrumb-container inner-3">
+    <h2 class="breadcrumb-txt">Dashboard</h2>
 </section>
 <!-- Breadcrumb end -->
 
@@ -42,42 +26,38 @@
     </div>
 </section>
 
-<section class="dashboard-profile mt-4 mb-4">
+<section class="dashboard-profile sider mt-4" *ngIf="!completedProfile?.IsCompleted">
     <div class="container">
-        <div class="row mt-4 blog-agency" *ngIf="!completedProfile">
+        <div class="row">
             <div class="col-12">
-                <!-- Complete your profile -->
-                <div class="row blog-contain pl-0 pr-0">
-                    <div class="col-xl-5 col-lg-5 col-md-5 p-0">
-                        <div class="text-center profile-img" [ngStyle]="{'background-image': 'url(assets/images/gym/header2.jpg)'}">
-                            <div class="profile-title">
-                                <h4>Please complete</h4>
-                                <h1>Your Profile</h1>
-                                <h5 class="mt-3">to unlock more features</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-7 col-lg-7 col-md-7 p-4">
-                        <h3 class="mb-2">Pair your Rating Central ID</h3>
-                        <hr/>
-                        <h6>Please enter your Full Name to search Rating Central Players.</h6>
-                        <div class="theme-card mt-4">
-                            <form class="theme-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
-                                <app-player-autocomplete (actionTriggered)="handlePlayerAutoCompleteAction($event)"></app-player-autocomplete>
-                                <button class="btn primary-btn btn-default radius-0" type="submit">Save</button>
-                            </form>
-                        </div>
-                    </div>
+                <!-- Not Completed Profile -->
+                <div class="alert alert-warning" role="alert">
+                    <i class="fa fa-info m-r-10"></i>Please fill the form and save your profile to unlock the following features, <br/>
+                    <ul class="mt-2 ml-2">
+                        <li class="mb-2"><strong>1. your matches history</strong></li>
+                        <li class="mb-2"><strong>2. your play statistics</strong></li>
+                        <li class="mb-2"><strong>3. friends list</strong></li>
+                        <li class="mb-2"><strong>4. competitors list</strong></li>
+                    </ul>
+                    <a href="/profile" class="btn btn-default btn-white btn-sm">Edit Profile</a>
                 </div>
             </div>
         </div>
-        <div class="row p-0" *ngIf="completedProfile">
+    </div>
+</section>
+
+<section class="dashboard-profile mt-4 mb-4">
+    <div class="container" *ngIf="completedProfile && completedProfile.IsCompleted">
+        <div class="row p-0" >
             <div class="col-12 p-0">
-                <h2>{{completedProfile.FullName}}</h2>
+                <div class="dashboard-player-name">
+                    <h2 >{{completedProfile.FullName}}</h2>
+                    <a href="/profile" class="btn btn-default btn-white btn-sm text-right">Profile</a>
+                </div>
                 <hr/>
             </div>
         </div>
-        <div class="row blog-agency" *ngIf="completedProfile">
+        <div class="row blog-agency">
             <div class="col-12">
                 <!-- Your profile -->
                 <div class="row blog-contain pl-0 pr-0">
@@ -95,7 +75,7 @@
             <div class="col-lg-4 col-md-6 pb-4" *ngIf="player">
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-user m-r-10"></i> My Statistics 
+                        <i class="fa fa-bar-chart" aria-hidden="true"></i> My Statistics 
                     </div>
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">

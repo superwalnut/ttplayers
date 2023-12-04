@@ -26,6 +26,16 @@
                         </div>
                         <div class="form-row">
                             <div class="col-md-6">
+                                <label for="email">email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Email" required="true" formControlName="email">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="review">Password</label>
+                                <input type="password" class="form-control" id="review" placeholder="Enter your password" required="true" formControlName="password">
+                            </div>                            
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
                                 <label for="rcId">RatingCentral ID</label>
                                 <app-player-autocomplete (actionTriggered)="handlePlayerAutoCompleteAction($event)"></app-player-autocomplete>
                             </div>
@@ -36,9 +46,15 @@
                         </div>
                         <div class="form-row">
                             <div class="col-md-6">
+                                <label for="suburb">Suburb</label>
+                                <input type="text" class="form-control" id="suburb" placeholder="Suburb" required="true" formControlName="suburb">
+                            </div>
+                            <div class="col-md-6">
                                 <label for="postcode">Postcode</label>
                                 <input type="text" class="form-control" id="postcode" placeholder="Postcode" required="true" formControlName="postcode">
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="col-md-6">
                                 <label for="grip">Racket Grips</label>
                                 <select class="form-control form-select" aria-label="select racket grips" formControlName="grip">
@@ -47,16 +63,16 @@
                                     <option value="Others">Others</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="col-md-6">
-                                <label for="email">email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Email" required="true" formControlName="email">
+                                <label for="rubber">Rubber Types</label>
+                                <select class="form-control form-select" aria-label="select racket grips" formControlName="rubber">
+                                    <option selected value="Inverted">Inverted</option>
+                                    <option value="ShortPips">Short pips</option>
+                                    <option value="LongPips">Long pips</option>
+                                    <option value="Antispin">Antispin</option>
+                                    <option value="Others">Others</option>
+                                </select>
                             </div>
-                            <div class="col-md-6">
-                                <label for="review">Password</label>
-                                <input type="password" class="form-control" id="review" placeholder="Enter your password" required="true" formControlName="password">
-                            </div>                            
                         </div>
                         <div class="buttons">
                             <div class="alert alert-danger" role="alert" *ngIf="errors.length>0">
@@ -66,7 +82,7 @@
                                     </li>
                                 </ul>    
                             </div>
-                            <button type="submit" class="btn primary-btn btn-default radius-0">create Account</button>
+                            <button type="submit" class="btn primary-btn btn-default radius-0">Create Account</button>
                         </div>
                     </form>
                 </div>

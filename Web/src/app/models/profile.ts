@@ -11,7 +11,11 @@ export interface Profile {
     State: string;
     Gender: string;
     BornYear:number;
+    Suburb:string;
     Postcode:string;
     Grip:string;
+    RubberType:string;
     PhotoUrl:string;
+    IsCompleted:boolean;
+    LastUpdated:Date;
 }

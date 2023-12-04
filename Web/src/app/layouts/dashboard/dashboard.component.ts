@@ -17,11 +17,8 @@ import { of, switchMap, zip } from 'rxjs';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit{
-  profileForm!: FormGroup;
   user:User;
-
   completedProfile:Profile = null; // try to load this from DB
-  selectedPlayerProfile:PlayerAutoComplete; // profile selected from the autocomplete
   player:Player; // once completed the profile, player will be populated with paired Rating Central Player
 
   constructor(public authService: AuthService, 
@@ -32,8 +29,6 @@ export class DashboardComponent implements OnInit{
     
   ngOnInit(): void {
     this.user = this.authService.getLoggedInUser();
-    this.profileForm = new FormGroup({});
-
     this.loadProfile();
   }
 
@@ -56,33 +51,6 @@ export class DashboardComponent implements OnInit{
 
         this.player = player;
     });
-  }
-
-  saveProfile() {
-    if(this.selectedPlayerProfile){
-      const profile = {
-        UserId: this.user.Id,
-        PlayerId: this.selectedPlayerProfile.PlayerId,
-        FullName: this.selectedPlayerProfile.FullName,
-        FirstName: this.selectedPlayerProfile.FirstName,
-        LastName: this.selectedPlayerProfile.LastName,
-        State: this.selectedPlayerProfile.State,
-        Gender: this.selectedPlayerProfile.Gender
-      } as Profile;
-      this.profileService.saveProfile(this.user.Id, profile).then(x=>{
-        this.completedProfile = profile;
-        this.toastrService.show('You have successfully paired your rating central player ID');
-      });
-    }
-    else {
-      this.toastrService.show('You must select a rating central player');
-    }
-  }
-
-
-  handlePlayerAutoCompleteAction(profile:PlayerAutoComplete) {
-    console.log('profile selected', profile);
-    this.selectedPlayerProfile = profile;
   }
 
   resendEmailVerify() {

@@ -90,12 +90,17 @@ export class LoginComponent implements OnInit {
       if(existingProfile && existingProfile.UserId == profile.UserId){
         // this user already logged in previously, no need to save profile
         console.log('profile already created previously');
-        this.router.navigate(['/', 'dashboard']);
+        if(existingProfile.IsCompleted){
+          this.router.navigate(['/', 'dashboard']);
+        } else {
+          this.router.navigate(['/', 'profile']);
+        }
       }
       else {
+        // new registered user
         this.profileService.saveProfile(profile.UserId, profile).then(x=>{
-          this.toastrService.show('User registred successfuly');
-          this.router.navigate(['/', 'dashboard']);
+          this.toastrService.success('User registered successfully');
+          this.router.navigate(['/', 'profile']);
         });
       }
     });
@@ -115,12 +120,17 @@ export class LoginComponent implements OnInit {
       if(existingProfile && existingProfile.UserId == profile.UserId){
         // this user already logged in previously, no need to save profile
         console.log('profile already created previously');
-        this.router.navigate(['/', 'dashboard']);
+        if(existingProfile.IsCompleted){
+          this.router.navigate(['/', 'dashboard']);
+        } else {
+          this.router.navigate(['/', 'profile']);
+        }
       }
       else {
+        // new registered user
         this.profileService.saveProfile(profile.UserId, profile).then(x=>{
-          this.toastrService.show('User registred successfuly');
-          this.router.navigate(['/', 'dashboard']);
+          this.toastrService.show('User registered successfully');
+          this.router.navigate(['/', 'profile']);
         });
       }
     });
