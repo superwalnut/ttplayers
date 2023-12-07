@@ -15,6 +15,7 @@ import { UserProfileService } from 'src/app/service/user-profile.service';
   styleUrls: ['./competitor-list.component.scss']
 })
 export class CompetitorListComponent {
+  showEmptyResult:boolean = false;
   competitorPlayers:Player[];
   profile:Profile = null; // try to load this from DB
   player:Player; // once completed the profile, player will be populated with paired Rating Central Player
@@ -59,12 +60,17 @@ export class CompetitorListComponent {
 
         this.competitorPlayers = [];
         if(player){
-          
           players.push(player);
         }
 
         var sorted = this.sortPlayersByRating(players);
         this.competitorPlayers = sorted;
+        
+        if(this.competitorPlayers.length<=0){
+          this.showEmptyResult = true;
+        } else {
+          this.showEmptyResult = false;
+        }
     });
   }
   

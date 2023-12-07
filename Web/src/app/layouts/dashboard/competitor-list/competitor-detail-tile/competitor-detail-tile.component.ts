@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { Friend } from 'src/app/models/friend';
 import { Player } from 'src/app/models/player';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-competitor-detail-tile',
@@ -15,11 +17,16 @@ export class CompetitorDetailTileComponent {
   @Output() removeCompetitor = new EventEmitter<Player>();
   
   time:any;
-  constructor(private sanitizer: DomSanitizer) {
+  rating:string;
+  nameInitialSvg:any;
+
+  constructor(private commonService:CommonService, private router:Router) {
   }
   
   ngOnInit(): void {
     this.time = this.totalPlayedTime(this.player);
+    this.rating = this.toRating(this.player);
+    this.nameInitialSvg = this.getSvg(this.player, this.rank);
   }
   
   toRating(player:Player)
@@ -54,40 +61,22 @@ export class CompetitorDetailTileComponent {
 
     return { year:years, month:months};
   }
+  
+  getSvg(player:Player, rank:number | null) {
+    return this.commonService.getNameInitialSvg(player, rank);
+  }
 
-  getCircleColour(player:Player) {
-    if(player.Gender == "F") {
-      return "#e50202";
+  playerClick(e, playerId:string) {
+    console.log(e.target.parentNode);
+    if(e.target.parentNode.nodeName.toLowerCase() === 'div' ){
+      this.router.navigate([`/player/${playerId}`], { queryParams: { referrer: 'competitors' } });
     }
-
-    return "#357fef";
   }
 
-  toInitials(player:Player)
-  {
-      const firstInitial = player.FirstName.charAt(0);
-      const lastInitial = player.LastName.charAt(0);
-      return `${firstInitial}${lastInitial}`;
-  }
+  remove_competitor(e, player:Player) {
+    if(e.target.parentNode.nodeName.toLowerCase() === 'a' ){
+      console.log('click remove-friend', player);
+      this.removeCompetitor.emit(player);    }
 
-  getSvg(player:Player, rank:number) {
-    const initial = this.toInitials(player);
-    const circleColor = this.getCircleColour(player);
-
-    const svgString = `
-    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" class="svg-initial">
-      <circle cx="20" cy="20" r="15" fill="${circleColor}"/>
-      <text x="20" y="20" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="bold" fill="white">${initial}</text>
-
-      <circle cx="30" cy="30" r="5" fill="#000"/>
-      <text x="30" y="30" text-anchor="middle" dominant-baseline="central" font-size="8" fill="white">${rank}</text>
-    </svg>
-    `;
-    return this.sanitizer.bypassSecurityTrustHtml(svgString);
-  }
-
-  remove_competitor(player:Player) {
-    console.log('click remove-friend', player);
-    this.removeCompetitor.emit(player);
   }
 }

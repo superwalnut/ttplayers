@@ -219,14 +219,14 @@ export class PlayerDetailComponent implements OnInit {
     } as Friend;
     this.friendService.addFriend(friend).then(x=>{
       this.friend = friend;
-      this.toastrService.show(`Added ${this.player.FullName} to your friends list`);
+      this.toastrService.success(`Added ${this.player.FullName} to your friends list`);
     });
   }
 
   remove_friend() {
     this.friendService.removeFriend(this.friend.Id).then(x=>{
       this.friend = null;
-      this.toastrService.show(`Removed ${this.player.FullName} from your friends list`);
+      this.toastrService.success(`Removed ${this.player.FullName} from your friends list`);
     });
   }
 
@@ -244,14 +244,14 @@ export class PlayerDetailComponent implements OnInit {
 
     this.competitorService.addCompetitor(competitor).then(x=>{
       this.competitor = competitor;
-      this.toastrService.show(`Added ${this.player.FullName} to your competitors list`);
+      this.toastrService.success(`Added ${this.player.FullName} to your competitors list`);
     });
   }
 
   remove_competitor() {
     this.competitorService.removeCompetitor(this.competitor.Id).then(x=>{
       this.competitor = null;
-      this.toastrService.show(`Removed ${this.player.FullName} from your competitors list`);
+      this.toastrService.success(`Removed ${this.player.FullName} from your competitors list`);
     });
   }
 

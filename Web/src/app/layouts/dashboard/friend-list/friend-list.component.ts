@@ -15,6 +15,7 @@ import { UserProfileService } from 'src/app/service/user-profile.service';
   styleUrls: ['./friend-list.component.scss']
 })
 export class FriendListComponent implements OnInit{
+  showEmptyResult:boolean = false;
   friendPlayers:Player[];
   profile:Profile = null; // try to load this from DB
   player:Player; // once completed the profile, player will be populated with paired Rating Central Player
@@ -29,6 +30,7 @@ export class FriendListComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.friendPlayers = [];
     this.user = this.authService.getLoggedInUser();
 
     this.loadProfileAndFriends();
@@ -66,6 +68,12 @@ export class FriendListComponent implements OnInit{
 
         var sorted = this.sortPlayersByRating(players);
         this.friendPlayers = sorted;
+
+        if(this.friendPlayers.length<=0){
+          this.showEmptyResult = true;
+        } else {
+          this.showEmptyResult = false;
+        }
     });
   }
 
@@ -78,7 +86,7 @@ export class FriendListComponent implements OnInit{
         this.friendPlayers.splice(index, 1);
       }
 
-      this.toastrService.show(`${player.FullName} is removed from friends list`);
+      this.toastrService.success(`${player.FullName} is removed from friends list`);
     });
     console.log('remove', player.Id);
   }

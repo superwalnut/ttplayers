@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { Friend } from 'src/app/models/friend';
 import { Player } from 'src/app/models/player';
 import { CommonService } from 'src/app/service/common.service';
@@ -16,15 +17,17 @@ export class FriendDetailTileComponent implements OnInit {
   @Output() removeFriend = new EventEmitter<Player>();
   
   time:any;
+  rating:string;
+  nameInitialSvg:any;
 
-  /**
-   *
-   */
-  constructor(private commonService:CommonService) {
+
+  constructor(private commonService:CommonService, private router:Router) {
   }
   
   ngOnInit(): void {
     this.time = this.totalPlayedTime(this.player);
+    this.rating = this.toRating(this.player);
+    this.nameInitialSvg = this.getSvg(this.player, this.rank);
   }
   
   toRating(player:Player)
@@ -64,8 +67,17 @@ export class FriendDetailTileComponent implements OnInit {
     return this.commonService.getNameInitialSvg(player, rank);
   }
 
-  remove_friend(player:Player) {
-    console.log('click remove-friend', player);
-    this.removeFriend.emit(player);
+  remove_friend(e, player:Player) {
+    if(e.target.parentNode.nodeName.toLowerCase() === 'a' ){
+      this.removeFriend.emit(player);
+      console.log('click remove-friend', player);
+    }
+  }
+  
+  playerClick(e, playerId:string) {
+    console.log(e.target.parentNode);
+    if(e.target.parentNode.nodeName.toLowerCase() === 'div' ){
+      this.router.navigate([`/player/${playerId}`], { queryParams: { referrer: 'friends' } });
+    }
   }
 }

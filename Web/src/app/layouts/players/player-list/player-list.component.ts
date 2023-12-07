@@ -18,6 +18,9 @@ export class PlayerListComponent implements OnInit {
   keyword:string;
   state:string;
   showNoResult:boolean = false;
+
+  showInstruction:boolean = false;
+
   pageSize:number = 10;
     
   lastPlayer:Player = null;
@@ -32,8 +35,8 @@ export class PlayerListComponent implements OnInit {
       if(keyword){
         this.keyword = keyword;
         this.search();
-      }else {
-        this.showNoResult = true;
+      } else {
+        this.showInstruction = true;
       }
 
       this.statsService.getLatest().subscribe(x=>{
@@ -46,6 +49,7 @@ export class PlayerListComponent implements OnInit {
   }
   
   search() {
+    this.showInstruction = false;
     console.log(this.keyword);
     const trimKeyword = this.keyword.trim();
     const isPlayerId = this.isNumber(trimKeyword);

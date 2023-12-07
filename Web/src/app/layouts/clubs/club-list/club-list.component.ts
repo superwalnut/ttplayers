@@ -9,6 +9,7 @@ import { ClubService } from 'src/app/service/club.service';
   styleUrls: ['./club-list.component.scss']
 })
 export class ClubListComponent {
+    showEmptyResult:boolean = false;
 
     state:string = "";
     keyword:string = "";
@@ -44,8 +45,10 @@ export class ClubListComponent {
             this.clubs = x;
             if(x.length<=0){
                 this.lastClub = null;
+                this.showEmptyResult = true;
             } else {
                 this.lastClub = x[x.length-1];
+                this.showEmptyResult = false;
             }
 
             if(x.length<this.pageSize){

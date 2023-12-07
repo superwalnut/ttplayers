@@ -8,6 +8,7 @@ import { TtEvent } from 'src/app/models/event';
   styleUrls: ['./event-list.component.scss']
 })
 export class EventListComponent {
+  showEmptyResult:boolean = false;
   state:string = "";
   keyword:string = "";
   events:TtEvent[] = [];
@@ -30,10 +31,13 @@ export class EventListComponent {
       this.setLocalState(this.state);
       this.eventService.searchEvents(this.keyword, this.state, this.pageSize).subscribe(x=>{
         this.events = x;
+        
         if(x.length<=0){
+          this.showEmptyResult = true;
           this.lastEvent = null;
         } else {
           this.lastEvent = x[x.length-1];
+          this.showEmptyResult = false;
         }
       });
   }

@@ -1,71 +1,181 @@
-.blue-text {
-    color: rgba(65, 163, 255, 1) !important;
+// .blue-text {
+//     color: rgba(65, 163, 255, 1) !important;
+// }
+
+// .red-text {
+//     color:#e3154f !important;
+// }
+
+
+// .rank {
+//     font-size:2em;
+//     font-weight:600;
+//     color:#ffc107;
+// }
+
+// .highlight {
+//     background: #dddddd;
+
+  
+// }    
+
+// .friend-detail {
+//     padding:0.6em;
+
+//     a {
+//         color:#357fef;
+//         text-decoration: underline;
+//     }
+
+//     .green {
+//         color:#03b803;
+//     }
+    
+//     .red {
+//         color:red;
+//     }
+// }
+
+// .remove-friend {
+//     font-size: 1.5em;
+// }
+
+// @media only screen and (max-width: 575px) {
+//     .friend-detail {
+//         padding:0em;
+//     }
+
+//     .rank {
+//         font-size:1em;
+//         font-weight:400;
+//     }
+
+//     .friend-detail-label {
+//         padding:0.1em !important;
+//         font-size:0.7em;
+
+//         a {
+//             font-size:0.8em;
+//         }
+
+//         .remove-friend {
+//             font-size: 1.5em;
+//         }
+//     }
+// }
+
+// @media only screen and (max-width: 991px) {
+//     .friend-detail {
+//         padding:0.4em;
+//     }
+// }
+
+
+.card {
+    margin:10px;
+    margin-top: 0px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(133, 133, 133, 0.2);
+    cursor: pointer;
 }
 
-.red-text {
-    color:#e3154f !important;
+.card-body{
+    padding:0.8em;
 }
 
-
-.rank {
-    font-size:2em;
+.ranking-number {
+    font-size:1.7em;
     font-weight:600;
-    color:#ffc107;
+}
+
+.ranking-name {
+    a {
+        font-weight:600;
+    }
+    
+}
+
+.no-wrap{
+    white-space: nowrap;
+}
+
+
+.player-1 {
+    width:49%;
+    margin-left:25%;
+
 }
 
 .highlight {
-    background: #dddddd;
-
-  
-}    
-
-.friend-detail {
-    padding:0.6em;
-
-    a {
-        color:#357fef;
-        text-decoration: underline;
-    }
-
-    .green {
-        color:#03b803;
-    }
-    
-    .red {
-        color:red;
-    }
-}
-
-.remove-friend {
-    font-size: 1.5em;
+    background-color: #cbe0ff;
 }
 
 @media only screen and (max-width: 575px) {
-    .friend-detail {
-        padding:0em;
-    }
-
-    .rank {
-        font-size:1em;
-        font-weight:400;
-    }
-
-    .friend-detail-label {
-        padding:0.1em !important;
-        font-size:0.7em;
-
-        a {
-            font-size:0.8em;
-        }
-
-        .remove-friend {
-            font-size: 1.5em;
-        }
+    .player-1 {
+        width:auto;
+        margin-left:10px;
     }
 }
 
-@media only screen and (max-width: 991px) {
-    .friend-detail {
-        padding:0.4em;
+.m-ranking {
+    width:30px;
+    font-size: 1.3em;
+    font-weight: 800;
+    color:#357fef;
+    line-height: 55px;
+    text-align: center;
+    vertical-align: middle;
+}
+.name-svg {
+    width:55px;
+}
+
+.full-name {
+    align-items: center;
+    justify-content: center;
+    font-size:1.1em;
+    height: 55px;
+    padding-top:15px;
+    margin-bottom: 0px;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.m-state {
+    padding-top:3px;
+    color:#979797;
+}
+
+.m-rating {
+    font-size: 1.1em;
+    font-weight: 400;
+    color:#357fef;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top:-25px;
+    align-items: center;
+    justify-content: center;
+    line-height: 55px;
+}
+
+.m-win-rate {
+    height: 21px;
+    font-size:0.9em;
+    position: absolute;
+    right: 10px;
+    bottom: 0;
+    padding-bottom:5px;
+}
+
+.m-remove {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    a {
+        font-size:1.8em;
+        color:red;
     }
 }

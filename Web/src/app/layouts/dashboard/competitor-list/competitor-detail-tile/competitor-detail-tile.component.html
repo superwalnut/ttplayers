@@ -1,6 +1,5 @@
-<div class="row friend-detail" [ngClass]="{'highlight': player.Id== yourPlayerId}" *ngIf="player">
+<!-- <div class="row friend-detail" [ngClass]="{'highlight': player.Id== yourPlayerId}" *ngIf="player">
     <div class="col-1 rank friend-detail-label">
-         <!-- #{{rank}} -->
          <div [innerHTML]="getSvg(player, rank)"></div>
     </div>
     <div class="col-3 friend-detail-label">
@@ -14,4 +13,22 @@
     <div class="col-2 text-center friend-detail-label"><span class="green">{{player.TotalBeatPlayersCount}}</span>/{{player.TotalOpponentCount}}</div>
     <div class="col-2 text-center friend-detail-label" [ngClass]="{'green':player.RatingChangesQuarterly>0, 'red':player.RatingChangesQuarterly<0}">{{player.RatingChangesQuarterly>0?"+"+player.RatingChangesQuarterly:player.RatingChangesQuarterly}}</div>
     <div class="col-1 text-center friend-detail-label"><a class="red remove-friend" (click)="remove_competitor(player)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div>
+</div> -->
+
+<div class="card" [ngClass]="'player-'+rank" [ngClass]="{'highlight': player.Id== yourPlayerId}" *ngIf="player" (click)="playerClick($event, player.Id)">
+    <div class="card-body">
+        <div class="d-flex">
+            <div class="m-ranking">{{rank}}</div>
+            <div class="name-svg" [innerHTML]="nameInitialSvg"></div>
+            <h2 class="full-name">
+                {{player.FullName}} 
+                <div class="m-state">{{player.State}}</div>
+            </h2>
+            <div class="m-rating">{{rating}}</div>
+            <div class="m-win-rate">Win {{player.YearToDateWins / (player.YearToDateWins+player.YearToDateLoses) | percent }}</div>
+            <div class="m-remove">
+                <a class="red remove-friend" (click)="remove_competitor($event, player)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </div>
 </div>
