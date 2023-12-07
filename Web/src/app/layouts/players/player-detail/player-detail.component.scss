@@ -105,6 +105,12 @@ h5{
     font-weight: 400;
 }
 
+.nav-link.active{
+    font-weight: 600;
+    background-color: #2691f7;
+    color:#fff;
+}
+
 @media only screen and (max-width: 575px) {
     .border-around {
         display:none;
