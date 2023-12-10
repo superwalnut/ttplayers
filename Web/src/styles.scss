@@ -50,3 +50,20 @@ input.ng-invalid {
 }
 
 
+.accordion-button {
+    color: #071828;
+    font-weight: 500;
+    font-size: calc(15px + (18 - 15) * ((100vw - 300px) / (1920 - 300)));
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-bottom: solid 1px #979797;
+    margin-bottom: 20px;
+    &:focus, &:hover {
+      text-decoration: none;
+    }
+}
+
+.accordion-body {
+    margin-bottom: 20px;
+}

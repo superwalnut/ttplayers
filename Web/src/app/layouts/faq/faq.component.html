@@ -1,1 +1,114 @@
-<p>faq works!</p>
+<app-gym-nav></app-gym-nav>
+<!-- header Start-->
+<div class="header5-content">
+    <div class="player-list-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header3.jpg)'}">
+    </div>
+</div>
+<!-- header end-->
+
+<!-- Breadcrumb -->
+<section class="breadcrumb-container inner-3">
+    <h2 class="breadcrumb-txt">Dashboard</h2>
+</section>
+<!-- Breadcrumb end -->
+
+<!-- faq section -->
+
+<section id="faq" class="saas1 faq testimonial-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="faq-block">
+                    <div>
+                        <h3 class="frequent-text">Frequently Asked Questions</h3>
+                        <h6 class="mb-4">Welcome to our FAQ section! Explore answers to commonly asked questions about our platform's features, player data, rankings, and how to navigate our site effectively. 
+                            Find solutions to your queries and gain insights into maximizing your experience with our comprehensive table tennis statistics database.</h6>
+                            <ngb-accordion [closeOthers]="true" class="accordion faq" activeIds="static-1">
+                                <ngb-panel id="static-1" class="card">
+                                  <ng-template ngbPanelTitle class="card-header">
+                                    <div class="collapsed" data-toggle="collapse" data-target="#collapse1" aria-expanded="false">
+                                        <a>
+                                            <div class="fa fa-angle-right rotate"></div>
+                                        </a>
+                                        What is ttPlayers' data source?
+                                    </div>
+                                  </ng-template>
+                                  <ng-template ngbPanelContent class="card-body">
+                                      All table tennis players' data is from rating central's Australian events, matches and players. They are all public data that is accessible to everyone online.
+                                  </ng-template>
+                                </ngb-panel>
+                                <ngb-panel id="static-2" class="card">
+                                    <ng-template ngbPanelTitle class="card-header">
+                                        <div class="collapsed" data-toggle="collapse" data-target="#collapse1" aria-expanded="false">
+                                            <a>
+                                                <div class="fa fa-angle-right rotate"></div>
+                                            </a>
+                                            Why my rating is not updated?
+                                        </div>
+                                    </ng-template>
+                    
+                                    <ng-template ngbPanelContent class="card-body">
+                                        Players' rating are usually updated after a few days of the match. We do regularly updating players' ratings, rankings and all statistics data.
+                                    </ng-template>
+                                  </ngb-panel>
+                                  <ngb-panel id="static-3" class="card">
+                                      <ng-template ngbPanelTitle class="card-header">
+                                        <div class="collapsed" data-toggle="collapse" data-target="#collapse1" aria-expanded="false">
+                                            <a>
+                                                <div class="fa fa-angle-right rotate"></div>
+                                            </a>
+                                            Why don't I have ranking?
+                                        </div>
+                                      </ng-template>
+                      
+                                      <ng-template ngbPanelContent class="card-body">
+                                        If a player's rating has a high standard deviation (i.e. ±101) and is greater than 100. So his/her playing strength is relatively uncertain, therefore ranking is not available at the moment for him/her.
+                                      </ng-template>
+                                    </ngb-panel>
+                                    <ngb-panel id="static-4" class="card">
+                                        <ng-template ngbPanelTitle class="card-header">
+                                            <div class="collapsed" data-toggle="collapse" data-target="#collapse1"
+                                            aria-expanded="false">
+                                           <a>
+                                               <div class="fa fa-angle-right rotate"></div>
+                                           </a>
+                                           How to Reduce the standard deviation?
+                                       </div>
+                                        </ng-template>
+                        
+                                        <ng-template ngbPanelContent class="card-body">
+                                            The simple answer is to play more matches and you will get a relatively accurate rating, and your rating's standard deviation will reduce too.
+                                        </ng-template>
+                                    </ngb-panel>
+                                    <ngb-panel id="static-4" class="card">
+                                        <ng-template ngbPanelTitle class="card-header">
+                                            <div class="collapsed" data-toggle="collapse" data-target="#collapse1"
+                                            aria-expanded="false">
+                                           <a>
+                                               <div class="fa fa-angle-right rotate"></div>
+                                           </a>
+                                           What should I do if my match history is wrong?
+                                       </div>
+                                        </ng-template>
+                        
+                                        <ng-template ngbPanelContent class="card-body">
+                                            If you think one or more of your matches are having incorrect scores, please send us an email with your player link, event name and date, match details and your opponent details. We will fix it asap.
+                                        </ng-template>
+                                    </ngb-panel>
+                              </ngb-accordion>
+                        <h6 class="link">Still have a question? Reach out to us: <a href="mailto:support@ttplayers.com.au">support@ttplayers.com.au</a></h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="faq-img-block">
+                    <img src="assets/images/faq-img.png" class="img-fluid" alt="faq-person">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- end faq section -->
+
+<app-gym-footer></app-gym-footer>

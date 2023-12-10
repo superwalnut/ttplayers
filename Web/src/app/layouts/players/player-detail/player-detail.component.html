@@ -57,19 +57,8 @@
 
                 <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs mt-4">
                     <li [ngbNavItem]="1">
-                        <button ngbNavLink>Match History</button>
-                        <ng-template ngbNavContent>
-                            <!-- Match history -->
-                            <app-player-history [player]="player" [matchesByEvent]="matchesByEvent" *ngIf="matchesByEvent"></app-player-history>
-                            <div class="text-center" *ngIf="lastMatch">
-                                <a (click)="loadMoreMatches()" class="btn btn-default btn-white btn-sm">Load more</a>
-                            </div>
-                        </ng-template>
-                    </li>
-                    <li [ngbNavItem]="2">
                         <button ngbNavLink>Statistics</button>
                         <ng-template ngbNavContent>
-                            
                             <!-- Summary -->
                             <app-player-summary [player]="player" [stats]="stats" *ngIf="stats"></app-player-summary>
 
@@ -79,7 +68,7 @@
                             <!-- Rankings -->
                             <app-player-ranking [player]="player" [stats]="stats" *ngIf="stats"></app-player-ranking>
 
-                            <!-- Match Count summary -->
+                            <!-- Play More - Match Count summary -->
                             <app-player-match-percentage [player]="player" [stats]="stats" *ngIf="stats && stats.MatchPlayedGroups"></app-player-match-percentage>
 
                             <!-- Match summary -->
@@ -93,6 +82,16 @@
 
                             <!-- Sets insights -->
                             <app-player-sets-statistics [player]="player"></app-player-sets-statistics>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2">
+                        <button ngbNavLink>Match History</button>
+                        <ng-template ngbNavContent>
+                            <!-- Match history -->
+                            <app-player-history [player]="player" [matchesByEvent]="matchesByEvent" *ngIf="matchesByEvent"></app-player-history>
+                            <div class="text-center" *ngIf="lastMatch">
+                                <a (click)="loadMoreMatches()" class="btn btn-default btn-white btn-sm">Load more</a>
+                            </div>
                         </ng-template>
                     </li>
                 </ul>
