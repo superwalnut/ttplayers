@@ -119,8 +119,12 @@ export class PlayerService {
   }
 
   getPlayerByPlayerIdList(playerIds:string[]) : Observable<Player[]>{
-    const batches = this.createBatch(playerIds, 30);
 
+    if(playerIds.length<=0){
+      return of(null);
+    }
+    
+    const batches = this.createBatch(playerIds, 30);
     const queries = batches.map(batch => {
       return this.firestore.collection<Player>('Players', ref =>
         ref.where('Id', 'in', batch)

@@ -1,0 +1,74 @@
+<app-gym-nav></app-gym-nav>
+<!-- header Start-->
+<div class="header5-content">
+    <div class="player-list-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header3.jpg)'}">
+    </div>
+</div>
+<!-- header end-->
+
+<!-- Breadcrumb -->
+<section class="breadcrumb-container inner-3">
+    <a class="breadcrumb-back btn btn-secondary" href="/dashboard">
+        <i class="fa fa-angle-left m-r-10" aria-hidden="true"></i>
+         <i class="fa fa-home" aria-hidden="true"></i>
+    </a>
+    <h2 class="breadcrumb-txt">My Clubs</h2>
+</section>
+<!-- Breadcrumb end -->
+
+<section class="dashboard-friends-title mt-5">
+    <div class="container">
+        <div class="row p-0">
+            <div class="col-12 p-0">
+                <h2><i class="fa fa-home" aria-hidden="true"></i>
+                    My Clubs</h2>
+                <hr/>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="col-md-12 empty-cart-cls text-center mt-5 mb-2" *ngIf="showEmptyResult">
+    <img src="assets/images/empty-compare.png" alt="Empty cart" title="No Players Found">
+    <h3 class="mt-4"><b>You haven't set any clubs yet</b></h3>
+    <h4>Please try search and <br/> add clubs to your account.</h4>
+</div>
+
+<section class="dashboard-friends mb-4">
+    <div class="container p-0">
+        <div class="row">
+            <div class="col-lg-2 col-md-2"></div>
+            <div class="col-lg-8 col-md-8">
+                <div class="subscribe">
+                    <div class="center-content">
+                        <div class="form-group">
+                            <div class="flex search-form">
+                                <app-club-autocomplete (actionTriggered)="handleClubAutoCompleteAction($event)"></app-club-autocomplete>
+                                <div class="button-primary">
+                                    <button type="button" (click)="saveClub()" class="btn btn-default primary-btn text-white text-capitalize">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2"></div>
+        </div>
+        <div class="row">
+            <div class="col-xl-4 col-md-6" *ngFor="let club of clubs">
+                <div class="card mb-4">
+                    <div class="card-img-top club-img" [ngStyle]="{'background-image': 'url(assets/images/events/AUS.jpg)'}">{{club.Nickname}}</div>
+                    <div class="card-body p-t-0 text-center">
+                      <h5 class="card-title mb-3"> <i class="fa fa-map-marker" aria-hidden="true"></i> {{club.City?club.City+',':''}} {{club.State}}</h5>
+                      <p class="card-text mb-3">{{club.Name}}</p>
+                      <a href="/club/{{club.ClubId}}?state={{club.State}}" class="btn btn-default btn-white btn-sm">View Club</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<app-gym-footer></app-gym-footer>

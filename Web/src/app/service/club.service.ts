@@ -68,6 +68,8 @@ export class ClubService {
   searchClubsForAutoComplete(keyword:string) : Observable<any[]>{
     console.log('search autocomplete', keyword);
     if(keyword){
+      console.log('searching..', keyword);
+
       const wordsArray = keyword.toLocaleLowerCase().split(" ");
       return this.firestore.collection<Club>('Clubs', ref => 
         ref
@@ -75,16 +77,9 @@ export class ClubService {
         .where('Status', '==', 'Active')
         .orderBy('Name','asc')
         .limit(10)
-      ).valueChanges().pipe(
-        map((clubs => {
-          return clubs.map(c =>{
-            return `${c.Name} - (ID:${c.Id})`;
-          })
-        })),
-      );
-    } 
+      ).valueChanges();
+    } else {
+      return of(null);
+    }
   }
-
-
-
 }

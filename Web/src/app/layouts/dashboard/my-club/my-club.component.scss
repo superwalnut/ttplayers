@@ -1,0 +1,75 @@
+.dashboard-profile{
+    padding:0;
+}
+
+.dashboard-friends-title {
+    padding:0;
+    color:#000;
+
+    h2 {
+        margin-left: 0px;
+
+        .fa-heart {
+            color:red;
+        }
+    }
+}
+
+.dashboard-friends {
+    padding:0;
+
+    .container {
+        .row {
+            padding-top:5px;
+            padding-bottom:5px;
+        }
+    }
+}
+
+.friend-title {
+    .font-600 {
+        font-weight: 600;
+    }
+
+    small {
+        font-size:0.8em !important;
+        font-weight: 500;
+    }
+}
+
+.club-img {
+    font-size:1.3em;
+    font-weight: 600;
+    color:#fff;
+    text-align: center;
+    background-color: rgb(0,0,0,0.7);
+    width:100%;
+    height:30px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.card {
+    min-height:200px;
+}
+
+
+@media only screen and (max-width: 575px) {
+    .friend-title-label {
+        font-size:0.6em;
+        padding:0.1em !important;
+    }
+
+    .dashboard-friends-title {
+        h2 {
+            text-align: center;
+        }
+    }
+
+    .dashboard-profile {
+        h2 {
+            text-align: center;
+        }
+    }
+}

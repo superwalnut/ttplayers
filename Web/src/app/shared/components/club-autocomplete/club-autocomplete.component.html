@@ -1,0 +1,13 @@
+<div class="form-group mb-4">
+    <ng-template #rt let-r="result" let-t="term">
+        <i class="fa fa-home m-r-10" aria-hidden="true"></i>
+        <ngb-highlight [result]="r.Label" [term]="t" class="m-r-10"></ngb-highlight>
+    </ng-template>
+    <input type="text" class="form-control" placeholder="Enter Club Name (or Nickname) to Search" name="searchClubId"
+        [(ngModel)]="clubAutoCompleteModel" 
+        [ngbTypeahead]="searchClub"
+        [resultTemplate]="rt"
+        [inputFormatter]="searchClubFormatter"
+        (blur)="onInputBlur()"
+        >
+</div>

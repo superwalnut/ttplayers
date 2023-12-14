@@ -58,6 +58,13 @@ export class CompetitorListComponent {
         console.log('mePlayer', player);
         console.log('players', players);
 
+        if(!players || players.length<=0){
+          this.showEmptyResult = true;
+          return;
+        } 
+          
+        this.showEmptyResult = false;
+
         this.competitorPlayers = [];
         if(player){
           players.push(player);
@@ -66,11 +73,7 @@ export class CompetitorListComponent {
         var sorted = this.sortPlayersByRating(players);
         this.competitorPlayers = sorted;
         
-        if(this.competitorPlayers.length<=0){
-          this.showEmptyResult = true;
-        } else {
-          this.showEmptyResult = false;
-        }
+        
     });
   }
   

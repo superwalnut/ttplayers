@@ -23,6 +23,7 @@ import { PrivacyComponent } from './layouts/privacy/privacy.component';
 import { TermsComponent } from './layouts/terms/terms.component';
 import { CookiePolicyComponent } from './layouts/cookie-policy/cookie-policy.component';
 import { FaqComponent } from './layouts/faq/faq.component';
+import { MyClubComponent } from './layouts/dashboard/my-club/my-club.component';
 
 export const routes: Routes = [
   {
@@ -72,6 +73,10 @@ export const routes: Routes = [
   {
     path: 'competitors',
     component: CompetitorListComponent, canActivate: [AuthGuard]
+  },
+  {
+    path:'my-clubs',
+    component: MyClubComponent, canActivate: [AuthGuard]
   },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },

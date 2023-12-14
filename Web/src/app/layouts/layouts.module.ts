@@ -66,12 +66,18 @@ import { PlayerMatchScoreStatsItemThreeSetsComponent } from './players/player-de
 import { PlayerMatchScoreStatsItemFiveSetsComponent } from './players/player-detail/player-match-score-stats/player-match-score-stats-item-five-sets/player-match-score-stats-item-five-sets.component';
 import { PlayerMatchScoreStatsItemSevenSetsComponent } from './players/player-detail/player-match-score-stats/player-match-score-stats-item-seven-sets/player-match-score-stats-item-seven-sets.component';
 import { FaqComponent } from './faq/faq.component';
+import { MyClubComponent } from './dashboard/my-club/my-club.component';
+import { OpeningHoursComponent } from './clubs/club-profile-detail/opening-hours/opening-hours.component';
+import { TrainingPricingComponent } from './clubs/club-profile-detail/training-pricing/training-pricing.component';
+import { OurCoachesComponent } from './clubs/club-profile-detail/our-coaches/our-coaches.component';
 
 @NgModule({
   declarations: [
     GymComponent, GymAboutComponent, GymScheduleComponent, GymWorkoutAboutComponent, GymCounterComponent, HomeEventsComponent, GymTestimonialComponent, GymPricingComponent, GymBMIComponent, GymBrandComponent, 
     PlayerDetailComponent, PlayerListComponent, SidebarComponent, GymHeaderComponent, PlayerHistoryComponent, PlayerTotalCounterComponent, PlayerSummaryComponent, PlayerSetsStatisticsComponent, ClubDetailComponent, TeamPlayersComponent, 
-    HomeComponent, ClubListComponent, EventListComponent, EventDetailComponent, RankingComponent, DashboardComponent, ForgotPasswordComponent, LoginComponent, RegisterComponent, ProfileComponent, LogoutComponent, ResendEmailVerificationComponent,
+    HomeComponent, ClubListComponent, EventListComponent, EventDetailComponent, RankingComponent, DashboardComponent, ForgotPasswordComponent, LoginComponent, RegisterComponent, ProfileComponent, 
+    LogoutComponent, 
+    ResendEmailVerificationComponent,
     PlayerDetailBasicInfoComponent,
     PlayerListTileComponent,
     FriendDetailTileComponent,
@@ -97,7 +103,11 @@ import { FaqComponent } from './faq/faq.component';
     PlayerMatchScoreStatsItemThreeSetsComponent,
     PlayerMatchScoreStatsItemFiveSetsComponent,
     PlayerMatchScoreStatsItemSevenSetsComponent,
-    FaqComponent
+    FaqComponent,
+    MyClubComponent,
+    OpeningHoursComponent,
+    TrainingPricingComponent,
+    OurCoachesComponent    
   ],
   imports: [
     CommonModule,

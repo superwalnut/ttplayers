@@ -49,7 +49,7 @@ export class FriendListComponent implements OnInit{
         }),
         switchMap(([player, friends])=>{
           this.player = player;
-          console.log('player', player);
+          console.log('get one player', player);
   
           const friendPlayerIds = friends.map(f => f.FriendPlayerId);
             // load players by friend-player-IDs
@@ -58,6 +58,13 @@ export class FriendListComponent implements OnInit{
       ).subscribe(([player, players])=>{
         console.log('mePlayer', player);
         console.log('players', players);
+
+        if(!players || players.length<=0){
+          this.showEmptyResult = true;
+          return;
+        } 
+          
+        this.showEmptyResult = false;
 
         //reset friends
         this.friendPlayers = [];
@@ -69,11 +76,7 @@ export class FriendListComponent implements OnInit{
         var sorted = this.sortPlayersByRating(players);
         this.friendPlayers = sorted;
 
-        if(this.friendPlayers.length<=0){
-          this.showEmptyResult = true;
-        } else {
-          this.showEmptyResult = false;
-        }
+
     });
   }
 
