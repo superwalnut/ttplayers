@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Club } from 'src/app/models/club';
+import { ClubSetup } from 'src/app/models/club-setup';
 import { ClubService } from 'src/app/service/club.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { ClubService } from 'src/app/service/club.service';
 })
 export class ClubProfileDetailComponent implements OnInit {
   club:Club;
+  clubSetup:ClubSetup;
 
   state:string;
 

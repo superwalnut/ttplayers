@@ -1,1 +1,44 @@
-<p>training-pricing works!</p>
+<!--pricing section start-->
+<section class="gym pricing set-relative" id="plan">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="title">
+                    <div class="text-center">
+                        <div>
+                            <h6 class=" borders-before"><span>OUR PRICING</span></h6>
+                        </div>
+                        <div class="main-title">
+                            <h2>prices</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                    <owl-carousel-o [options]="pricingcarouselOptions" class="price-margin pricing-slider">
+                        <ng-container *ngFor="let price of pricing">
+                            <ng-template carouselSlide class="item">
+                                <div class="price-container price-margin hover-overlay shadows bg-white text-center">
+                                    <div class="price-feature-container set-relative">
+                                        <div class="feature-text">
+                                            <span class="flaticon-{{price.Icon}} feature-icon"></span>
+                                            <h4 class="feature-text-heading bold text-uppercase">{{price.Package}}</h4>
+                                            <hr class="set-border">
+                                        </div>
+                                        <div class="price-features">
+                                            <h5 class="price-feature text-center" *ngFor="let feature of price.Features">{{feature}}</h5>
+                                        </div>
+                                        <div class="price-value">
+                                            <h6 class="price text-center" *ngIf="price.Price>0">$<span class="large">{{price.Price}}</span>/hr</h6>
+                                        </div>
+                                        <!-- <a href="#" class="btn btn-default back-white">{{price.btn}}</a> -->
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-container>
+                    </owl-carousel-o>
+            </div>
+        </div>
+    </div>
+</section>
+<!--pricing section end-->

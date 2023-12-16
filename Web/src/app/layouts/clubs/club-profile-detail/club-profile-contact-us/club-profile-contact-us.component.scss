@@ -1,3 +1,5 @@
-.map {
-    height:600px;
+.event.event-gradient::before {
+    color:#000;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#321575), to(#e3154f));
+    background-image: linear-gradient(#ffffff, rgba(2, 15, 27, 0.6));
 }

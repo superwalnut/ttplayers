@@ -2,16 +2,31 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore  } from '@angular/fire/compat/firestore';
 import { Observable, map, of, take } from 'rxjs';
 import { Club } from './../models/club';
+import { LocalstorageService } from './localstorage.service';
+import { GlobalConstants } from './global.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClubService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore, private lsService:LocalstorageService) { }
 
   getClub(id:string): Observable<Club> {
-    return this.firestore.doc<Club>(`Clubs/${id}`).valueChanges();
+    const val = this.lsService.getItemWithExpiration(`${GlobalConstants.CLUB_DETAIL}-${id}`);
+    if(val){
+      const club = val as Club;
+      console.log('ls club', club);
+      return of(club);
+    }
+    else {
+      return this.firestore.doc<Club>(`Clubs/${id}`).valueChanges().pipe(
+        map(club=>{
+          this.lsService.setItemWithExpiration(`${GlobalConstants.CLUB_DETAIL}-${id}`, club, GlobalConstants.LOCAL_STORAGE_SHORT_EXPIRY);
+          return club;
+        })
+      );;
+    }
   }
 
   searchClubs(keyword:string, state:string, pageSize:number) : Observable<Club[]>{

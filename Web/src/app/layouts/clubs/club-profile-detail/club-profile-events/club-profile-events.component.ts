@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Club } from 'src/app/models/club';
 
 @Component({
   selector: 'app-club-profile-events',
@@ -6,31 +7,28 @@ import { Component } from '@angular/core';
   styleUrls: ['./club-profile-events.component.scss']
 })
 export class ClubProfileEventsComponent {
-  events:string[] = ["Event 1", "Event 2", "Event 3", "Event 4", "Event 5"];
+  @Input() club:Club
 
-  claimClub() {
-
-  }
-
-  trainercarouselOptions= {
-    center: true,
-    loop: true,
-    dots: true,
-    margin: 0,
-    responsive: {
-        0: {
-            items: 2,
-            margin: 10
-        },
-        576: {
-            items: 3
-        },
-        768: {
-            items: 4
-        },
-        1200: {
-            items: 6
-        }
+  
+  users = [
+    { 
+      img:"assets/images/gym/testimonial/quote.png"
+    },
+    {
+      img:"assets/images/gym/testimonial/quote.png"
     }
+  ]
+  
+  testimonialCarouselOptions= {
+    items: 1,
+    margin: 0,
+    dots: true,
+    nav: false,
+    autoplay: false,
+    slideSpeed: 300,
+    paginationSpeed: 400,
+    loop: true
   }
+
+
 }

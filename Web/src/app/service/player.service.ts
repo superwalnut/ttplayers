@@ -3,13 +3,15 @@ import { AngularFirestore  } from '@angular/fire/compat/firestore';
 import { Observable, map, of, take } from 'rxjs';
 import { Player } from '../models/player';
 import { PlayerHistory } from '../models/player-history';
+import { LocalstorageService } from './localstorage.service';
+import { GlobalConstants } from './global.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore, private lsService:LocalstorageService) { }
 
   searchPlayerByName(searchTerm: string, state:string, pageSize:number): Observable<Player[]> {
     if(state){
@@ -61,7 +63,20 @@ export class PlayerService {
   }
 
   getPlayer(id:string): Observable<Player> {
-    return this.firestore.doc<Player>(`Players/${id}`).valueChanges();
+    const val = this.lsService.getItemWithExpiration(`${GlobalConstants.PLAYER_DETAIL}-${id}`);
+    if(val){
+      const player = val as Player;
+      console.log('ls player', player);
+      return of(player);
+    }
+    else {
+      return this.firestore.doc<Player>(`Players/${id}`).valueChanges().pipe(
+        map(player=>{
+          this.lsService.setItemWithExpiration(`${GlobalConstants.PLAYER_DETAIL}-${id}`, player, GlobalConstants.LOCAL_STORAGE_SHORT_EXPIRY);
+          return player;
+        })
+      );
+    }
   }
 
   getPlayerHistory(id:string): Observable<PlayerHistory>{

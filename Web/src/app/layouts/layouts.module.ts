@@ -70,6 +70,7 @@ import { MyClubComponent } from './dashboard/my-club/my-club.component';
 import { OpeningHoursComponent } from './clubs/club-profile-detail/opening-hours/opening-hours.component';
 import { TrainingPricingComponent } from './clubs/club-profile-detail/training-pricing/training-pricing.component';
 import { OurCoachesComponent } from './clubs/club-profile-detail/our-coaches/our-coaches.component';
+import { ClubSummaryComponent } from './clubs/club-profile-detail/club-summary/club-summary.component';
 
 @NgModule({
   declarations: [
@@ -107,7 +108,8 @@ import { OurCoachesComponent } from './clubs/club-profile-detail/our-coaches/our
     MyClubComponent,
     OpeningHoursComponent,
     TrainingPricingComponent,
-    OurCoachesComponent    
+    OurCoachesComponent,
+    ClubSummaryComponent    
   ],
   imports: [
     CommonModule,

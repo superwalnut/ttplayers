@@ -1,24 +1,62 @@
-<section class="event contact set-relative bg bg-img bg-about p-b-0 event-gradient" id="contact"  [ngStyle]="{'background-image': 'url(assets/images/event/bg1.jpg)'}" *ngIf="club">
+<section class="gym format event contact set-relative bg bg-img bg-about p-b-0 event-gradient" id="contact"  [ngStyle]="{'background-image': 'url(assets/images/events/bg1.jpg)'}" *ngIf="club">
     <div class="container p-b-100">
         <div class="row">
             <div class="col-md-10 offset-md-1">
-                <div class="title title3">
-                    <div class="main-title">
-                        <h2 class=" text-white">Contact Us</h2>
+                <div class="text-center">
+                    <div class="format-small-text">
+                        <h6 class="font-primary borders-before"><span>Contact {{club.Nickname}}</span></h6>
                     </div>
-                    <div class="sub-title">
-                        <P class="text-white">{{address}}</P>
+                    <div class="format-head-text">
+                        <h3 class="about-font-header gradient-text">Contact The Club</h3>
+                    </div>
+                    <div class="format-sub-text">
+                        <p class="p-light about-para">{{address}}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-12 p-r-0 map">
-                <!-- <google-map
-                height="500px"
-                width="100%"
-                [zoom]="zoom"
-                [center]="center"
-                [options]="options"
-                ></google-map> -->
+            <div class="col-xl-5 offset-xl-1 col-md-6 p-r-0 map">
+                <div class="iframe-container" *ngIf="address">
+                    <iframe src="https://www.google.com/maps/embed/v1/place?q=Greenfield+Park,+471+North+Street,+Albury+NSW+2640,+Australia&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"
+                    ></iframe>
+                </div>
+            </div>
+            <div class="col-xl-5 p-l-0 col-md-6 set-z-index form-footer">
+                <div class="bg-white">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="name">Name *</label>
+                                    <input type="text" class="form-control" id="name">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="Phone">Phone *</label>
+                                    <input type="text" class="form-control" id="Phone">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="Email">Email *</label>
+                                    <input type="text" class="form-control" id="Email">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="Subject">Subject *</label>
+                                    <input type="text" class="form-control" id="Subject">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Message">Message *</label>
+                            <input type="text" class="form-control" id="Message">
+                        </div>
+
+                        <a class="btn btn-default primary-btn m-0-auto event-btn ">send</a>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

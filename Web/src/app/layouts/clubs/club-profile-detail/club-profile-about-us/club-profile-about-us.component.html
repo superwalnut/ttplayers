@@ -9,7 +9,7 @@
                             <div>
                                 <div class="bg-black"></div>
                             </div>
-                            <img src="assets/images/gym/about-us.jpg" alt="" class="img-fluid format-img">
+                            <img [src]="aboutUsImageUrl" alt="" class="img-fluid format-img">
                         </div>
                     </div>
                 </div>
@@ -25,10 +25,8 @@
                         </div>
                         <div class="format-sub-text">
                             <p class="p-light about-para">Welcome to <strong>{{club.Name}}</strong>, is a table tennis club located in {{club.City}}.</p>
-                            <p class="p-light about-para">Join us in celebrating the art of table tennis and unlocking the potential for every player, no matter their level of expertise. 
-                                We're here to support and empower the table tennis community on their journey to excellence.</p>
+                            <p class="p-light about-para">{{aboutUs}}</p>
                         </div>
-                        <a (click)="claimClub()" class="btn btn-default primary-btn">Claim this club</a>
                     </div>
                 </div>
             </div>
