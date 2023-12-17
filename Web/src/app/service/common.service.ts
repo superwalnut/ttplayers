@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Player } from '../models/player';
+import { Timestamp } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,52 @@ export class CommonService {
 
     return this.sanitizer.bypassSecurityTrustHtml(svgString);
   }
+
+  totalPlayedTime(player:Player) : {year, month}{
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const playingDate = this.convertTimeStampToDate(player.StartPlayingDate);
+    
+    const timeDifference = today.getTime() - playingDate.getTime();
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+    const millisecondsInMonth = millisecondsInDay * 30.44; // Approximate average number of days in a month
+
+    const years = Math.floor(timeDifference / (millisecondsInDay * 365));
+    const months = Math.floor((timeDifference % (millisecondsInDay * 365)) / millisecondsInMonth);
+    const days = Math.floor((timeDifference % millisecondsInMonth) / millisecondsInDay);
+
+    let result = "";
+
+    if (years > 0) {
+      result += `${years} ${years === 1 ? 'Yr' : 'Yr'}`;
+    }
+
+    if (months > 0) {
+      if (result) {
+        result += ", ";
+      }
+      result += `${months} ${months === 1 ? 'M' : 'M'}`;
+    }
+
+    // if (days > 0) {
+    //   if (result) {
+    //     result += ", ";
+    //   }
+    //   result += `${days} ${days === 1 ? 'day' : 'Days'}`;
+    // }
+
+    return { year:years, month:months};
+  }
+
+  convertTimeStampToDate(timestamp: Timestamp) : Date
+  {
+    const milliseconds = timestamp.seconds * 1000;
+    const date = new Date(milliseconds);
+    return date;
+  }
+
+
 
   private getCircleColour(player:Player) {
       if(player.Gender == "F") {

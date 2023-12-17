@@ -28,7 +28,7 @@
                     </h4>
                     <hr>
                     <div *ngIf="player.TotalPlayedMatches>0" class="player-activity-summary">
-                        Since {{player.StartPlayingDate.toDate() | date:"dd/MM/yyyy"}}, {{player.FirstName}}
+                        Since {{startPlayingDate | date:"dd/MM/yyyy"}}, {{player.FirstName}}
                         <ul class="list-group list-group-flush">
                             <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>participated <strong>{{player.TotalPlayedEvents}}</strong> events.</li>
                             <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i>played <strong>{{player.TotalPlayedMatches}}</strong> matches.</li>
@@ -36,7 +36,7 @@
                         </ul>
                     </div>
                     <div *ngIf="player.TotalPlayedMatches<=0" class="player-activity-summary">
-                        {{player.FirstName}} has been very quiet since {{player.StartPlayingDate.toDate() | date:'dd/MM/yyyy'}}
+                        {{player.FirstName}} has been very quiet since {{startPlayingDate | date:'dd/MM/yyyy'}}
                     </div>
                 </div>
             </div>

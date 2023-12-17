@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Timestamp } from 'firebase/firestore';
 import { Player } from 'src/app/models/player';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-player-detail-basic-info',
@@ -13,48 +15,13 @@ export class PlayerDetailBasicInfoComponent implements OnInit {
   hasWtdRate:boolean;
   ratingDisplay:string;
 
-  constructor() {
+  constructor(private commonService:CommonService) {
     
   }
-  ngOnInit(): void {
-    this.time = this.totalPlayedTime(this.player);
+  ngOnInit(): void {    
+    this.time = this.commonService.totalPlayedTime(this.player);
     this.hasWtdRate = this.player.YearToDateWins+ this.player.YearToDateLoses > 0;
     this.ratingDisplay = this.toRating(this.player);
-  }
-  
-  totalPlayedTime(player:Player) : {year, month}{
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const timeDifference = today.getTime() - player.StartPlayingDate.toDate().getTime();
-    const millisecondsInDay = 1000 * 60 * 60 * 24;
-    const millisecondsInMonth = millisecondsInDay * 30.44; // Approximate average number of days in a month
-
-    const years = Math.floor(timeDifference / (millisecondsInDay * 365));
-    const months = Math.floor((timeDifference % (millisecondsInDay * 365)) / millisecondsInMonth);
-    const days = Math.floor((timeDifference % millisecondsInMonth) / millisecondsInDay);
-
-    let result = "";
-
-    if (years > 0) {
-      result += `${years} ${years === 1 ? 'Yr' : 'Yr'}`;
-    }
-
-    if (months > 0) {
-      if (result) {
-        result += ", ";
-      }
-      result += `${months} ${months === 1 ? 'M' : 'M'}`;
-    }
-
-    // if (days > 0) {
-    //   if (result) {
-    //     result += ", ";
-    //   }
-    //   result += `${days} ${days === 1 ? 'day' : 'Days'}`;
-    // }
-
-    return { year:years, month:months};
   }
 
     // display label methods

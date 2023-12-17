@@ -25,7 +25,7 @@ export class FriendDetailTileComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.time = this.totalPlayedTime(this.player);
+    this.time = this.commonService.totalPlayedTime(this.player);
     this.rating = this.toRating(this.player);
     this.nameInitialSvg = this.getSvg(this.player, this.rank);
   }
@@ -33,34 +33,6 @@ export class FriendDetailTileComponent implements OnInit {
   toRating(player:Player)
   {
     return `${player.Rating}±${player.StDev}`;
-  }
-
-  totalPlayedTime(player:Player) : {year, month}{
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const timeDifference = today.getTime() - player.StartPlayingDate.toDate().getTime();
-    const millisecondsInDay = 1000 * 60 * 60 * 24;
-    const millisecondsInMonth = millisecondsInDay * 30.44; // Approximate average number of days in a month
-
-    const years = Math.floor(timeDifference / (millisecondsInDay * 365));
-    const months = Math.floor((timeDifference % (millisecondsInDay * 365)) / millisecondsInMonth);
-    const days = Math.floor((timeDifference % millisecondsInMonth) / millisecondsInDay);
-
-    let result = "";
-
-    if (years > 0) {
-      result += `${years} ${years === 1 ? 'Yr' : 'Yr'}`;
-    }
-
-    if (months > 0) {
-      if (result) {
-        result += ", ";
-      }
-      result += `${months} ${months === 1 ? 'M' : 'M'}`;
-    }
-
-    return { year:years, month:months};
   }
 
   getSvg(player:Player, rank:number | null) {
