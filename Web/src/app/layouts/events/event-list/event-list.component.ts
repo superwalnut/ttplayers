@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { EventService } from './../../../service/event.service';
 import { TtEvent } from 'src/app/models/event';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-event-list',
@@ -16,8 +17,14 @@ export class EventListComponent {
 
   lastEvent:TtEvent = null;
 
-  constructor(private eventService:EventService) {
-    this.state = this.getLocalState();
+  constructor(private eventService:EventService, private route: ActivatedRoute) {
+    const state = this.route.snapshot.queryParams.state;
+    if(state){
+      this.state = state;
+    } else {
+      this.state = this.getLocalState();
+    }
+
     if(!this.state)
     {
       this.state = "NSW";

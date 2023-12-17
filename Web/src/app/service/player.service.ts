@@ -32,6 +32,21 @@ export class PlayerService {
     }
   }
 
+  searchByState(state:string, pageSize:number): Observable<Player[]> {
+    console.log('search by state', state);
+    if(state){
+      return this.firestore.collection<Player>('Players', ref =>
+        ref
+        .where('State', '==', state)
+        .orderBy('LastPlayed', 'desc')
+        .limit(pageSize)
+      ).valueChanges();
+    }
+    else {
+      return of([] as Player[]);
+    }
+  }
+
   searchPlayerByNameWithPaging(searchTerm: string, state:string, pageSize:number, lastPlayer:Player): Observable<Player[]> {
     if(state){
       return this.firestore.collection<Player>('Players', ref =>
@@ -50,6 +65,23 @@ export class PlayerService {
         .startAfter(lastPlayer.Id)
         .limit(pageSize)
       ).valueChanges();
+    }
+  }
+
+  searchByStateWithPaging(state:string, pageSize:number, lastPlayer:Player): Observable<Player[]> {
+    console.log('search by state', state);
+    console.log('last player id', lastPlayer);
+    if(state){
+      return this.firestore.collection<Player>('Players', ref =>
+        ref
+        .where('State', '==', state)
+        .orderBy('LastPlayed', 'desc')
+        .startAfter(lastPlayer.LastPlayed)
+        .limit(pageSize)
+      ).valueChanges();
+    }
+    else {
+      return of([] as Player[]);
     }
   }
 

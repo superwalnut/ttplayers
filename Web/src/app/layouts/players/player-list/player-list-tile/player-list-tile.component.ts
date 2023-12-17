@@ -9,6 +9,7 @@ import { Player } from 'src/app/models/player';
 export class PlayerListTileComponent {
   @Input() player:Player;
   @Input() keyword:string;
+  @Input() state:string;
 
   toInitials(player:Player)
   {
