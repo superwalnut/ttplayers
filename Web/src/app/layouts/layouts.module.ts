@@ -71,6 +71,22 @@ import { OpeningHoursComponent } from './clubs/club-profile-detail/opening-hours
 import { TrainingPricingComponent } from './clubs/club-profile-detail/training-pricing/training-pricing.component';
 import { OurCoachesComponent } from './clubs/club-profile-detail/our-coaches/our-coaches.component';
 import { ClubSummaryComponent } from './clubs/club-profile-detail/club-summary/club-summary.component';
+import { ButterflyComponent } from './wiki/butterfly/butterfly.component';
+import { JoolaComponent } from './wiki/joola/joola.component';
+import { DoubleHappinessComponent } from './wiki/double-happiness/double-happiness.component';
+import { StigaComponent } from './wiki/stiga/stiga.component';
+import { TibharComponent } from './wiki/tibhar/tibhar.component';
+import { KillerspinComponent } from './wiki/killerspin/killerspin.component';
+import { NittakuComponent } from './wiki/nittaku/nittaku.component';
+import { XiomComponent } from './wiki/xiom/xiom.component';
+import { SevenTwoNineComponent } from './wiki/seven-two-nine/seven-two-nine.component';
+import { CornilleauComponent } from './wiki/cornilleau/cornilleau.component';
+import { DonicComponent } from './wiki/donic/donic.component';
+import { YasakaComponent } from './wiki/yasaka/yasaka.component';
+import { AndroComponent } from './wiki/andro/andro.component';
+import { VictasComponent } from './wiki/victas/victas.component';
+import { WikiComponent } from './wiki/wiki.component';
+import { WikiRoutingModule } from './wiki-routing.module';
 
 @NgModule({
   declarations: [
@@ -109,7 +125,22 @@ import { ClubSummaryComponent } from './clubs/club-profile-detail/club-summary/c
     OpeningHoursComponent,
     TrainingPricingComponent,
     OurCoachesComponent,
-    ClubSummaryComponent    
+    ClubSummaryComponent,
+    ButterflyComponent,
+    JoolaComponent,
+    DoubleHappinessComponent,
+    StigaComponent,
+    TibharComponent,
+    KillerspinComponent,
+    NittakuComponent,
+    XiomComponent,
+    SevenTwoNineComponent,
+    CornilleauComponent,
+    DonicComponent,
+    YasakaComponent,
+    AndroComponent,
+    VictasComponent,
+    WikiComponent    
   ],
   imports: [
     CommonModule,
@@ -120,6 +151,7 @@ import { ClubSummaryComponent } from './clubs/club-profile-detail/club-summary/c
     ReactiveFormsModule,
     NgbModule,
     NgxGaugeModule,
+    WikiRoutingModule,
   ],
   exports: [],
 })

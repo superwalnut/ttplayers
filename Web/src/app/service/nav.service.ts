@@ -35,16 +35,50 @@ export class NavService {
       menuItems.push({title: 'Events', type: 'link', path:'/events'});
       menuItems.push({title: 'Rankings', type: 'link', path: '/rankings'});
       menuItems.push({title: 'Clubs', type: 'link', path: '/clubs'});
+      menuItems.push({title: 'Wiki', type: 'sub', children:[
+         { path: '/wiki', title: 'All',  type: 'link' },
+         { path: '/wiki/butterfly', title: 'Butterfly',  type: 'link' },
+         { path: '/wiki/joola', title: 'JOOLA',  type: 'link' },
+         { path: '/wiki/double-happiness', title: 'Double Happiness',  type: 'link' },
+         { path: '/wiki/stiga', title: 'Stiga',  type: 'link' },
+         { path: '/wiki/tibhar', title: 'Tibhar',  type: 'link' },
+         { path: '/wiki/killerspin', title: 'Killerspin',  type: 'link' },
+         { path: '/wiki/nittaku', title: 'Nittaku',  type: 'link' },
+         { path: '/wiki/xiom', title: 'XIOM',  type: 'link' },
+         { path: '/wiki/729', title: '729',  type: 'link' },
+         { path: '/wiki/cornilleau', title: 'Cornilleau',  type: 'link' },
+         { path: '/wiki/donic', title: 'Donic',  type: 'link' },
+         { path: '/wiki/yasaka', title: 'Yasaka',  type: 'link' },
+         { path: '/wiki/andro', title: 'Andro',  type: 'link' },
+         { path: '/wiki/victas', title: 'Victas',  type: 'link' }
+      ]});
+
       menuItems.push({title: profile.FullName, type: 'sub', children:[
          { path: '/profile', title: 'profile',  type: 'link' },
          { path: '/logout', title: 'logout',  type: 'link' }
       ]});
-   
    } else {
       menuItems.push({title: 'Players', type: 'link', path: '/players'});
       menuItems.push({title: 'Events', type: 'link', path:'/events'});
       menuItems.push({title: 'Rankings', type: 'link', path: '/rankings'});
       menuItems.push({title: 'Clubs', type: 'link', path: '/clubs'});
+      menuItems.push({title: 'Wiki', type: 'sub', children:[
+         { path: '/wiki', title: 'All',  type: 'link' },
+         { path: '/wiki/butterfly', title: 'Butterfly',  type: 'link' },
+         { path: '/wiki/joola', title: 'JOOLA',  type: 'link' },
+         { path: '/wiki/double-happiness', title: 'Double Happiness',  type: 'link' },
+         { path: '/wiki/stiga', title: 'Stiga',  type: 'link' },
+         { path: '/wiki/tibhar', title: 'Tibhar',  type: 'link' },
+         { path: '/wiki/killerspin', title: 'Killerspin',  type: 'link' },
+         { path: '/wiki/nittaku', title: 'Nittaku',  type: 'link' },
+         { path: '/wiki/xiom', title: 'XIOM',  type: 'link' },
+         { path: '/wiki/729', title: '729',  type: 'link' },
+         { path: '/wiki/cornilleau', title: 'Cornilleau',  type: 'link' },
+         { path: '/wiki/donic', title: 'Donic',  type: 'link' },
+         { path: '/wiki/yasaka', title: 'Yasaka',  type: 'link' },
+         { path: '/wiki/andro', title: 'Andro',  type: 'link' },
+         { path: '/wiki/victas', title: 'Victas',  type: 'link' }
+      ]});
       menuItems.push({title: 'Login', type:'link', path:'/login'});
    }
 

@@ -33,17 +33,28 @@ export class PlayerService {
   }
 
   searchByState(state:string, pageSize:number): Observable<Player[]> {
-    console.log('search by state', state);
-    if(state){
-      return this.firestore.collection<Player>('Players', ref =>
-        ref
-        .where('State', '==', state)
-        .orderBy('LastPlayed', 'desc')
-        .limit(pageSize)
-      ).valueChanges();
-    }
-    else {
-      return of([] as Player[]);
+    const val = this.lsService.getItemWithExpiration(`${GlobalConstants.SEARCH_PLAYERS_BY_STATE}-${state}`);
+    if(val){
+      const players = val as Player[];
+      console.log('ls players', players);
+      return of(players);
+    } else {
+      if(state){
+        return this.firestore.collection<Player>('Players', ref =>
+          ref
+          .where('State', '==', state)
+          .orderBy('LastPlayed', 'desc')
+          .limit(pageSize)
+        ).valueChanges().pipe(
+          map(players=>{
+            this.lsService.setItemWithExpiration(`${GlobalConstants.SEARCH_PLAYERS_BY_STATE}-${state}`, players, GlobalConstants.LOCAL_STORAGE_SHORT_EXPIRY);
+            return players;
+          })
+        );
+      }
+      else {
+        return of([] as Player[]);
+      }
     }
   }
 

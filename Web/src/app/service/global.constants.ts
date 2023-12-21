@@ -13,6 +13,8 @@ export class GlobalConstants {
 
     public static PLAYER_DETAIL:string = 'player-detail';
 
+    public static SEARCH_PLAYERS_BY_STATE:string = 'player-list-state';
+    
     public static CLUB_DETAIL:string = 'club-detail';
 
     public static LOCAL_STORAGE_SHORT_EXPIRY:number = 1;

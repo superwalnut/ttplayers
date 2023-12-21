@@ -1,0 +1,206 @@
+<app-gym-nav></app-gym-nav>
+<!-- header Start-->
+<div class="header5-content">
+    <div class="player-list-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header3.jpg)'}">
+    </div>
+</div>
+<!-- header end-->
+
+<!-- Breadcrumb -->
+<section class="breadcrumb-container inner-3">
+    <a class="breadcrumb-back btn btn-secondary" href="/wiki">
+        <i class="fa fa-angle-left m-r-10" aria-hidden="true"></i>
+         Wiki
+    </a>
+    <h2 class="breadcrumb-txt">Stiga</h2>
+</section>
+<!-- Breadcrumb end -->
+
+<!-- section start -->
+<section class="agency blog-sec blog-sidebar single_blog_item">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="blog-block m-b-20">
+                    <div class="blog-box">
+                        <div class="overflow-hidden">
+                            <!-- <img class="img-fluid blur-up lazyload " src="assets/images/wiki/Stiga.jpg" alt="blog"> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-text mb-4">
+                    <h1 class="mb-4">Stiga</h1>
+                    <p>
+                        Stiga is a Swedish brand that is known for its high-quality table tennis equipment. 
+                        It was founded in 1944 and has been producing blades, rubbers, balls, tables, shoes, and clothing for table tennis players of all levels. 
+                        Stiga sponsors many top players and international tournaments, such as the World Table Tennis Championships and the World Cup. 
+                        Stiga products are designed to combine innovation, technology, and style.
+                    </p>
+                </div>
+                <div class="blog-text">
+                    <h3 class="blog-head" id="rubbers">Stiga Rubbers</h3>
+                    <div class="blog-divider"></div>
+                    <div class="blog-description">
+                        <p>Stiga rubbers have different characteristics and categories, depending on the type, thickness, and hardness of the top sheet and the sponge.</p>
+
+                        <ng-container *ngFor="let rubber of rubbers">
+                            <h4 class="mb-2">{{rubber.title}}</h4>
+                            <p>{{rubber.description}}</p>
+                            
+                            <table class="table">
+                                <tr>
+                                  <th>Speed</th>
+                                  <th>Spin</th>
+                                  <th>Control</th>
+                                  <th>Hardness</th>
+                                </tr>
+                                <tr>
+                                  <td>{{rubber.speed}}</td>
+                                  <td>{{rubber.spin}}</td>
+                                  <td>{{rubber.control}}</td>
+                                  <td>{{rubber.hardness}}</td>
+                                </tr>
+                              </table>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="blog-text mt-5">
+                    <h3 class="blog-head" id="blades">Stiga Blades</h3>
+                    <div class="blog-divider"></div>
+                    <div class="blog-description">
+                        <p>
+                            Stiga produces blades for different playing styles and preferences, using various materials and technologies.
+                        </p>
+                        
+                        <ng-container *ngFor="let blade of blades">
+                            <h4 class="mb-2">{{blade.title}}</h4>
+                            <p>{{blade.description}}</p>
+                            
+                            <table class="table">
+                                <tr>
+                                  <th>Speed</th>
+                                  <th>Control</th>
+                                  <th>Stiffness</th>
+                                  <th>Hardness</th>
+                                  <th>Consistency</th>
+                                  <th>Weight</th>
+                                  <th>Plies</th>
+                                  <th>Materials</th>
+                                </tr>
+                                <tr>
+                                  <td>{{blade.speed}}</td>
+                                  <td>{{blade.control}}</td>
+                                  <td>{{blade.stiffness}}</td>
+                                  <td>{{blade.hardness}}</td>
+                                  <td>{{blade.consistency}}</td>
+                                  <td>{{blade.weight}}</td>
+                                  <td>{{blade.plies}}</td>
+                                  <td>{{blade.material}}</td>
+                                </tr>
+                              </table>
+                        </ng-container>
+                    </div>                
+                </div>
+                <div class="blog-text mt-5">
+                    <h3 class="blog-head" id="balls">Stiga Balls</h3>
+                    <div class="blog-divider"></div>
+                    <div class="blog-description">
+                        <p>
+                            Stiga produces balls for different purposes and levels of play, using various materials and technologies.
+                        </p>
+                        
+                        <ng-container *ngFor="let ball of balls">
+                            <h4 class="mb-2">{{ball.title}}</h4>
+                            <p>{{ball.description}}</p>
+                        </ng-container>
+                    </div>                
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="blog-side">
+                    <div>
+                        <h5 class="blog-title">categories</h5>
+                        <div class="sidebar-container borders">
+                            <ul class="sidebar-list">
+                                <li class="d-flex"><a (click)="scrollToElement('rubbers')"> <i class="fa fa-angle-right m-r-15"
+                                                                   aria-hidden="true"></i>Rubbers</a></li>
+                                <li class="d-flex"><a (click)="scrollToElement('blades')"> <i class="fa fa-angle-right m-r-15"
+                                                                   aria-hidden="true"></i>Blades</a></li>
+                                <li class="d-flex"><a (click)="scrollToElement('balls')"> <i class="fa fa-angle-right m-r-15"
+                                                                   aria-hidden="true"></i>Balls</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="blog-title">Popular Rubbers</h5>
+                        <div class="sidebar-container">
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/Stiga/mantra-h.png" alt="" class="img-fluid">
+                                </div>
+                                <div class="w-65">
+                                    <h5 class="post-head pt-0">Mantra H</h5>
+                                    <h6 class="date"> It has a mantra technology to increase the grip and elasticity.</h6>
+                                </div>
+                            </div>
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/Stiga/dna-pro-m.png" alt="" class="img-fluid">
+                                </div>
+                                <div class="w-65">
+                                    <h5 class="post-head pt-0">DNA Pro M</h5>
+                                    <h6 class="date"> It has a pro technology to increase the durability and consistency.</h6>
+                                </div>
+                            </div>
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/Stiga/calibra-lt.png" alt="" class="img-fluid">
+                                </div>
+                                <div class="w-65">
+                                    <h5 class="post-head pt-0">Calibra LT</h5>
+                                    <h6 class="date">It has a medium-hard sponge and a non-tacky top sheet.</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="blog-title">Popular Blades</h5>
+                        <div class="sidebar-container">
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/Stiga/carbonado.png" alt="" class="img-fluid">
+                                </div>
+                                <div class="w-65">
+                                    <h5 class="post-head pt-0">Carbonado</h5>
+                                    <h6 class="date">They are suitable for power top spin attacking players.</h6>
+                                </div>
+                            </div>
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/Stiga/dynasty-carbon.png" alt="" class="img-fluid">
+                                </div>
+                                <div class="w-65">
+                                    <h5 class="post-head pt-0">Dynasty Carbon</h5>
+                                    <h6 class="date">The special Xu Xin Edition of the Stiga Dynasty Carbon.</h6>
+                                </div>
+                            </div>
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/Stiga/clipper.png" alt="" class="img-fluid">
+                                </div>
+                                <div class="w-65">
+                                    <h5 class="post-head pt-0">Clipper</h5>
+                                    <h6 class="date">They are suitable for attacking players who want to produce fast and direct shots.</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- section end -->
+
+
+<app-gym-footer></app-gym-footer>

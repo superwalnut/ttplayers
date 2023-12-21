@@ -78,6 +78,7 @@ export const routes: Routes = [
     path:'my-clubs',
     component: MyClubComponent, canActivate: [AuthGuard]
   },
+  { path: 'wiki', loadChildren: () => import('./layouts/wiki-routing.module').then(m => m.WikiRoutingModule) },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'register', component: RegisterComponent},

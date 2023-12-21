@@ -1,0 +1,155 @@
+<app-gym-nav></app-gym-nav>
+<!-- header Start-->
+<div class="header5-content">
+    <div class="player-list-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header3.jpg)'}">
+    </div>
+</div>
+<!-- header end-->
+
+<!-- Breadcrumb -->
+<section class="breadcrumb-container inner-3">
+    <h2 class="breadcrumb-txt">Wiki</h2>
+</section>
+<!-- Breadcrumb end -->
+
+
+
+<!-- section start -->
+<section class="agency blog blog-sec blog-sidebar">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="row">
+                    <div class="col-md-6" *ngFor="let brand of brands" >
+                        <div class="blog-agency">
+                            <div class="blog-contain">
+                                <img [src]="brand.img" alt="" class="img-fluid">
+                                <div class="img-container center-content">
+                                    <div class="center-content">
+                                        <div class="blog-info">
+                                            <div class="m-b-20">
+                                                <div class="center-text">
+                                                    <i class="fa fa-map-marker m-r-10" aria-hidden="true"></i>
+                                                    <h6 class="font-blog">{{brand.origin}}</h6>
+                                                </div>
+                                            </div>
+                                            <h5 class="blog-head font-600">{{brand.title}}</h5>
+                                            <p class="para2">{{brand.description}}</p>
+                                            <div class="btn-bottom m-t-20">
+                                                <a href="/wiki/{{brand.link}}" class="text-uppercase">Read More</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="blog-side">
+                    <div>
+                        <h5 class="blog-title">categories</h5>
+                        <div class="sidebar-container borders">
+                            <ul class="sidebar-list">
+                                <li class="d-flex" *ngFor="let brand of brands" ><a href="/wiki/{{brand.link}}"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>{{brand.title}}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="blog-title">Popular Rubbers</h5>
+                        <div class="sidebar-container">
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/tenergy.jpg" alt="" class="img-fluid">
+                                </div>
+                                <div>
+                                    <h5 class="post-head pt-0">Tenergy Series</h5>
+                                    <h6 class="date">Renowned for its speed, spin, and power.</h6>
+                                </div>
+                            </div>
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/dignics.jpg" alt="" class="img-fluid">
+                                </div>
+                                <div>
+                                    <h5 class="post-head pt-0">Dignics Series</h5>
+                                    <h6 class="date">Built-in energy and high friction surface.</h6>
+                                </div>
+                            </div>
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/rozena.jpg" alt="" class="img-fluid">
+                                </div>
+                                <div>
+                                    <h5 class="post-head pt-0">Rozena</h5>
+                                    <h6 class="date">Well balanced Spin, Speed, and Control.</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="blog-title">Popular Blades</h5>
+                        <div class="sidebar-container">
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/timoboll-alc.jpg" alt="" class="img-fluid">
+                                </div>
+                                <div>
+                                    <h5 class="post-head pt-0">Timoboll ALC</h5>
+                                    <h6 class="date">This blade is recognized for its versatility.</h6>
+                                </div>
+                            </div>
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/viscaria.jpg" alt="" class="img-fluid">
+                                </div>
+                                <div>
+                                    <h5 class="post-head pt-0">Viscaria</h5>
+                                    <h6 class="date">Provides good balance of speed & control.</h6>
+                                </div>
+                            </div>
+                            <div class="post-container d-flex">
+                                <div class="w-35 m-r-10">
+                                    <img src="assets/images/wiki/innerforce.jpg" alt="" class="img-fluid">
+                                </div>
+                                <div>
+                                    <h5 class="post-head pt-0">Innerforce Layer ALC</h5>
+                                    <h6 class="date">Renowned for its soft touch and dwell time.</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- section end -->
+
+
+<!-- 
+<section class="sider mt-4 mb-4 pt-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 pb-4"  *ngFor="let brand of brands">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-tags" aria-hidden="true"></i> {{brand.title}}
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p> {{brand.description}}</p>
+                        </blockquote>
+                        <div class="btn-bottom mt-4">
+                            <a href="/wiki/{{brand.link}}" class="btn btn-default btn-white">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+
+<app-gym-footer></app-gym-footer>

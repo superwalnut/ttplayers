@@ -1,15 +1,27 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Player } from 'src/app/models/player';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-player-list-tile',
   templateUrl: './player-list-tile.component.html',
   styleUrls: ['./player-list-tile.component.scss']
 })
-export class PlayerListTileComponent {
+export class PlayerListTileComponent implements OnInit{
+
   @Input() player:Player;
   @Input() keyword:string;
   @Input() state:string;
+
+  lastPlayed:Date;
+
+  constructor(private commonService:CommonService) {
+    
+  }
+
+  ngOnInit(): void {
+    this.lastPlayed = this.commonService.convertTimeStampToDate(this.player.LastPlayed);
+  }
 
   toInitials(player:Player)
   {
