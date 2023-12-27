@@ -19,7 +19,8 @@ import { YasakaComponent } from './wiki/yasaka/yasaka.component';
 const routes: Routes = [
   {
     path: '',
-    component: WikiComponent    
+    component: WikiComponent,
+    data: {title:"Table Tennis Brands Rubbers, Blades and Balls"}
   },
   { path: 'butterfly', component: ButterflyComponent, data: {title:"Table Tennis Brand - Butterfly: Rubbers, Blades and Balls"}},
   { path: 'andro', component: AndroComponent, data: {title:"Table Tennis Brand - Andro: Rubbers, Blades and Balls"}},

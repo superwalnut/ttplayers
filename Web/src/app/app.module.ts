@@ -16,6 +16,7 @@ import { AuthService } from "./service/auth.service";
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { GtagModule } from 'angular-gtag';
 import { provideAuth, getAuth } from '@angular/fire/auth';
+import { TitleService } from './service/title.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
     }),
     RouterModule.forRoot(routes, { useHash: false, anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' })
   ],
-  providers: [AuthService],
+  providers: [AuthService, TitleService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

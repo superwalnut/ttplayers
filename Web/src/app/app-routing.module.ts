@@ -85,7 +85,7 @@ export const routes: Routes = [
     path:'my-clubs',
     component: MyClubComponent, canActivate: [AuthGuard]
   },
-  { path: 'wiki', loadChildren: () => import('./layouts/wiki-routing.module').then(m => m.WikiRoutingModule) },
+  { path: 'wiki', loadChildren: () => import('./layouts/wiki-routing.module').then(m => m.WikiRoutingModule), data: {title:"Table Tennis Brands Rubbers, Blades and Balls"}},
   { path: 'blogs', component: BlogsComponent, data: {title:"Australian Table Tennis Blogs"} },
   { path: 'blogs/:slug', component: BlogDetailComponent },
   { path: 'login', component: LoginComponent },

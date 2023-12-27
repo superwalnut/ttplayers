@@ -1,4 +1,6 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { TitleService } from '../app/service/title.service';
+
 
 @Component({
   selector: 'app-root',
@@ -9,10 +11,12 @@ export class AppComponent implements OnInit{
   title = 'TTPlayers';
   handleCredentialResponse:any;
 
-  constructor() {
+  constructor(private titleService: TitleService) {
     
   }
 
   ngOnInit(): void {
+    this.titleService.boot();
   }
+
 }
