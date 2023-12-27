@@ -56,9 +56,71 @@ namespace TtPlayers.Importer.Applications
 
             AddUrl(xmlDoc, root, $"{_baseUrl}");
             AddUrl(xmlDoc, root, $"{_baseUrl}/players");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/players?state=NSW");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/players?state=VIC");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/players?state=QLD");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/players?state=SA");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/players?state=TAS");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/players?state=WA");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/players?state=ACT");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/players?state=NT");
+
             AddUrl(xmlDoc, root, $"{_baseUrl}/events");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/events?state=NSW");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/events?state=VIC");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/events?state=QLD");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/events?state=SA");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/events?state=TAS");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/events?state=WA");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/events?state=ACT");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/events?state=NT");
+
             AddUrl(xmlDoc, root, $"{_baseUrl}/rankings");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=M&state=NSW");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=M&state=VIC");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=M&state=QLD");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=M&state=SA");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=M&state=TAS");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=M&state=WA");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=M&state=ACT");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=M&state=NT");
+
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=F&state=NSW");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=F&state=VIC");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=F&state=QLD");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=F&state=SA");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=F&state=TAS");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=F&state=WA");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=F&state=ACT");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/rankings?gender=F&state=NT");
+
             AddUrl(xmlDoc, root, $"{_baseUrl}/clubs");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/clubs?state=NSW");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/clubs?state=VIC");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/clubs?state=QLD");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/clubs?state=SA");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/clubs?state=TAS");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/clubs?state=WA");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/clubs?state=ACT");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/clubs?state=NT");
+
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/butterfly");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/double-happiness");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/joola");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/stiga");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/tibhar");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/killerspin");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/nittaku");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/xiom");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/729");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/cornilleau");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/donic");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/yasaka");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/andro");
+            AddUrl(xmlDoc, root, $"{_baseUrl}/wiki/victas");
+
+            AddUrl(xmlDoc, root, $"{_baseUrl}/blogs");
 
             foreach (var player in players)
             {

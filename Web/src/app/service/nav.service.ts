@@ -53,6 +53,8 @@ export class NavService {
          { path: '/wiki/victas', title: 'Victas',  type: 'link' }
       ]});
 
+      menuItems.push({title: 'Blogs', type: 'link', path: '/blogs'});
+
       menuItems.push({title: profile.FullName, type: 'sub', children:[
          { path: '/profile', title: 'profile',  type: 'link' },
          { path: '/logout', title: 'logout',  type: 'link' }
@@ -79,6 +81,8 @@ export class NavService {
          { path: '/wiki/andro', title: 'Andro',  type: 'link' },
          { path: '/wiki/victas', title: 'Victas',  type: 'link' }
       ]});
+
+      menuItems.push({title: 'Blogs', type: 'link', path: '/blogs'});
       menuItems.push({title: 'Login', type:'link', path:'/login'});
    }
 

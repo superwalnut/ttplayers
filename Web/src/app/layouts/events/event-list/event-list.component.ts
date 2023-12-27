@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { EventService } from './../../../service/event.service';
 import { TtEvent } from 'src/app/models/event';
 import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-event-list',
@@ -17,7 +18,7 @@ export class EventListComponent {
 
   lastEvent:TtEvent = null;
 
-  constructor(private eventService:EventService, private route: ActivatedRoute) {
+  constructor(private eventService:EventService, private route: ActivatedRoute, private title:Title) {
     const state = this.route.snapshot.queryParams.state;
     if(state){
       this.state = state;

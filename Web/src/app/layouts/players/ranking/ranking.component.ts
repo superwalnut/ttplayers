@@ -111,6 +111,5 @@ export class RankingComponent implements OnInit {
         return "National Women's";
       }
     }
-
   }
 }

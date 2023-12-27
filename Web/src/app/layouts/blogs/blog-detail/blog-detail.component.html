@@ -1,0 +1,73 @@
+<app-gym-nav></app-gym-nav>
+<!-- header Start-->
+<div class="header5-content">
+    <div class="player-list-header bg" [ngStyle]="{'background-image': 'url(assets/images/gym/header3.jpg)'}">
+    </div>
+</div>
+<!-- header end-->
+
+<!-- Breadcrumb -->
+<section class="breadcrumb-container inner-3">
+    <h2 class="breadcrumb-txt">Blogs</h2>
+</section>
+<!-- Breadcrumb end -->
+
+<!-- section start -->
+<section class="agency blog-sec blog-sidebar single_blog_item">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="blog-block m-b-20">
+                    <div class="blog-box">
+                        <div class="overflow-hidden">
+                            <!-- <img class="img-fluid blur-up lazyload " src="assets/images/agency/blog/20.jpg" alt="blog"> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-text">
+                    <h6>{{post.date}}</h6>
+                    <h3 class="blog-head">{{post.title}}</h3>
+                    <div class="blog-divider"></div>
+                    <div class="blog-description">
+                        <p>{{post.description}}</p>
+                        <div class="blog-content" *ngFor="let content of post.content">
+                            <div class="blog-section-title">
+                                <h5 class="blog-head">{{content.section_title}}</h5>
+                            </div>
+                            <div class="blog-section mb-4" *ngFor="let section of content.sections">
+                                <div class="blog-section-title">
+                                    <h6 class="blog-head">{{section.title}}</h6>
+                                </div>
+                                <div class="blog-section-description" *ngIf="!IsArray(section.description)">{{section.description}}</div>
+                                
+                                <ng-container *ngIf="IsArray(section.description)">
+                                    <div class="blog-section-description" *ngFor="let description of section.description">
+                                        <div class="blog-section-description-title">
+                                            <h7 class="blog-head">{{description.subtitle}}</h7>
+                                        </div>
+                                        <div class="blog-section-description-details">{{description.details}}</div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="blog-side">
+                    <div>
+                        <h5 class="blog-title">categories</h5>
+                        <div class="sidebar-container borders">
+                            <ul class="sidebar-list">
+                                <li class="d-flex" *ngFor="let category of categories" ><a href="/blogs/category/{{category.slug}}"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>{{category.title}}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- section end -->
+
+<app-gym-footer></app-gym-footer>

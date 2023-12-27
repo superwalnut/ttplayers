@@ -161,7 +161,7 @@ namespace TtPlayers.Importer
                            // import players (include import player-history)
                            playerImporter.ImportPlayer().GetAwaiter().GetResult();
                            // import sndtta team
-                           playerImporter.ImportSndttaTeam().GetAwaiter().GetResult();
+                           ////playerImporter.ImportSndttaTeam().GetAwaiter().GetResult();
                            // import ranking
                            playerImporter.ImportPlayerRanking().GetAwaiter().GetResult();
                            // import summary

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { TtEvent } from 'src/app/models/event';
 import { EventPlayerRating } from 'src/app/models/event-player-rating';
@@ -16,13 +17,18 @@ export class EventDetailComponent {
   keyword:string;
   state:string;
 
-  constructor(private route: ActivatedRoute, private eventService:EventService) {
+  constructor(private route: ActivatedRoute, private eventService:EventService, private title:Title) {
     var eventId = this.route.snapshot.params.id;
     this.keyword = this.route.snapshot.queryParams.keyword;
     this.state = this.route.snapshot.queryParams.state;
 
+    this.title.setTitle(`Australian Table Tennis Event - ${eventId} details`);
+
     this.eventService.getEvent(eventId).subscribe(evt=>{
       this.event = evt;
+
+      this.title.setTitle(`${this.event.State} Table Tennis Event - ${this.event.Name}:${eventId}`);
+
       console.log('event', this.event);
       this.eventService.getEventPlayer(eventId).subscribe(player =>{
         console.log('event-players', player);

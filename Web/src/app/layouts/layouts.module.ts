@@ -87,6 +87,8 @@ import { AndroComponent } from './wiki/andro/andro.component';
 import { VictasComponent } from './wiki/victas/victas.component';
 import { WikiComponent } from './wiki/wiki.component';
 import { WikiRoutingModule } from './wiki-routing.module';
+import { BlogsComponent } from './blogs/blogs.component';
+import { BlogDetailComponent } from './blogs/blog-detail/blog-detail.component';
 
 @NgModule({
   declarations: [
@@ -140,7 +142,9 @@ import { WikiRoutingModule } from './wiki-routing.module';
     YasakaComponent,
     AndroComponent,
     VictasComponent,
-    WikiComponent    
+    WikiComponent,
+    BlogsComponent,
+    BlogDetailComponent    
   ],
   imports: [
     CommonModule,

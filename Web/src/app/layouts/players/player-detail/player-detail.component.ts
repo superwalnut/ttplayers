@@ -64,11 +64,13 @@ export class PlayerDetailComponent implements OnInit {
     private competitorService:CompetitorService,
     private commonService:CommonService,
     private gtag: Gtag
-    ) { }
+    ) { 
+      var playerId = this.route.snapshot.params.id;
+      this.title.setTitle(`Australian Table Tennis player - ${playerId} match history and statistics`);
+    }
 
   ngOnInit() {
-    this.title.setTitle(this.route.snapshot.data['title']);
-    var playerId = this.route.snapshot.params.id;
+    var playerId = this.route.snapshot.params.id;    
     this.keyword = this.route.snapshot.queryParams.keyword;
     this.state = this.route.snapshot.queryParams.state;
     
@@ -80,6 +82,8 @@ export class PlayerDetailComponent implements OnInit {
     this.playerService.getPlayer(playerId).subscribe(player => {
       this.player = player;
       console.log(this.player);
+
+      this.title.setTitle(`${player.State} Table Tennis player - ${player.FullName} :${playerId} match history and statistics`);
 
       // get name initial svg
       this.nameInitialSvg = this.getSvg(player);

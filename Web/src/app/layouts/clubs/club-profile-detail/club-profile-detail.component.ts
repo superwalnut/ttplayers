@@ -20,12 +20,17 @@ export class ClubProfileDetailComponent implements OnInit {
     private title: Title) { }
 
   ngOnInit() {
-    this.title.setTitle(this.route.snapshot.data['title']);
     var clubId = this.route.snapshot.params.id;
+
+    this.title.setTitle(`Australian Table Tennis Club - ${clubId}`);
+
     this.state = this.route.snapshot.queryParams.state;
 
+    
     this.clubService.getClub(clubId).subscribe(x=>{
       this.club = x;
+
+      this.title.setTitle(`${this.club.State} Table Tennis club - ${this.club.Name} (${this.club.Nickname})`);
     });
   }
 
