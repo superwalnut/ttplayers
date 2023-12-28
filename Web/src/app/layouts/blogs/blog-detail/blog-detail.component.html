@@ -42,10 +42,13 @@
                                 
                                 <ng-container *ngIf="IsArray(section.description)">
                                     <div class="blog-section-description" *ngFor="let description of section.description">
-                                        <div class="blog-section-description-title">
-                                            <h7 class="blog-head">{{description.subtitle}}</h7>
-                                        </div>
-                                        <div class="blog-section-description-details">{{description.details}}</div>
+                                        <div class="blog-section-description-details mb-2" *ngIf="IsString(description)">{{description}}</div>
+                                        <ng-container *ngIf="!IsString(description)">
+                                            <div class="blog-section-description-title">
+                                                <h7 class="blog-head">{{description.subtitle}}</h7>
+                                            </div>
+                                            <div class="blog-section-description-details mb-2">{{description.details}}</div>
+                                        </ng-container>
                                     </div>
                                 </ng-container>
                             </div>
@@ -59,7 +62,7 @@
                         <h5 class="blog-title">categories</h5>
                         <div class="sidebar-container borders">
                             <ul class="sidebar-list">
-                                <li class="d-flex" *ngFor="let category of categories" ><a href="/blogs/category/{{category.slug}}"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>{{category.title}}</a></li>
+                                <li class="d-flex" *ngFor="let category of categories" ><a href="/blogs?category={{category.title}}"><i class="fa fa-angle-right m-r-15" aria-hidden="true"></i>{{category.title}}</a></li>
                             </ul>
                         </div>
                     </div>

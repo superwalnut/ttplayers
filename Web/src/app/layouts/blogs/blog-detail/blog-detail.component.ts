@@ -33,4 +33,13 @@ export class BlogDetailComponent implements OnInit{
     return false;
   }
 
+  IsString(obj:any){
+    if(typeof obj == "string"){
+      return true;
+    }
+
+    return false;
+  }
+
+
 }
