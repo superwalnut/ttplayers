@@ -96,17 +96,19 @@ export class ProfileComponent implements OnInit{
         rubber: profile.RubberType
       });
 
-      this.selectedPlayerProfile = {
-        Label: `${player.FirstName} ${player.LastName} (ID:${player.Id})`,
-        PlayerId: player.Id,
-        Rating: player.Rating,
-        StDev: player.StDev,
-        FullName: player.FullName,
-        FirstName: player.FirstName,
-        LastName: player.LastName,
-        State: player.State,
-        Gender: player.Gender
-      } as PlayerAutoComplete;
+      if(player){
+        this.selectedPlayerProfile = {
+          Label: `${player.FirstName} ${player.LastName} (ID:${player.Id})`,
+          PlayerId: player.Id,
+          Rating: player.Rating,
+          StDev: player.StDev,
+          FullName: player.FullName,
+          FirstName: player.FirstName,
+          LastName: player.LastName,
+          State: player.State,
+          Gender: player.Gender
+        } as PlayerAutoComplete;
+      }
     });
   }
   
@@ -172,8 +174,8 @@ export class ProfileComponent implements OnInit{
         BornYear: form.birthYear,
         Postcode: form.postcode,
         Suburb: form.suburb,
-        Grip: form.grip,
-        RubberType: form.rubber,
+        Grip: form.grip??"",
+        RubberType: form.rubber??"",
         IsCompleted:true,
         LastUpdated: new Date()
       } as Profile;

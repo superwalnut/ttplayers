@@ -35,7 +35,7 @@ export class NavService {
       menuItems.push({title: 'Events', type: 'link', path:'/events'});
       menuItems.push({title: 'Rankings', type: 'link', path: '/rankings'});
       menuItems.push({title: 'Clubs', type: 'link', path: '/clubs'});
-      menuItems.push({title: 'Wiki', type: 'sub', children:[
+      menuItems.push({title: 'Brands', type: 'sub', children:[
          { path: '/wiki', title: 'All',  type: 'link' },
          { path: '/wiki/butterfly', title: 'Butterfly',  type: 'link' },
          { path: '/wiki/joola', title: 'JOOLA',  type: 'link' },
@@ -64,7 +64,7 @@ export class NavService {
       menuItems.push({title: 'Events', type: 'link', path:'/events'});
       menuItems.push({title: 'Rankings', type: 'link', path: '/rankings'});
       menuItems.push({title: 'Clubs', type: 'link', path: '/clubs'});
-      menuItems.push({title: 'Wiki', type: 'sub', children:[
+      menuItems.push({title: 'Brands', type: 'sub', children:[
          { path: '/wiki', title: 'All',  type: 'link' },
          { path: '/wiki/butterfly', title: 'Butterfly',  type: 'link' },
          { path: '/wiki/joola', title: 'JOOLA',  type: 'link' },
