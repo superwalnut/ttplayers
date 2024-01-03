@@ -94,6 +94,12 @@
                             </div>
                         </ng-template>
                     </li>
+                    <li [ngbNavItem]="3">
+                        <button ngbNavLink>Summary</button>
+                        <ng-template ngbNavContent>
+                            <app-player-biography [player]="player"></app-player-biography>
+                        </ng-template>
+                    </li>
                 </ul>
                 <div [ngbNavOutlet]="nav" class="mt-2"></div>
             </div>

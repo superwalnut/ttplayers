@@ -89,6 +89,7 @@ import { WikiComponent } from './wiki/wiki.component';
 import { WikiRoutingModule } from './wiki-routing.module';
 import { BlogsComponent } from './blogs/blogs.component';
 import { BlogDetailComponent } from './blogs/blog-detail/blog-detail.component';
+import { PlayerBiographyComponent } from './players/player-detail/player-biography/player-biography.component';
 
 @NgModule({
   declarations: [
@@ -144,7 +145,8 @@ import { BlogDetailComponent } from './blogs/blog-detail/blog-detail.component';
     VictasComponent,
     WikiComponent,
     BlogsComponent,
-    BlogDetailComponent    
+    BlogDetailComponent,
+    PlayerBiographyComponent    
   ],
   imports: [
     CommonModule,
