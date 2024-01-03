@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Player } from 'src/app/models/player';
-import { PlayerHistory, PlayerHistoryEntry } from 'src/app/models/player-history';
 import { PlayerService } from 'src/app/service/player.service';
 import { MatchService } from './../../../service/match.service';
 import { Match } from 'src/app/models/match';
-import { PlayerMatchEvent } from 'src/app/models/player-match-event';
 import { ClubService } from './../../../service/club.service';
 import { SndttaTeamService } from './../../../service/sndtta-team.service';
 import { Club } from 'src/app/models/club';
@@ -32,7 +30,7 @@ import { Gtag } from 'angular-gtag';
 
 export class PlayerDetailComponent implements OnInit {
   player:Player;
-  club:Club;
+  clubs:Club[] = [];
   teamPlayers:TeamPlayer[] = [];
   matchesByEvent: { [eventId: string]: Match[] } = {};
   
@@ -63,10 +61,15 @@ export class PlayerDetailComponent implements OnInit {
     private statsService:StatisticsService,
     private competitorService:CompetitorService,
     private commonService:CommonService,
-    private gtag: Gtag
+    private gtag: Gtag,
+    private meta: Meta
     ) { 
       var playerId = this.route.snapshot.params.id;
       this.title.setTitle(`Australian Table Tennis player - ${playerId} match history and statistics`);
+      this.meta.addTags([
+        {name: 'keywords', content: 'Australia, Table Tennis, Match History, Match Statistics'},
+        {name: 'robots', content: 'index, follow'}
+      ]);
     }
 
   ngOnInit() {
@@ -84,6 +87,7 @@ export class PlayerDetailComponent implements OnInit {
       console.log(this.player);
 
       this.title.setTitle(`${player.State} Table Tennis player - ${player.FullName} :${playerId} match history and statistics`);
+      this.meta.addTag({name: 'description', content: `${player.State} Table Tennis player - ${player.FullName} :${playerId} match history and statistics`});
 
       // get name initial svg
       this.nameInitialSvg = this.getSvg(player);
@@ -124,12 +128,17 @@ export class PlayerDetailComponent implements OnInit {
       });
 
       // load club info
-      if(player.PrimaryClubId){
+      if(player.ClubIds){
+        console.log("I have clubIds", player.ClubIds);
+        this.clubService.getClubByIds(player.ClubIds).subscribe(clubs =>{
+          this.clubs = clubs;
+        });
+      } else if(player.PrimaryClubId) {
         this.clubService.getClub(player.PrimaryClubId).subscribe(club =>{
-          this.club = club;
+          this.clubs.push(club);
         });
       }
-
+      
       // load team and team players
       if(player.Team) {
         this.sndttaTeamService.searchTeams(player.Team).subscribe(teams =>{

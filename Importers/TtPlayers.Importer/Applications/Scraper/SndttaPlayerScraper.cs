@@ -103,6 +103,10 @@ namespace TtPlayers.Importer.Applications.Scraper
                         {
                             //player already in the list, just add another team name
                             player.Team.Add(teamName);
+
+                            var clubId = teamNameDict?.FirstOrDefault(x => x.Name.Equals(teamName))?.ClubId;
+                            player.ClubIds.Add(clubId.Trim());
+
                             player.Division = GetLowerDivision((int)division, player);
                         }
                         else
@@ -112,6 +116,7 @@ namespace TtPlayers.Importer.Applications.Scraper
                                 Id = playerId,
                                 FullName = playerName,
                                 Team = new List<string> { teamName },
+                                ClubIds = new List<string> { teamNameDict?.FirstOrDefault(x => x.Name.Equals(teamName))?.ClubId?.Trim() },
                                 Division = (int)division
                             });
                         }

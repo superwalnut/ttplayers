@@ -7,5 +7,5 @@ import { Club } from 'src/app/models/club';
   styleUrls: ['./club-detail.component.scss']
 })
 export class ClubDetailComponent {
-  @Input() club:Club;
+  @Input() clubs:Club[];
 }

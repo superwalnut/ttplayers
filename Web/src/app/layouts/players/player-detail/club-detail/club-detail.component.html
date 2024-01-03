@@ -1,13 +1,12 @@
-<h5 class="blog-title mb-2">Club</h5>
-<div class="sidebar-container borders">
-    <h4><a href="/club/{{club.Id}}" target="_blank">{{club.Nickname}}</a></h4>
+<h5 class="blog-title mb-2">Clubs</h5>
+<div class="sidebar-container borders" *ngFor="let club of clubs">
+    <h4><a class="club-link" href="/club/{{club.Id}}" target="_blank">{{club.Nickname}}</a></h4>
     <h5>{{club.Name}}</h5>
-    <hr/>
-    <div>
+    <div class="mt-4">
         <strong>Address:</strong><br/>
         {{club.Address1}}, {{club.City}}, {{club.State}} {{club.PostalCode}}
     </div>
-    <div>
+    <!-- <div>
         <strong>Email:</strong><br/>
         {{club.Email?club.Email:"N/A"}}
     </div>
@@ -20,5 +19,6 @@
         <strong>Website:</strong><br/>
         <a *ngIf="club.Website" href="{{club.Website}}" target="_blank" rel="nofollow" class="website">{{club.Website.toLowerCase()}}</a>
         <span *ngIf="!club.Website">N/A</span>
-    </div>
+    </div> -->
+    <hr/>
 </div>

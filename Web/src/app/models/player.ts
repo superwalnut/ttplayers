@@ -9,7 +9,10 @@ export interface Player {
     Names:string[];
     Rating: number;
     StDev: number;
+    
     PrimaryClubId: string;
+    ClubIds:string[];
+
     State: string;
     Country: string;
     Gender: string;

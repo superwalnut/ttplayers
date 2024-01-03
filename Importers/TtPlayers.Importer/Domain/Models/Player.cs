@@ -70,11 +70,11 @@ namespace TtPlayers.Importer.Domain.Models
         // from sndtta
         [FirestoreProperty]
         public List<string> Team { get; set; }
+
         [FirestoreProperty]
         public int Division { get; set; }
         [FirestoreProperty]
         public bool IsSndtta { get; set; }
-
 
         // summary
         [FirestoreProperty]

@@ -25,8 +25,34 @@ export class ClubService {
           this.lsService.setItemWithExpiration(`${GlobalConstants.CLUB_DETAIL}-${id}`, club, GlobalConstants.LOCAL_STORAGE_SHORT_EXPIRY);
           return club;
         })
-      );;
+      );
     }
+  }
+
+  getClubByIds(ids:string[]) : Observable<Club[]> {
+    console.log('getClubsByIds', ids);
+    const queries = ids.map(id => {
+      return this.firestore.doc<Club>(`Clubs/${id.trim()}`).valueChanges();
+    });
+    return this.combineObservables(ids, queries);
+  }
+
+  private combineObservables(clubIds: string[], observables: Observable<Club>[]): Observable<Club[]> {
+    return new Observable<Club[]>(subscriber => {
+      const mergedResults: Club[] = [];
+  
+      const subscribeToQuery = (query: Observable<Club>) => {
+        query.subscribe(results => {
+          mergedResults.push(results);
+          if (mergedResults.length === clubIds.length) {
+            subscriber.next(mergedResults);
+            subscriber.complete();
+          }
+        });
+      };
+  
+      observables.forEach(subscribeToQuery);
+    });
   }
 
   searchClubs(keyword:string, state:string, pageSize:number) : Observable<Club[]>{

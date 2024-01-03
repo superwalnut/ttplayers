@@ -79,6 +79,9 @@ namespace TtPlayers.Importer
             [Option("player-sndtta-team", Required = false, HelpText = "Import player sndtta teams.")]
             public bool PlayerSndttaTeamImport { get; set; }
 
+            [Option("player-refresh-clubids", Required = false, HelpText = "Refresh players' clubIDs.")]
+            public bool Refresh_Player_ClubIds { get; set; }
+
             // import statistics
 
             [Option("statistics", Required = false, HelpText = "Import player sndtta teams.")]
@@ -251,6 +254,10 @@ namespace TtPlayers.Importer
                        else if (o.PlayerSndttaTeamImport)
                        {
                            playerImporter.ImportSndttaTeam().GetAwaiter().GetResult();
+                       }
+                       else if (o.Refresh_Player_ClubIds)
+                       {
+                           playerImporter.RefreshPlayerTeamClubs().GetAwaiter().GetResult();
                        }
                        else if(o.EventPlayerImport)
                        {

@@ -17,6 +17,8 @@ namespace TtPlayers.Importer.Applications
         Task ImportSndttaTeam();
         Task ImportPlayerRanking();
         Task ImportPlayerSummary();
+
+        Task RefreshPlayerTeamClubs();
     }
 
     public class RatingCentralPlayersImporter : RatingCentralImporterBase, IRatingCentralPlayersImporter
@@ -115,6 +117,13 @@ namespace TtPlayers.Importer.Applications
                     player.IsSndtta = true;
                     player.Division = s.Division;
                     player.Team = s.Team;
+
+                    if (!s.ClubIds.Contains(player.PrimaryClubId))
+                    {
+                        s.ClubIds.Add(player.PrimaryClubId);
+                    }
+                    player.ClubIds = s.ClubIds;
+                    
                     player.LastUpdated = DateTime.Now;
                     player.RequireDeltaPush = true;
                     pendingPlayers.Add(player);
@@ -231,6 +240,42 @@ namespace TtPlayers.Importer.Applications
             await Task.WhenAll(importTasks);
             _logger.LogInformation($"Finish updating summary for {players.Count} players - {sw.Elapsed}.");
             sw.Stop();
+        }
+
+        public async Task RefreshPlayerTeamClubs()
+        {
+            var teamNameDict = _sndttaScraper.GetTeamNames();
+            var players = await _playerRepository.FilterByAsync(x => true);
+            foreach(var player in players)
+            {
+                var clubIds = new List<string>();
+
+                if(player.Team == null || !player.Team.Any())
+                {
+                    continue;
+                }
+
+                foreach(var teamName in player.Team)
+                {
+                    var clubId = teamNameDict?.FirstOrDefault(x => x.Name.Equals(teamName))?.ClubId;
+                    if(clubId != null)
+                    {
+                        clubIds.Add(clubId.Trim());
+                    }
+                }
+
+                if (!clubIds.Contains(player.PrimaryClubId))
+                {
+                    clubIds.Add(player.PrimaryClubId);
+                }
+
+                player.ClubIds = clubIds;
+                player.LastUpdated = DateTime.Now;
+                player.RequireDeltaPush = true;
+
+                await _playerRepository.UpsertAsync(player, x => x.Id == player.Id);
+                _logger.LogInformation($"Updating clubIds for {player.FullName}:{player.Id}.");
+            }
         }
 
         private async Task UpdatePlayersSummary(List<Player> players, int startIndex, int step)
