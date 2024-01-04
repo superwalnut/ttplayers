@@ -1,34 +1,39 @@
 <div class="container mt-4" *ngIf="player">
     <div class="row">
         <div class="col-12">
-            <h2>Biography of {{player.FullName}}</h2>
+            <h2>Table Tennis Biography - {{player.FullName}}</h2>
 
             <div class="mt-4">
                 {{player.FullName}}, a competitive table tennis player from {{player.State}}, Australia, has exhibited a commendable journey in the sport. 
-                Having participated in {{player.TotalPlayedMatches}} matches, {{player.FirstName}} holds a diverse playing record that reflects his perseverance and skill. 
-                His win rates across various game sequences showcase his adaptability and determination, 
-                with a consistent performance evident in his win rates for the first, second, third, fourth, and fifth games, varying between {{minGameRate | percent }} to {{maxGameRate | percent }}.
+                Having participated in {{player.TotalPlayedMatches}} matches, {{player.FirstName}} holds a diverse playing record that reflects {{hisOrHer}} perseverance and skill. 
+                {{hisOrHer}} win rates across various game sequences showcase {{hisOrHer}} adaptability and determination, 
+                with a consistent performance evident in {{hisOrHer}} win rates for the first, second, third, fourth, and fifth games, varying between {{minGameRate | percent }} to {{maxGameRate | percent }}.
             </div>
 
             <div class="mt-4">
-                {{player.FirstName}} embarked on his table tennis journey around {{startDate | date:'MMM yyyy'}}, accumulating experience and expertise over the years. 
-                His prowess is evident in his ability to secure victories across different scorelines, including 3:0, 3:1, and even tightly contested 3:2 matches. 
-                Despite facing losses, totaling {{player.TotalLoses}} in his career, his resilience is underscored by his ability to bounce back, maintaining a positive Year-to-Date record.
+                {{player.FirstName}} embarked on {{hisOrHer}} table tennis journey around {{startDate | date:'MMM yyyy'}}, accumulating experience and expertise over the years. 
+                {{hisOrHer}} prowess is evident in {{hisOrHer}} ability to secure victories across different scorelines, including 3:0, 3:1, and even tightly contested 3:2 matches. 
+                Despite facing losses, totaling {{player.TotalLoses}} in {{hisOrHer}} career, {{hisOrHer}} resilience is underscored by {{hisOrHer}} ability to bounce back, maintaining a positive Year-to-Date record.
             </div>
 
             <div class="mt-4">
                 With a current rating of {{player.Rating}} and a peak rating of {{player.HighestRating}}, {{player.FirstName}} has encountered players of various skill levels, triumphing over {{player.TotalBeatPlayersCount}} opponents while competing in {{player.TotalPlayedEvents}} events. 
-                His statistical breakdown reveals a balance between wins and losses against players with both lower and higher ratings, emphasizing his adaptability against different challenges.
+                {{hisOrHer}} statistical breakdown reveals a balance between wins and losses against players with both lower and higher ratings, emphasizing {{hisOrHer}} adaptability against different challenges.
             </div>
 
             <div class="mt-4">
-                Moreover, {{player.FirstName}}'s recent participation in events like the {{player.LastPlayedEvent}} and consistent activity over the last six months demonstrates his ongoing dedication to the sport. 
-                His ranking in the State and National level further solidifies his position among Australia's table tennis talents, securing a State Ranking of {{player.StateGenderRanking}} and a National Ranking of {{player.NationalGenderRanking}}.
+                Moreover, {{player.FirstName}}'s recent participation in events like the {{player.LastPlayedEvent}} and consistent activity over the last six months demonstrates {{hisOrHer}} ongoing dedication to the sport. 
+                <span *ngIf="player.StateGenderRanking>0">
+                    {{hisOrHer}} ranking in the State and National level further solidifies {{hisOrHer}} position among Australia's table tennis talents, securing a State Ranking of {{player.StateGenderRanking}} and a National Ranking of {{player.NationalGenderRanking}}.    
+                </span>
+                <span *ngIf="player.StateGenderRanking<=0">
+                    If {{heOrShe}} plays a few more games, {{heOrShe}} would be able to obtain a ranking among Australia's table tennis talents.
+                </span>
             </div>
 
             <div class="mt-4">
-                Despite facing fluctuations in his rating over time, experiencing a change of {{player.RatingChangesLast6Mth}} points in the past six months, {{player.FirstName}}'s commitment to the sport remains unwavering. 
-                His determination, showcased through consistent participation and a balanced win-loss ratio, positions him as a promising and resilient contender in the Australian table tennis landscape.
+                Despite facing fluctuations in {{hisOrHer}} rating over time, experiencing a change of {{player.RatingChangesLast6Mth}} points in the past six months, {{player.FirstName}}'s commitment to the sport remains unwavering. 
+                {{hisOrHer}} determination, showcased through consistent participation and a balanced win-loss ratio, positions {{himOrHer}} as a promising and resilient contender in the Australian table tennis landscape.
             </div>
         </div>
     </div>

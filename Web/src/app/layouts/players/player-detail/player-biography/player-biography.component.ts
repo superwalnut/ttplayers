@@ -15,6 +15,10 @@ export class PlayerBiographyComponent implements OnInit{
 
   startDate: Date;
 
+  heOrShe:string;
+  hisOrHer:string;
+  himOrHer:string;
+
   constructor(private commonService:CommonService) {
     
   }
@@ -27,7 +31,13 @@ export class PlayerBiographyComponent implements OnInit{
 
     this.startDate = this.commonService.convertTimeStampToDate(this.player.StartPlayingDate);
 
+    this.heOrShe = this.player.Gender == 'M'? "he" : "she";
+    this.hisOrHer = this.player.Gender == 'M'? "his" : "her";
+    this.himOrHer = this.player.Gender == 'M'? "him" : "her";
+
     console.log('date', this.startDate);
     console.log('timestamp', this.player.StartPlayingDate);
   }
+
+  
 }
