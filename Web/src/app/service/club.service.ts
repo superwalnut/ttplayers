@@ -32,7 +32,7 @@ export class ClubService {
   getClubByIds(ids:string[]) : Observable<Club[]> {
     console.log('getClubsByIds', ids);
     const queries = ids.map(id => {
-      return this.firestore.doc<Club>(`Clubs/${id.trim()}`).valueChanges();
+      return this.firestore.doc<Club>(`Clubs/${id.trim()}`).valueChanges().pipe(take(1));
     });
     return this.combineObservables(ids, queries);
   }

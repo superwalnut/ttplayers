@@ -90,6 +90,7 @@ import { WikiRoutingModule } from './wiki-routing.module';
 import { BlogsComponent } from './blogs/blogs.component';
 import { BlogDetailComponent } from './blogs/blog-detail/blog-detail.component';
 import { PlayerBiographyComponent } from './players/player-detail/player-biography/player-biography.component';
+import { PlayerRatingGraphComponent } from './players/player-detail/player-rating-graph/player-rating-graph.component';
 
 @NgModule({
   declarations: [
@@ -146,7 +147,8 @@ import { PlayerBiographyComponent } from './players/player-detail/player-biograp
     WikiComponent,
     BlogsComponent,
     BlogDetailComponent,
-    PlayerBiographyComponent    
+    PlayerBiographyComponent,
+    PlayerRatingGraphComponent    
   ],
   imports: [
     CommonModule,

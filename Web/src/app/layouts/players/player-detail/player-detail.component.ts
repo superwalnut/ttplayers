@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Player } from 'src/app/models/player';
@@ -28,7 +28,13 @@ import { Gtag } from 'angular-gtag';
   styleUrls: ['./player-detail.component.scss']
 })
 
-export class PlayerDetailComponent implements OnInit {
+export class PlayerDetailComponent implements OnInit, OnDestroy {
+
+  playerSubscription$;
+  matchSubscription$;
+  clubSubscription$;
+  teamSubscription$;
+
   player:Player;
   clubs:Club[] = [];
   teamPlayers:TeamPlayer[] = [];
@@ -70,7 +76,14 @@ export class PlayerDetailComponent implements OnInit {
         {name: 'keywords', content: 'Australia, Table Tennis, Match History, Match Statistics'},
         {name: 'robots', content: 'index, follow'}
       ]);
-    }
+  }
+
+  ngOnDestroy(): void {
+    this.playerSubscription$.unsubscribe();
+    this.matchSubscription$.unsubscribe();
+    this.clubSubscription$.unsubscribe();
+    this.teamSubscription$.unsubscribe();
+  }
 
   ngOnInit() {
     var playerId = this.route.snapshot.params.id;    
@@ -82,7 +95,7 @@ export class PlayerDetailComponent implements OnInit {
     this.gtag.event('player_detail', { 'playerId': playerId });
     
     // load player info
-    this.playerService.getPlayer(playerId).subscribe(player => {
+    this.playerSubscription$ = this.playerService.getPlayer(playerId).subscribe(player => {
       this.player = player;
       console.log(this.player);
 
@@ -112,7 +125,7 @@ export class PlayerDetailComponent implements OnInit {
 
 
       // load matches info
-      this.matchService.searchMatches(playerId).subscribe(matches =>{
+      this.matchSubscription$ = this.matchService.searchMatches(playerId).subscribe(matches =>{
         console.log('matches', matches);
 
         this.matchesByEvent = {};
@@ -130,7 +143,7 @@ export class PlayerDetailComponent implements OnInit {
       // load club info
       if(player.ClubIds){
         console.log("I have clubIds", player.ClubIds);
-        this.clubService.getClubByIds(player.ClubIds).subscribe(clubs =>{
+        this.clubSubscription$ = this.clubService.getClubByIds(player.ClubIds).subscribe(clubs =>{
           this.clubs = clubs;
         });
       } else if(player.PrimaryClubId) {
@@ -141,7 +154,7 @@ export class PlayerDetailComponent implements OnInit {
       
       // load team and team players
       if(player.Team) {
-        this.sndttaTeamService.searchTeams(player.Team).subscribe(teams =>{
+        this.teamSubscription$ = this.sndttaTeamService.searchTeams(player.Team).subscribe(teams =>{
           for(var i=0;i<teams.length;i++){
             for(var j=0;j<teams[i].Players.length;j++){
               var player = teams[i].Players[j];

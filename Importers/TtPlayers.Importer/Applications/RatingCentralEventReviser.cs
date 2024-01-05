@@ -47,6 +47,10 @@ namespace TtPlayers.Importer.Applications
             _firebaseEventPlayerRepository = firebaseEventPlayerRepository;
         }
 
+        /*
+            The purpose of this method is to fix errors that were entered into rating central and imported to ttplayers.
+            So we need to remove the event and re-import player matches and scores.
+         */
         public async Task ReviseEvent(string eventId)
         {
             var importedEvents = await _eventRepository.FilterByAsync(x => x.Id == eventId);

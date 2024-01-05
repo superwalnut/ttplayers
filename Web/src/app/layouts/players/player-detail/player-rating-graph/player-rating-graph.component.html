@@ -1,0 +1,36 @@
+<div class="container counter bg-light-inner pt-3 pl-3 pr-3 mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h4>Rating History</h4>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 p-4 p-b-0">
+            <div *ngIf="player.Rating>0" class="player-activity-summary mb-4">
+                <strong>{{player.FirstName}}</strong>'s current rating is <strong>{{toRating(player)}}</strong>, 
+                <ul class="list-group list-group-flush">
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> rating changed <strong>{{player.RatingChangesLast6Mth}}</strong> within last 6 months.</li>
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> rating changed <strong>{{player.RatingChangesYearly}}</strong> within last 12 months.</li>
+                </ul>
+            </div>            
+        </div>
+        <div class="col-lg-6 col-md-6 p-4 p-b-0">
+            <div *ngIf="player.HighestRating>0" class="player-activity-summary mb-4">
+                And achieved
+                <ul class="list-group list-group-flush">
+                    <li><i _ngcontent-serverapp-c366="" class="fa fa-angle-double-right mr-2"></i> highest rating <strong>{{toHighestRating(player)}}</strong>.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 p-4 p-t-0">
+            <div class="chart-container">
+                <canvas  id="RatingChart" >{{ ratingChart }}</canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,5 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 import { MatchScoreStats } from './match-score-stats';
+import { PlayerRatingChange } from './player-rating-change';
 
 export interface Player {
     Id: string;
@@ -68,4 +69,9 @@ export interface Player {
     LastUpdated: Date;
     LastDeltaPushDate: Date | null;
     RequireDeltaPush: boolean;
+
+    RatingChangeEveryHalfYearHistory:PlayerRatingChange[];
+
+    HighestRating:number;
+    HighestRatingStDev:number;
   }

@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Diagnostics;
 using TtPlayers.Importer.Applications.Base;
 using TtPlayers.Importer.Applications.Scraper;
-using TtPlayers.Importer.Configurations;
 using TtPlayers.Importer.Domain.Models;
 using TtPlayers.Importer.Domain.Repositories;
 using TtPlayers.Importer.Extensions;
@@ -18,42 +16,34 @@ namespace TtPlayers.Importer.Applications
         Task ImportPlayerRanking();
         Task ImportPlayerSummary();
 
-        Task RefreshPlayerTeamClubs();
+        Task ImportPlayerTeamClubs();
     }
 
     public class RatingCentralPlayersImporter : RatingCentralImporterBase, IRatingCentralPlayersImporter
     {
-        private readonly SndttaSettings _settings;
         private readonly ILogger<RatingCentralPlayersImporter> _logger;
         private readonly IDocumentRepository<Player> _playerRepository;
-        //private readonly IDocumentRepository<PlayerHistory> _playerHistoryRepository;
-        private readonly IDocumentRepository<PlayerUpdate> _playerUpdateRepository;
         private readonly IDocumentRepository<Match> _matchRepository;
         private readonly IDocumentRepository<TtEventPlayer> _eventPlayerRepository;
         private readonly ISndttaPlayerScraper _sndttaScraper;
         private readonly IRatingCentralScraper _rcScraper;
         private readonly IDocumentRepository<SndttaTeam> _teamRepository;
 
-        public RatingCentralPlayersImporter(IOptions<SndttaSettings> settings, 
+        public RatingCentralPlayersImporter(
             IDocumentRepository<Player> playerRepository,
-            //IDocumentRepository<PlayerHistory> playerHistoryRepository,
             IDocumentRepository<Match> matchRepository,
             ISndttaPlayerScraper sndttaScraper,
             ILogger<RatingCentralPlayersImporter> logger,
-            IDocumentRepository<PlayerUpdate> playerUpdateRepository,
             IDocumentRepository<TtEventPlayer> eventPlayerRepository,
             IDocumentRepository<SndttaTeam> teamRepository,
             IRatingCentralScraper rcScraper)
             : base(logger)
         {
-            _settings = settings.Value;
             _playerRepository = playerRepository;
-            //_playerHistoryRepository = playerHistoryRepository;
             _matchRepository = matchRepository;
             _sndttaScraper = sndttaScraper;
             _rcScraper = rcScraper;
             _logger = logger;
-            _playerUpdateRepository = playerUpdateRepository;
             _eventPlayerRepository = eventPlayerRepository;
             _teamRepository = teamRepository;
         }
@@ -242,7 +232,7 @@ namespace TtPlayers.Importer.Applications
             sw.Stop();
         }
 
-        public async Task RefreshPlayerTeamClubs()
+        public async Task ImportPlayerTeamClubs()
         {
             var teamNameDict = _sndttaScraper.GetTeamNames();
             var players = await _playerRepository.FilterByAsync(x => true);
@@ -258,9 +248,11 @@ namespace TtPlayers.Importer.Applications
                 foreach(var teamName in player.Team)
                 {
                     var clubId = teamNameDict?.FirstOrDefault(x => x.Name.Equals(teamName))?.ClubId;
-                    if(clubId != null)
+                    clubId = clubId.Trim();
+
+                    if (clubId != null && !clubIds.Contains(clubId))
                     {
-                        clubIds.Add(clubId.Trim());
+                        clubIds.Add(clubId);
                     }
                 }
 
@@ -322,6 +314,8 @@ namespace TtPlayers.Importer.Applications
             player.RatingChangesMonthly = RatingChangesInPeriod(player.Id, eventPlayers, 1);
             player.RatingChangesQuarterly = RatingChangesInPeriod(player.Id, eventPlayers, 3);
             player.RatingChangesYearly = RatingChangesInPeriod(player.Id, eventPlayers, 12);
+
+            player.RatingChangeEveryHalfYearHistory = RatingChangeEveryHalfYearHistory(player.Id, eventPlayers);
 
             //_logger.LogInformation($"load 6months rating-change - {sw.Elapsed.TotalMilliseconds}");
 
@@ -479,6 +473,48 @@ namespace TtPlayers.Importer.Applications
 
             return 0;
         }
+
+        private List<PlayerRatingChange> RatingChangeEveryHalfYearHistory(string playerId, List<TtEventPlayer> eventPlayers)
+        {
+            var results = new List<PlayerRatingChange>();
+            var orderedEventPlayers = eventPlayers.Where(x => x.Players.Any(o => o.PlayerId == playerId)).OrderBy(x => x.EventDate).ToList();
+
+            if(!orderedEventPlayers.Any())
+            {
+                return results;
+            }
+
+            var initialDate = orderedEventPlayers.FirstOrDefault().EventDate;
+            var halfYearDates = initialDate.GetHalfYearStartAndEndDates();
+            var previousRating = 0;
+
+            foreach (var date in halfYearDates)
+            {
+                int rating = 0;
+
+                var eventsInPeriod = orderedEventPlayers.Where(x => x.EventDate >= date.Value.Item1 && x.EventDate < date.Value.Item2).OrderByDescending(x => x.EventDate);
+                if (eventsInPeriod.Any())
+                {
+                    var playerLastEvent = eventsInPeriod.FirstOrDefault()?.Players.FirstOrDefault(x => x.PlayerId == playerId);
+
+                    if (playerLastEvent != null)
+                    {
+                        rating = playerLastEvent.FinalMean;
+                        previousRating = rating;
+                    }
+                }
+                else
+                {
+                    // for this period, we don't find any events, so consider rating didn't change. so we set to previous rating
+                    rating = previousRating;
+                }
+
+                results.Add(new PlayerRatingChange { Period = date.Key , Rating = rating });
+            }
+
+            return results;
+        }
+  
 
         private (int, int) GetHighestRating(List<Match> matches, Player player)
         {

@@ -37,7 +37,6 @@ namespace TtPlayers.Importer.Applications
         private readonly IDocumentRepository<Club> _clubRepository;
         private readonly IDocumentRepository<TtEventPlayer> _eventPlayerRepository;
         private readonly IDocumentRepository<Player> _playerRepository;
-        private readonly IDocumentRepository<Match> _matchRepository;
 
         private readonly IRatingCentralScraper _rcScraper;
 
@@ -52,7 +51,6 @@ namespace TtPlayers.Importer.Applications
             IDocumentRepository<Club> clubRepository,
             IDocumentRepository<TtEventPlayer> eventPlayerRepository,
             IDocumentRepository<Player> playerRepository,
-            IDocumentRepository<Match> matchRepository,
             IRatingCentralScraper rcScraper)
             :base(logger)
         {
@@ -63,7 +61,6 @@ namespace TtPlayers.Importer.Applications
             _clubRepository= clubRepository;
             _eventPlayerRepository = eventPlayerRepository;
             _playerRepository= playerRepository;
-            _matchRepository = matchRepository;
             _logger = logger;
         }
 

@@ -175,6 +175,9 @@ namespace TtPlayers.Importer.Domain.Models
         public int HighestRatingStDev { get; set; }
 
         [FirestoreProperty]
+        public List<PlayerRatingChange> RatingChangeEveryHalfYearHistory { get; set; } // create series for the rating changes every 6 months
+
+        [FirestoreProperty]
         public bool IsJunior { get; set; }
 
         [FirestoreProperty]

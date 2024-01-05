@@ -68,8 +68,8 @@
                             <!-- Rankings -->
                             <app-player-ranking [player]="player" [stats]="stats" *ngIf="stats"></app-player-ranking>
 
-                            <!-- Play More - Match Count summary -->
-                            <app-player-match-percentage [player]="player" [stats]="stats" *ngIf="stats && stats.MatchPlayedGroups"></app-player-match-percentage>
+                            <!-- Ratings -->
+                            <app-player-rating-graph [player]="player"></app-player-rating-graph>
 
                             <!-- Match summary -->
                             <app-player-match [player]="player"></app-player-match>
@@ -82,6 +82,9 @@
 
                             <!-- Sets insights -->
                             <app-player-sets-statistics [player]="player"></app-player-sets-statistics>
+
+                            <!-- Play More - Match Count summary -->
+                            <app-player-match-percentage [player]="player" [stats]="stats" *ngIf="stats && stats.MatchPlayedGroups"></app-player-match-percentage>
                         </ng-template>
                     </li>
                     <li [ngbNavItem]="2">

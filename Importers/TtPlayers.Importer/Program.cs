@@ -80,7 +80,7 @@ namespace TtPlayers.Importer
             public bool PlayerSndttaTeamImport { get; set; }
 
             [Option("player-refresh-clubids", Required = false, HelpText = "Refresh players' clubIDs.")]
-            public bool Refresh_Player_ClubIds { get; set; }
+            public bool PlayerTeamClubImport { get; set; }
 
             // import statistics
 
@@ -164,11 +164,13 @@ namespace TtPlayers.Importer
                            // import players (include import player-history)
                            playerImporter.ImportPlayer().GetAwaiter().GetResult();
                            // import sndtta team
-                           ////playerImporter.ImportSndttaTeam().GetAwaiter().GetResult();
+                           playerImporter.ImportSndttaTeam().GetAwaiter().GetResult();
                            // import ranking
                            playerImporter.ImportPlayerRanking().GetAwaiter().GetResult();
                            // import summary
                            playerImporter.ImportPlayerSummary().GetAwaiter().GetResult();
+                           // import player clubs
+                           playerImporter.ImportPlayerTeamClubs().GetAwaiter().GetResult();
                        }
                        else if (o.ClubImport)
                        {
@@ -242,6 +244,8 @@ namespace TtPlayers.Importer
                            playerImporter.ImportPlayerRanking().GetAwaiter().GetResult();
                            // import summary
                            playerImporter.ImportPlayerSummary().GetAwaiter().GetResult();
+                           // import player clubs
+                           playerImporter.ImportPlayerTeamClubs().GetAwaiter().GetResult();
                        }
                        else if (o.PlayerSummaryImport)
                        {
@@ -255,9 +259,9 @@ namespace TtPlayers.Importer
                        {
                            playerImporter.ImportSndttaTeam().GetAwaiter().GetResult();
                        }
-                       else if (o.Refresh_Player_ClubIds)
+                       else if (o.PlayerTeamClubImport)
                        {
-                           playerImporter.RefreshPlayerTeamClubs().GetAwaiter().GetResult();
+                           playerImporter.ImportPlayerTeamClubs().GetAwaiter().GetResult();
                        }
                        else if(o.EventPlayerImport)
                        {
