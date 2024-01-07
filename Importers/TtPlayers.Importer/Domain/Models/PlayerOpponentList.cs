@@ -14,6 +14,11 @@ namespace TtPlayers.Importer.Domain.Models
     [FirestoreData]
     public class PlayerOpponentList : IDocument
     {
+        public PlayerOpponentList()
+        {
+            Opponents = new List<PlayerOpponent>();
+        }
+
         [BsonElement("_id")]
         [BsonId]
         [FirestoreProperty] 

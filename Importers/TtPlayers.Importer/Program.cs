@@ -87,6 +87,11 @@ namespace TtPlayers.Importer
             [Option("statistics", Required = false, HelpText = "Import player sndtta teams.")]
             public bool StatisticsImport { get; set; }
 
+            // import opponents
+
+            [Option("opponent", Required = false, HelpText = "Import player opponents.")]
+            public bool OpponentsImport { get; set; }
+
             // pushing to firestore
 
             [Option("push-all", Required = false, HelpText = "Push all.")]
@@ -119,6 +124,9 @@ namespace TtPlayers.Importer
             [Option("push-statistics", Required = false, HelpText = "Push statistics.")]
             public bool PushStatistics { get; set; }
 
+            [Option("push-opponent", Required = false, HelpText = "Push opponents.")]
+            public bool PushOpponents { get; set; }
+
             [Option("show-push-summary", Required = false, HelpText = "Show Push Summary.")]
             public bool ShowPushSummary { get; set; }
 
@@ -139,6 +147,8 @@ namespace TtPlayers.Importer
             var sndttaUpcomingEventImporter = host.Services.GetRequiredService<ISndttaUpcomingEventImporter>();
             var clubImporter = host.Services.GetRequiredService<IRatingCentralClubImporter>();
             var statisticImporter = host.Services.GetRequiredService<IStatisticsImporter>();
+            var opponentImporter = host.Services.GetRequiredService<IRatingCentralOpponentImporter>();
+
             var sitemapGenerator = host.Services.GetRequiredService<IGoogleSiteMapGenerator>();
             var firebasePusher = host.Services.GetRequiredService<IFirebaseDeltaPushImporter>();
 
@@ -263,6 +273,10 @@ namespace TtPlayers.Importer
                        {
                            playerImporter.ImportPlayerTeamClubs().GetAwaiter().GetResult();
                        }
+                       else if (o.OpponentsImport)
+                       {
+                           opponentImporter.ImportOpponents().GetAwaiter().GetResult();
+                       }
                        else if(o.EventPlayerImport)
                        {
                            eventImporter.ImportEventPlayers(o.ForceAll).GetAwaiter().GetResult();
@@ -325,6 +339,10 @@ namespace TtPlayers.Importer
                        else if (o.PushStatistics)
                        {
                            firebasePusher.PushStatistics().GetAwaiter().GetResult();
+                       }
+                       else if (o.PushOpponents)
+                       {
+                           firebasePusher.PushOpponents(o.PlayerId).GetAwaiter().GetResult();
                        }
                        else if(o.ShowPushSummary)
                        {

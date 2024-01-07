@@ -71,6 +71,8 @@ namespace TtPlayers.Importer
             services.AddTransient<IStatisticsImporter, StatisticsImporter>();
             services.AddTransient<IGoogleSiteMapGenerator, GoogleSiteMapGenerator>();
             services.AddTransient<IRatingCentralEventReviser, RatingCentralEventReviser>();
+
+            services.AddTransient<IRatingCentralOpponentImporter, RatingCentralOpponentImporter>();
         }
     }
 }

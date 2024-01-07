@@ -25,6 +25,8 @@ namespace TtPlayers.Importer.Applications
 
         Task PushStatistics();
 
+        Task PushOpponents(string playerId = null);
+
         Task ShowPendingPushSummary();
     }
 
@@ -40,6 +42,7 @@ namespace TtPlayers.Importer.Applications
         private readonly IDocumentRepository<Club> _clubRepository;
         private readonly IDocumentRepository<TtEventPlayer> _eventPlayerRepository;
         private readonly IDocumentRepository<Statistics> _statisticsRepository;
+        private readonly IDocumentRepository<PlayerOpponentList> _playerOpponentListRepository;
 
         private readonly IFireBaseRepository<Player> _firebasePlayerRepository;
         private readonly IFireBaseRepository<PlayerHistory> _firebasePlayerHistoryRepository;
@@ -50,6 +53,7 @@ namespace TtPlayers.Importer.Applications
         private readonly IFireBaseRepository<Club> _firebaseClubRepository;
         private readonly IFireBaseRepository<TtEventPlayer> _firebaseEventPlayerRepository;
         private readonly IFireBaseRepository<Statistics> _firebaseStatisticsRepository;
+        private readonly IFireBaseRepository<PlayerOpponentList> _firebasePlayerOpponentListRepository;
 
         public FirebaseDeltaPushImporter(ILogger<FirebaseDeltaPushImporter> logger, 
             IDocumentRepository<Player> playerRepository,
@@ -61,6 +65,7 @@ namespace TtPlayers.Importer.Applications
             IDocumentRepository<Club> clubRepository,
             IDocumentRepository<TtEventPlayer> eventPlayerRepository,
             IDocumentRepository<Statistics> statisticsRepository,
+            IDocumentRepository<PlayerOpponentList> playerOpponentListRepository,
             IFireBaseRepository<Player> firebasePlayerRepository,
             IFireBaseRepository<PlayerHistory> firebasePlayerHistoryRepository,
             IFireBaseRepository<Match> firebaseEventMatchesRepository,
@@ -69,7 +74,9 @@ namespace TtPlayers.Importer.Applications
             IFireBaseRepository<SndttaUpcomingEvent> firebaseUpcomingEventRepository,
             IFireBaseRepository<Club> firebaseClubRepository,
             IFireBaseRepository<TtEventPlayer> firebaseEventPlayerRepository,
-            IFireBaseRepository<Statistics> firebaseStatisticsRepository)
+            IFireBaseRepository<Statistics> firebaseStatisticsRepository,
+            IFireBaseRepository<PlayerOpponentList> firebasePlayerOpponentListRepository
+            )
         {
             _logger = logger;
             _playerRepository = playerRepository;
@@ -90,6 +97,9 @@ namespace TtPlayers.Importer.Applications
             _firebaseEventPlayerRepository= firebaseEventPlayerRepository;
             _firebaseStatisticsRepository = firebaseStatisticsRepository;
             _statisticsRepository = statisticsRepository;
+            _playerOpponentListRepository = playerOpponentListRepository;
+            _firebasePlayerOpponentListRepository = firebasePlayerOpponentListRepository;
+
         }
 
         public async Task PushPlayers(string playerId = null)
@@ -300,6 +310,32 @@ namespace TtPlayers.Importer.Applications
             _logger.LogInformation($"Pushed club to firebase completed with status {result}");
         }
 
+        public async Task PushOpponents(string playerId = null)
+        {
+            var opponents = new List<PlayerOpponentList>();
+
+            if (!string.IsNullOrEmpty(playerId))
+            {
+                opponents = await _playerOpponentListRepository.FilterByAsync(x => x.Id == playerId);
+            }
+            else
+            {
+                opponents = await _playerOpponentListRepository.FilterByAsync(x => x.RequireDeltaPush);
+            }
+
+            _logger.LogInformation($"Pushing {opponents.Count} players' oppponets to firebase");
+
+            await _firebasePlayerOpponentListRepository.UpdateBulk(opponents);
+
+            opponents.ForEach(x => {
+                x.RequireDeltaPush = false;
+                x.LastDeltaPushDate = DateTime.Now;
+            });
+
+            var result = await _playerOpponentListRepository.UpsertManyAsync(opponents);
+            _logger.LogInformation($"Pushed players' opponents to firebase completed with status {result}");
+        }
+
         public async Task PushSndttaTeams()
         {
             var sndttaTeams = await _sndttaTeamRepository.FilterByAsync(x => x.RequireDeltaPush);
@@ -363,21 +399,8 @@ namespace TtPlayers.Importer.Applications
             var sndttaTeams = await _sndttaTeamRepository.CountAsync(x => x.RequireDeltaPush);
             _logger.LogInformation($"Teams: {sndttaTeams} pending to push");
 
-        }
-
-        private Dictionary<int, IList<IDocument>> CreateBatches(IList<IDocument> documents)
-        {
-            var batches = new Dictionary<int, IList<IDocument>>();
-
-            int batchSize = 500;
-
-            for (int i = 0; i < documents.Count; i += batchSize)
-            {
-                IList<IDocument> batch = documents.Skip(i).Take(batchSize).ToList();
-                batches.Add(i, batch);
-            }
-
-            return batches;
+            var opponents = await _playerOpponentListRepository.CountAsync(x => x.RequireDeltaPush);
+            _logger.LogInformation($"Opponents: {opponents} pending to push");
         }
     }
 }
