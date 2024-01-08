@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Player } from 'src/app/models/player';
 import { Team } from 'src/app/models/team';
 import { TeamPlayer } from 'src/app/models/team-player';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-team-players',
@@ -12,7 +13,7 @@ export class TeamPlayersComponent implements OnInit{
   @Input() teamPlayers:TeamPlayer[];
 
   count:number = 5;
-  constructor() {
+  constructor(private commonService:CommonService) {
   }
 
   ngOnInit(): void {
@@ -36,5 +37,10 @@ export class TeamPlayersComponent implements OnInit{
       const firstInitial = player.FirstName.charAt(0);
       const lastInitial = player.LastName.charAt(0);
       return `${firstInitial}${lastInitial}`;
+  }
+
+  convertNameSlug(player:TeamPlayer)
+  {
+    return this.commonService.convertToSlug(player.FullName);
   }
 }

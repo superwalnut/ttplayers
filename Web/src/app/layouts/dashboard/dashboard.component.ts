@@ -10,6 +10,7 @@ import { Player } from 'src/app/models/player';
 import { PlayerService } from 'src/app/service/player.service';
 import { FriendService } from 'src/app/service/friend.service';
 import { of, switchMap, zip } from 'rxjs';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +25,8 @@ export class DashboardComponent implements OnInit{
   constructor(public authService: AuthService, 
     private toastrService: ToastrService, 
     private playerService:PlayerService,
-    private profileService:UserProfileService
+    private profileService:UserProfileService,
+    private commonService:CommonService
     ) { }
     
   ngOnInit(): void {
@@ -59,4 +61,8 @@ export class DashboardComponent implements OnInit{
     });
   }
 
+  convertNameSlug(player:Player)
+  {
+    return this.commonService.convertToSlug(player.FullName);
+  }
 }

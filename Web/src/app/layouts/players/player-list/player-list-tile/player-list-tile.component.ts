@@ -54,4 +54,9 @@ export class PlayerListTileComponent implements OnInit{
         return "Premier";
     }
   }
+
+  convertNameSlug(player:Player)
+  {
+    return this.commonService.convertToSlug(player.FullName);
+  }
 }

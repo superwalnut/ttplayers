@@ -38,10 +38,11 @@ export class CompetitorDetailTileComponent {
     return this.commonService.getNameInitialSvg(player, rank);
   }
 
-  playerClick(e, playerId:string) {
+  playerClick(e) {
     console.log(e.target.parentNode);
     if(e.target.parentNode.nodeName.toLowerCase() === 'div' ){
-      this.router.navigate([`/player/${playerId}`], { queryParams: { referrer: 'competitors' } });
+      const slug = this.convertNameSlug(this.player);
+      this.router.navigate([`/player/${this.player.Id}/${slug}`], { queryParams: { referrer: 'competitors' } });
     }
   }
 
@@ -50,5 +51,10 @@ export class CompetitorDetailTileComponent {
       console.log('click remove-friend', player);
       this.removeCompetitor.emit(player);    }
 
+  }
+
+  convertNameSlug(player:Player)
+  {
+    return this.commonService.convertToSlug(player.FullName);
   }
 }

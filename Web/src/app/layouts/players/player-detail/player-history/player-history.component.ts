@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Match } from 'src/app/models/match';
 import { Player } from 'src/app/models/player';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-player-history',
@@ -13,7 +14,7 @@ export class PlayerHistoryComponent {
   
   maxSets:number = 7;
 
-  constructor() {
+  constructor(private commonService:CommonService) {
   }
 
   
@@ -194,4 +195,18 @@ export class PlayerHistoryComponent {
     }
   }
 
+  getOpponentNameSlug(match:Match)
+  {
+    var name="";
+    if(match.WinnerId == this.player.Id){
+      // I am winner
+      name = match.LoserName;
+    }
+    if(match.LoserId == this.player.Id){
+      // I am loser
+      name = match.WinnerName;
+    }
+
+    return this.commonService.convertToSlug(name);
+  }
 }

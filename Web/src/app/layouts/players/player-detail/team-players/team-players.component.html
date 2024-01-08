@@ -15,7 +15,7 @@
                                 <div class="badge" [ngClass]="{'badge-blue': teamPlayer.Gender == 'M', 'badge-red': teamPlayer.Gender == 'F'}">{{toRating(teamPlayer)}}</div>    
                             </div>
                             <div class="col-7">
-                                <h5 class="post-head text-nowrap"><a class="team-player-link" href="/player/{{teamPlayer.Id}}" title="{{teamPlayer.FullName}}">{{teamPlayer.FullName}}</a></h5>
+                                <h5 class="post-head text-nowrap"><a class="team-player-link" href="/player/{{teamPlayer.Id}}/{{convertNameSlug(teamPlayer)}}" title="{{teamPlayer.FullName}}">{{teamPlayer.FullName}}</a></h5>
                                 <h6 class="date">{{teamPlayer.Team}}</h6>
                             </div>
                         </div>

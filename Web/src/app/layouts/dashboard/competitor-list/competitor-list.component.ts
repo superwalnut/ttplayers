@@ -5,6 +5,7 @@ import { Player } from 'src/app/models/player';
 import { Profile } from 'src/app/models/profile';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/service/auth.service';
+import { CommonService } from 'src/app/service/common.service';
 import { CompetitorService } from 'src/app/service/competitor.service';
 import { PlayerService } from 'src/app/service/player.service';
 import { UserProfileService } from 'src/app/service/user-profile.service';
@@ -25,7 +26,8 @@ export class CompetitorListComponent {
     private profileService:UserProfileService, 
     private playerService:PlayerService,
     private competitorService:CompetitorService,
-    private toastrService:ToastrService
+    private toastrService:ToastrService,
+    private commonService:CommonService,
     ) {
   }
 
@@ -95,4 +97,6 @@ export class CompetitorListComponent {
     // Use the sort method to sort players by rating
     return items.sort((a, b) => b.Rating - a.Rating);
   }
+
+
 }

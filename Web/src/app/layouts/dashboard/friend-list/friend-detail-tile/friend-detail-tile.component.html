@@ -15,7 +15,7 @@
     <div class="col-1 text-center friend-detail-label"><a class="red remove-friend" (click)="remove_friend(player)"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></div>
 </div> -->
 
-<div class="card" [ngClass]="'player-'+rank" [ngClass]="{'highlight': player.Id== yourPlayerId}" *ngIf="player" (click)="playerClick($event, player.Id)">
+<div class="card" [ngClass]="'player-'+rank" [ngClass]="{'highlight': player.Id== yourPlayerId}" *ngIf="player" (click)="playerClick($event)">
     <div class="card-body">
         <div class="d-flex">
             <div class="m-ranking">{{rank}}</div>

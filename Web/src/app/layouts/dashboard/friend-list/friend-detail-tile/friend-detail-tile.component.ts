@@ -46,10 +46,16 @@ export class FriendDetailTileComponent implements OnInit {
     }
   }
   
-  playerClick(e, playerId:string) {
+  playerClick(e) {
     console.log(e.target.parentNode);
     if(e.target.parentNode.nodeName.toLowerCase() === 'div' ){
-      this.router.navigate([`/player/${playerId}`], { queryParams: { referrer: 'friends' } });
+      const slug = this.convertNameSlug(this.player);
+      this.router.navigate([`/player/${this.player.Id}/${slug}`], { queryParams: { referrer: 'friends' } });
     }
+  }
+
+  convertNameSlug(player:Player)
+  {
+    return this.commonService.convertToSlug(player.FullName);
   }
 }

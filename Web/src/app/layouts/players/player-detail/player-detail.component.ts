@@ -29,12 +29,6 @@ import { Gtag } from 'angular-gtag';
 })
 
 export class PlayerDetailComponent implements OnInit, OnDestroy {
-
-  playerSubscription$;
-  matchSubscription$;
-  clubSubscription$;
-  teamSubscription$;
-
   player:Player;
   clubs:Club[] = [];
   teamPlayers:TeamPlayer[] = [];
@@ -79,10 +73,6 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.playerSubscription$.unsubscribe();
-    this.matchSubscription$.unsubscribe();
-    this.clubSubscription$.unsubscribe();
-    this.teamSubscription$.unsubscribe();
   }
 
   ngOnInit() {
@@ -95,7 +85,7 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     this.gtag.event('player_detail', { 'playerId': playerId });
     
     // load player info
-    this.playerSubscription$ = this.playerService.getPlayer(playerId).subscribe(player => {
+    this.playerService.getPlayer(playerId).subscribe(player => {
       this.player = player;
       console.log(this.player);
 
@@ -125,7 +115,7 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
 
 
       // load matches info
-      this.matchSubscription$ = this.matchService.searchMatches(playerId).subscribe(matches =>{
+      this.matchService.searchMatches(playerId).subscribe(matches =>{
         console.log('matches', matches);
 
         this.matchesByEvent = {};
@@ -143,7 +133,7 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
       // load club info
       if(player.ClubIds){
         console.log("I have clubIds", player.ClubIds);
-        this.clubSubscription$ = this.clubService.getClubByIds(player.ClubIds).subscribe(clubs =>{
+        this.clubService.getClubByIds(player.ClubIds).subscribe(clubs =>{
           this.clubs = clubs;
         });
       } else if(player.PrimaryClubId) {
@@ -154,7 +144,7 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
       
       // load team and team players
       if(player.Team) {
-        this.teamSubscription$ = this.sndttaTeamService.searchTeams(player.Team).subscribe(teams =>{
+        this.sndttaTeamService.searchTeams(player.Team).subscribe(teams =>{
           for(var i=0;i<teams.length;i++){
             for(var j=0;j<teams[i].Players.length;j++){
               var player = teams[i].Players[j];

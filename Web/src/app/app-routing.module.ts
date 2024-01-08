@@ -44,7 +44,7 @@ export const routes: Routes = [
     data: { title: 'Australian Table Tennis Players Search'}
   },
   {
-    path: 'player/:id',
+    path: 'player/:id/:name',
     component: PlayerDetailComponent,
     data: { title: "Australian Table Tennis Player's match history and statistics"}
   },

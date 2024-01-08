@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TtEvent } from 'src/app/models/event';
 import { EventPlayerRating } from 'src/app/models/event-player-rating';
 import { EventService } from 'src/app/service/event.service';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -17,7 +18,7 @@ export class EventDetailComponent {
   keyword:string;
   state:string;
 
-  constructor(private route: ActivatedRoute, private eventService:EventService, private title:Title) {
+  constructor(private route: ActivatedRoute, private eventService:EventService, private title:Title, private commonService:CommonService) {
     var eventId = this.route.snapshot.params.id;
     this.keyword = this.route.snapshot.queryParams.keyword;
     this.state = this.route.snapshot.queryParams.state;
@@ -62,5 +63,10 @@ export class EventDetailComponent {
     } 
 
     return rating.PointChange;
+  }
+  
+  convertNameSlug(player:EventPlayerRating)
+  {
+    return this.commonService.convertToSlug(player.PlayerName);
   }
 }

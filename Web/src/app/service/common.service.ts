@@ -78,7 +78,11 @@ export class CommonService {
     return date;
   }
 
-
+  convertToSlug(val:string)
+  {
+    const stringWithHyphens: string = val.replace(/[\s,]+/g, '-');
+    return stringWithHyphens;
+  }
 
   private getCircleColour(player:Player) {
       if(player.Gender == "F") {

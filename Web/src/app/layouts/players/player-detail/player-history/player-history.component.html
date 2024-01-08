@@ -43,7 +43,7 @@
                                             <tr>
                                                 <td class="match-player" [ngClass]="getOpponentWinnerClass(match)">
                                                     <i class="fa fa-user m-r-10" ></i>
-                                                    <a href="/player/{{getMatchOpponentPlayerId(match)}}">{{getMatchOpponentPlayerName(match)}}</a> ({{getOpponentRating(match)}}) 
+                                                    <a href="/player/{{getMatchOpponentPlayerId(match)}}/{{getOpponentNameSlug(match)}}">{{getMatchOpponentPlayerName(match)}}</a> ({{getOpponentRating(match)}}) 
                                                     <span class="badge badge-danger">{{getOpponentPointChange(match)}}</span>
                                                 </td>
                                                 <td class="match-set-wins" [ngClass]="getOpponentWinnerClass(match)"><span class="badge bg-secondary set-wins">{{getOpponentSetWins(match)}}</span></td>

@@ -49,8 +49,13 @@ export class RankingItemComponent implements OnInit {
     }
   }
 
-  playerClick(playerId:string) {
-    this.router.navigate([`/player/${playerId}`], { queryParams: { referrer: 'rankings' } });
+  playerClick() {
+    const slug = this.convertNameSlug(this.player);
+    this.router.navigate([`/player/${this.player.Id}/${slug}`], { queryParams: { referrer: 'rankings' } });
   }
 
+  convertNameSlug(player:Player)
+  {
+    return this.commonService.convertToSlug(player.FullName);
+  }
 }

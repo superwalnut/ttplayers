@@ -7,6 +7,7 @@ import { LocalstorageService } from 'src/app/service/localstorage.service';
 import { PlayerService } from 'src/app/service/player.service';
 import { StatisticsService } from 'src/app/service/statistics.service';
 import { GlobalConstants } from 'src/app/service/global.constants';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-player-list',
@@ -29,7 +30,11 @@ export class PlayerListComponent implements OnInit {
 
   stats:Statistics; // use for statistics data for sidebar
 
-  constructor(private playerService:PlayerService, private route: ActivatedRoute, private router:Router, private statsService:StatisticsService, private lsService:LocalstorageService) {
+  constructor(private playerService:PlayerService, 
+    private route: ActivatedRoute, 
+    private router:Router, 
+    private statsService:StatisticsService, 
+    private commonService:CommonService) {
   }
 
   ngOnInit() {
@@ -159,5 +164,7 @@ export class PlayerListComponent implements OnInit {
             (value !== '') &&
             !isNaN(Number(value.toString())));
   }
+
+
 }
 
