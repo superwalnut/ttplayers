@@ -178,7 +178,7 @@ namespace TtPlayers.Importer
                            // import ranking
                            playerImporter.ImportPlayerRanking().GetAwaiter().GetResult();
                            // import summary
-                           playerImporter.ImportPlayerSummary().GetAwaiter().GetResult();
+                           playerImporter.ImportPlayerSummary(o.PlayerId).GetAwaiter().GetResult();
                            // import player clubs
                            playerImporter.ImportPlayerTeamClubs().GetAwaiter().GetResult();
                        }
@@ -253,13 +253,13 @@ namespace TtPlayers.Importer
                            // import ranking
                            playerImporter.ImportPlayerRanking().GetAwaiter().GetResult();
                            // import summary
-                           playerImporter.ImportPlayerSummary().GetAwaiter().GetResult();
+                           playerImporter.ImportPlayerSummary(o.PlayerId).GetAwaiter().GetResult();
                            // import player clubs
                            playerImporter.ImportPlayerTeamClubs().GetAwaiter().GetResult();
                        }
                        else if (o.PlayerSummaryImport)
                        {
-                           playerImporter.ImportPlayerSummary().GetAwaiter().GetResult();
+                           playerImporter.ImportPlayerSummary(o.PlayerId).GetAwaiter().GetResult();
                        }
                        else if (o.PlayerRankingImport)
                        {

@@ -18,8 +18,7 @@ export class PlayerOpponentComponent implements OnInit{
   }
   
   createChart(){
-  
-    this.totalLostOpponents = this.player.TotalOpponentCount - this.player.TotalBeatPlayersCount;
+    this.totalLostOpponents = this.player.TotalLostPlayersCount?this.player.TotalLostPlayersCount:this.player.TotalOpponentCount - this.player.TotalBeatPlayersCount;
     const data = {
       labels: [`Won (${this.player.TotalBeatPlayersCount})`, `Lost (${this.totalLostOpponents})`],
       datasets: [

@@ -14,7 +14,7 @@ namespace TtPlayers.Importer.Applications
         Task ImportPlayer();
         Task ImportSndttaTeam();
         Task ImportPlayerRanking();
-        Task ImportPlayerSummary();
+        Task ImportPlayerSummary(string playerId = null);
 
         Task ImportPlayerTeamClubs();
     }
@@ -216,11 +216,16 @@ namespace TtPlayers.Importer.Applications
             _logger.LogInformation($"Finish updating ranking for {pendingPlayers.Count} players, only ranked {rankedPlayers.Count()} players.");
         }
 
-        public async Task ImportPlayerSummary()
+        public async Task ImportPlayerSummary(string playerId = null)
         {
             var sw = new Stopwatch();
             sw.Start();
             var players = await _playerRepository.FilterByAsync(x => true);
+            if (!string.IsNullOrEmpty(playerId))
+            {
+                players = players.Where(x => x.Id == playerId).ToList();
+            }
+
             int numThreads = 10; // Number of threads for parallel importing
             List<Task> importTasks = new List<Task>();
             for (int i = 0; i < numThreads; i++)
@@ -356,6 +361,7 @@ namespace TtPlayers.Importer.Applications
             player.TotalOpponentCount = opponentIds.Count;
 
             player.TotalBeatPlayersCount = loserOpponents.Distinct().Count();
+            player.TotalLostPlayersCount = winnerOpponents.Distinct().Count();
 
             var winsWithoutLosingSet = matches.Count(x => x.WinnerId == player.Id && WinAllSets(x.Score));
             player.TotalWinsWithoutLosingAnySet = winsWithoutLosingSet;

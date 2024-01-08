@@ -131,6 +131,9 @@ namespace TtPlayers.Importer.Domain.Models
         public int TotalBeatPlayersCount { get; set; } // total beat distinct players
 
         [FirestoreProperty]
+        public int TotalLostPlayersCount { get; set; } // total lost distinct players
+
+        [FirestoreProperty]
         public int TotalWinsWithoutLosingAnySet { get; set; }
 
         [FirestoreProperty]

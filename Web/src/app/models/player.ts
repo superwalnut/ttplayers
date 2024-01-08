@@ -58,6 +58,7 @@ export interface Player {
 
     TotalOpponentCount:number;
     TotalBeatPlayersCount:number;
+    TotalLostPlayersCount:number;
 
     NationalGenderRanking:number;
     StateGenderRanking:number;
