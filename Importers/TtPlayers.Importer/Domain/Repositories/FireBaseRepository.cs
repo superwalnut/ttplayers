@@ -22,7 +22,7 @@ namespace TtPlayers.Importer.Domain.Repositories
         Task<TDocument> Add(TDocument record);
         Task<bool> Update(TDocument record);
 
-        Task<bool> UpdateBulk(IList<TDocument> records);
+        Task<bool> UpdateBulk(IList<TDocument> records, int batchSize = 500);
 
         Task<bool> Delete(TDocument record);
         Task<bool> DeleteBulk(IList<TDocument> records);
@@ -64,9 +64,9 @@ namespace TtPlayers.Importer.Domain.Repositories
             return true;
         }
 
-        public async Task<bool> UpdateBulk(IList<TDocument> records)
+        public async Task<bool> UpdateBulk(IList<TDocument> records, int batchSize = 500)
         {
-            var batches = CreateBatches(records);
+            var batches = CreateBatches(records, batchSize);
             var resultCount = 0;
             var index = 0;
             _logger.LogInformation($"UpsertMany {batches.Count} batches.");
@@ -173,11 +173,9 @@ namespace TtPlayers.Importer.Domain.Repositories
                 .FirstOrDefault())?.CollectionName;
         }
 
-        private Dictionary<int, IList<TDocument>> CreateBatches(IList<TDocument> documents)
+        private Dictionary<int, IList<TDocument>> CreateBatches(IList<TDocument> documents, int batchSize = 500)
         {
             var batches = new Dictionary<int, IList<TDocument>>();
-
-            int batchSize = 500;
 
             for (int i = 0; i < documents.Count; i += batchSize)
             {

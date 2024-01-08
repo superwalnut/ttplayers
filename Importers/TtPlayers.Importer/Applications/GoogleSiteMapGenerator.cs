@@ -124,12 +124,12 @@ namespace TtPlayers.Importer.Applications
 
             foreach (var player in players)
             {
-                AddUrl(xmlDoc, root, $"{_baseUrl}/player/{player.Id}");
+                AddUrl(xmlDoc, root, $"{_baseUrl}/player/{player.Id}/{player.FullName.Replace(" ","-")}");
             }
 
             foreach(var evt in events)
             {
-                AddUrl(xmlDoc, root, $"{_baseUrl}/event/{evt.Id}");
+                AddUrl(xmlDoc, root, $"{_baseUrl}/event/{evt.Id}/{evt.Name.Replace(" ","-")}");
             }
 
             foreach(var club in clubs)

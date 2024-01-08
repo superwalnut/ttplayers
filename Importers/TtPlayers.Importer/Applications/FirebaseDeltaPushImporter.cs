@@ -325,7 +325,7 @@ namespace TtPlayers.Importer.Applications
 
             _logger.LogInformation($"Pushing {opponents.Count} players' oppponets to firebase");
 
-            await _firebasePlayerOpponentListRepository.UpdateBulk(opponents);
+            await _firebasePlayerOpponentListRepository.UpdateBulk(opponents, 50);
 
             opponents.ForEach(x => {
                 x.RequireDeltaPush = false;
