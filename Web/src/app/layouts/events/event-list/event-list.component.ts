@@ -3,6 +3,7 @@ import { EventService } from './../../../service/event.service';
 import { TtEvent } from 'src/app/models/event';
 import { ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { CommonService } from 'src/app/service/common.service';
 
 @Component({
   selector: 'app-event-list',
@@ -18,7 +19,7 @@ export class EventListComponent {
 
   lastEvent:TtEvent = null;
 
-  constructor(private eventService:EventService, private route: ActivatedRoute, private title:Title) {
+  constructor(private eventService:EventService, private route: ActivatedRoute, private title:Title, private commonService:CommonService) {
     const state = this.route.snapshot.queryParams.state;
     if(state){
       this.state = state;
@@ -85,6 +86,11 @@ export class EventListComponent {
     }
 
     return `url(assets/images/events/${evt.State}.jpg)`;
+   }
+
+   convertNameSlug(evt:TtEvent)
+   {
+      return this.commonService.convertToSlug(evt.Name);
    }
 }
 

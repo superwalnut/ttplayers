@@ -64,7 +64,7 @@ export const routes: Routes = [
     data: { title: "Australian Table Tennis Events"}
   },
   {
-    path: 'event/:id',
+    path: 'event/:id/:name',
     component: EventDetailComponent,
     data: { title: "Australian Table Tennis Event Details"}
   },
