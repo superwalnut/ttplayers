@@ -29,8 +29,11 @@
                                                 <td class="match-set-wins" [ngClass]="getOpponentWinnerClass(match)"><span class="badge bg-secondary set-wins">{{getOpponentPlayerScore(match)}}</span></td>
                                                 <td></td>
                                                 <td class="match-player middle-align" [ngClass]="getOpponentWinnerClass(match)">
-                                                    <a href="/player/{{opponent.Id}}/{{convertNameSlug(opponent)}}">
+                                                    <a href="/player/{{opponent.Id}}/{{convertNameSlug(opponent)}}" *ngIf="opponent.FullName.trim()">
                                                         <i class="fa fa-user m-r-10" ></i>{{opponent.FullName}}
+                                                    </a>
+                                                    <a *ngIf="!opponent.FullName.trim()">
+                                                        <i class="fa fa-user m-r-10" ></i>Unknown
                                                     </a>
                                                 </td>
                                                 <!-- <td class="middle-align match-date">{{convertMatchDate(match) | date:"dd/MM/yy"}}</td> -->
