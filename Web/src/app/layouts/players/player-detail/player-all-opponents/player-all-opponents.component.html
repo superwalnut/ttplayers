@@ -1,0 +1,49 @@
+<h3 class="page-header-comment mt-5">{{player.FirstName}}'s Opponents</h3>
+<div class="comment-list blog_comment" *ngIf="opponents">
+    <div class="comment_sec" *ngFor="let opponent of opponents.Opponents">
+        <article class="row">
+            <div class="col-12 p-0">
+                <div class="blog_center">
+                    <div class="blog_user arrow left">
+                        <div class="panel-body">
+                            <div class="text-left ml-2 mr-2">
+                                <div class="comment-user"><i class="fa fa-calendar"></i>
+                                    <h6><strong>{{opponents.FullName}}</strong> VS <strong>{{opponent.FullName}}</strong> {{matchCountLabel(opponent)}}</h6>
+                                </div>
+                            </div>
+                            <div class="comment-post">
+                                <div class="table-responsive">
+                                    <table class="table table-borderless">
+                                        <thead>
+                                            <th width="35%"></th>
+                                            <th width="5%"></th>
+                                            <th width="5%"></th>
+                                            <th width="5%"></th>
+                                            <th width="50%"></th>
+                                            <!-- <th width="20%"></th> -->
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let match of opponent.Matches">
+                                                <td class="middle-align" [ngClass]="getPlayerWinnerClass(match)"><i class="fa fa-user m-r-10" ></i>{{player.FirstName}}</td>
+                                                <td class="match-set-wins" [ngClass]="getPlayerWinnerClass(match)"><span class="badge bg-secondary set-wins">{{getPlayerScore(match)}}</span></td>
+                                                <td class="match-set-wins" [ngClass]="getOpponentWinnerClass(match)"><span class="badge bg-secondary set-wins">{{getOpponentPlayerScore(match)}}</span></td>
+                                                <td></td>
+                                                <td class="match-player middle-align" [ngClass]="getOpponentWinnerClass(match)">
+                                                    <a href="/player/{{opponent.Id}}/{{convertNameSlug(opponent)}}">
+                                                        <i class="fa fa-user m-r-10" ></i>{{opponent.FullName}}
+                                                    </a>
+                                                </td>
+                                                <!-- <td class="middle-align match-date">{{convertMatchDate(match) | date:"dd/MM/yy"}}</td> -->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+

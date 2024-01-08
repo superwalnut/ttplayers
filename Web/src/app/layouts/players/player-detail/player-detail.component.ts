@@ -21,6 +21,8 @@ import { Competitor } from './../../../models/competitor';
 import { CompetitorService } from './../../../service/competitor.service';
 import { CommonService } from 'src/app/service/common.service';
 import { Gtag } from 'angular-gtag';
+import { PlayerOpponentService } from './../../../service/player-opponent.service';
+import { PlayerOpponents } from 'src/app/models/player-opponent';
 
 @Component({
   selector: 'app-player-detail',
@@ -33,6 +35,7 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
   clubs:Club[] = [];
   teamPlayers:TeamPlayer[] = [];
   matchesByEvent: { [eventId: string]: Match[] } = {};
+  opponents:PlayerOpponents;
   
   keyword:string;
   state:string;
@@ -58,8 +61,9 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     private authService:AuthService,
     private modalService: NgbModal,
     private toastrService: ToastrService,
-    private statsService:StatisticsService,
     private competitorService:CompetitorService,
+    private playerOpponentService:PlayerOpponentService,
+    private statsService:StatisticsService,
     private commonService:CommonService,
     private gtag: Gtag,
     private meta: Meta
@@ -84,6 +88,46 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
 
     this.gtag.event('player_detail', { 'playerId': playerId });
     
+    this.loggedInUser = this.authService.getLoggedInUser();
+
+    if(this.loggedInUser){
+      // load friend info
+      this.friendService.getFriend(this.loggedInUser.Id, playerId).subscribe(f => {
+        if(f){
+          this.friend = f;
+        }
+      });
+
+      // load competitor info
+      this.competitorService.getCompetitor(this.loggedInUser.Id, playerId).subscribe(c =>{
+        if(c)
+        {
+          this.competitor = c;
+        }
+      });
+    }
+
+    // load matches info
+    this.matchService.searchMatches(playerId).subscribe(matches =>{
+      console.log('matches', matches);
+
+      this.matchesByEvent = {};
+
+      matches.forEach((match, index) => {
+        if (!this.matchesByEvent[match.EventId]) {
+          this.matchesByEvent[match.EventId] = [];
+        }
+        this.matchesByEvent[match.EventId].push(match);
+      });
+
+      this.lastMatch = matches[matches.length-1];
+    });
+
+    // load player opponents
+    this.playerOpponentService.getPlayerOpponents(playerId).subscribe(opponents =>{
+      this.opponents = opponents;
+    });
+
     // load player info
     this.playerService.getPlayer(playerId).subscribe(player => {
       this.player = player;
@@ -95,41 +139,6 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
       // get name initial svg
       this.nameInitialSvg = this.getSvg(player);
       
-      this.loggedInUser = this.authService.getLoggedInUser();
-      if(this.loggedInUser){
-        // load friend info
-        this.friendService.getFriend(this.loggedInUser.Id, player.Id).subscribe(f => {
-          if(f){
-            this.friend = f;
-          }
-        });
-
-        // load competitor info
-        this.competitorService.getCompetitor(this.loggedInUser.Id, playerId).subscribe(c =>{
-          if(c)
-          {
-            this.competitor = c;
-          }
-        });
-      }
-
-
-      // load matches info
-      this.matchService.searchMatches(playerId).subscribe(matches =>{
-        console.log('matches', matches);
-
-        this.matchesByEvent = {};
-
-        matches.forEach((match, index) => {
-          if (!this.matchesByEvent[match.EventId]) {
-            this.matchesByEvent[match.EventId] = [];
-          }
-          this.matchesByEvent[match.EventId].push(match);
-        });
-
-        this.lastMatch = matches[matches.length-1];
-      });
-
       // load club info
       if(player.ClubIds){
         console.log("I have clubIds", player.ClubIds);
@@ -166,11 +175,11 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
           }
         });
       }
+    });
 
-      // load statistics
-      this.statsService.getLatest().subscribe(x=>{
-        this.stats = x;
-      });
+    // load statistics
+    this.statsService.getLatest().subscribe(x=>{
+      this.stats = x;
     });
   }
 

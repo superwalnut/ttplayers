@@ -98,6 +98,12 @@
                         </ng-template>
                     </li>
                     <li [ngbNavItem]="3">
+                        <button ngbNavLink>Opponents</button>
+                        <ng-template ngbNavContent>
+                            <app-player-all-opponents [player]="player" [opponents]="opponents"></app-player-all-opponents>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="4">
                         <button ngbNavLink>Summary</button>
                         <ng-template ngbNavContent>
                             <app-player-biography [player]="player"></app-player-biography>

@@ -69,6 +69,7 @@ namespace TtPlayers.Importer.Applications
                     Id = player.Id,
                     FullName = player.FullName,
                     LastUpdated = DateTime.Now,
+                    RequireDeltaPush = true
                 };
 
                 foreach (var group in groups)

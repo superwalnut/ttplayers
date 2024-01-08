@@ -11,6 +11,7 @@ namespace TtPlayers.Importer.Domain.Models
         [FirestoreProperty]
         public string? FullName { get; set; }
 
+        [FirestoreProperty]
         public List<PlayerOpponentMatch> Matches { get; set; }
     }
 

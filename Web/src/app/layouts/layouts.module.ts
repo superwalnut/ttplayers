@@ -91,6 +91,7 @@ import { BlogsComponent } from './blogs/blogs.component';
 import { BlogDetailComponent } from './blogs/blog-detail/blog-detail.component';
 import { PlayerBiographyComponent } from './players/player-detail/player-biography/player-biography.component';
 import { PlayerRatingGraphComponent } from './players/player-detail/player-rating-graph/player-rating-graph.component';
+import { PlayerAllOpponentsComponent } from './players/player-detail/player-all-opponents/player-all-opponents.component';
 
 @NgModule({
   declarations: [
@@ -148,7 +149,8 @@ import { PlayerRatingGraphComponent } from './players/player-detail/player-ratin
     BlogsComponent,
     BlogDetailComponent,
     PlayerBiographyComponent,
-    PlayerRatingGraphComponent    
+    PlayerRatingGraphComponent,
+    PlayerAllOpponentsComponent    
   ],
   imports: [
     CommonModule,

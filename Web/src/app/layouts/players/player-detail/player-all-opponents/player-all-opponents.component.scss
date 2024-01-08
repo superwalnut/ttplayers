@@ -1,0 +1,33 @@
+.set-wins {
+    font-size:1.5em;
+    font-weight: 600;
+    width:100%;
+    color:#fff;
+}
+
+.win {
+    color:#357fef;
+
+    span{
+        background-color: #007bff !important;
+    }
+}
+
+.middle-align {
+    vertical-align: middle;
+}
+
+.right-align {
+    text-align: right;
+    padding-right: 15px;
+}
+
+.match-date {
+    font-size:0.8em;
+}
+
+.match-player {
+    a{
+        text-decoration: underline;
+    }
+}
