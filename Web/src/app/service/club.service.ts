@@ -32,7 +32,19 @@ export class ClubService {
   getClubByIds(ids:string[]) : Observable<Club[]> {
     console.log('getClubsByIds', ids);
     const queries = ids.map(id => {
-      return this.firestore.doc<Club>(`Clubs/${id.trim()}`).valueChanges().pipe(take(1));
+      const val = this.lsService.getItemWithExpiration(`${GlobalConstants.CLUB_DETAIL}-${id}`);
+      if(val){
+        const club = val as Club;
+        console.log('ls club', club);
+        return of(club);
+      }
+
+      return this.firestore.doc<Club>(`Clubs/${id.trim()}`).valueChanges().pipe(
+        map(club=>{
+          this.lsService.setItemWithExpiration(`${GlobalConstants.CLUB_DETAIL}-${id}`, club, GlobalConstants.LOCAL_STORAGE_SHORT_EXPIRY);
+          return club;
+        })
+      );
     });
     return this.combineObservables(ids, queries);
   }

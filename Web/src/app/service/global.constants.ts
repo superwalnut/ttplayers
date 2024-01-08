@@ -21,4 +21,6 @@ export class GlobalConstants {
 
     public static LOCAL_STORAGE_SHORT_EXPIRY:number = 1;
 
+    public static TEAM_DETAIL:string = 'team-detail';
+
 }

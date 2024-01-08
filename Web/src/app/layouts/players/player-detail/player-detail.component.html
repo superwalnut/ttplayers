@@ -88,7 +88,7 @@
                         </ng-template>
                     </li>
                     <li [ngbNavItem]="2">
-                        <button ngbNavLink>Match History</button>
+                        <button ngbNavLink>Matches</button>
                         <ng-template ngbNavContent>
                             <!-- Match history -->
                             <app-player-history [player]="player" [matchesByEvent]="matchesByEvent" *ngIf="matchesByEvent"></app-player-history>
@@ -104,7 +104,7 @@
                         </ng-template>
                     </li>
                     <li [ngbNavItem]="4">
-                        <button ngbNavLink>Summary</button>
+                        <button ngbNavLink>Bio</button>
                         <ng-template ngbNavContent>
                             <app-player-biography [player]="player"></app-player-biography>
                         </ng-template>

@@ -23,6 +23,7 @@ import { CommonService } from 'src/app/service/common.service';
 import { Gtag } from 'angular-gtag';
 import { PlayerOpponentService } from './../../../service/player-opponent.service';
 import { PlayerOpponents } from 'src/app/models/player-opponent';
+import { of, switchMap, zip } from 'rxjs';
 
 @Component({
   selector: 'app-player-detail',
@@ -129,52 +130,52 @@ export class PlayerDetailComponent implements OnInit, OnDestroy {
     });
 
     // load player info
-    this.playerService.getPlayer(playerId).subscribe(player => {
-      this.player = player;
-      console.log(this.player);
-
-      this.title.setTitle(`${player.State} Table Tennis player - ${player.FullName} :${playerId} match history and statistics`);
-      this.meta.addTag({name: 'description', content: `${player.State} Table Tennis player - ${player.FullName} :${playerId} match history and statistics`});
-
-      // get name initial svg
-      this.nameInitialSvg = this.getSvg(player);
-      
-      // load club info
-      if(player.ClubIds){
-        console.log("I have clubIds", player.ClubIds);
-        this.clubService.getClubByIds(player.ClubIds).subscribe(clubs =>{
-          this.clubs = clubs;
-        });
-      } else if(player.PrimaryClubId) {
-        this.clubService.getClub(player.PrimaryClubId).subscribe(club =>{
-          this.clubs.push(club);
-        });
+    this.playerService.getPlayer(playerId)
+    .pipe(
+      switchMap(player=>{
+        this.player = player;
+        console.log(this.player);
+  
+        this.title.setTitle(`${player.State} Table Tennis player - ${player.FullName} :${playerId} match history and statistics`);
+        this.meta.addTag({name: 'description', content: `${player.State} Table Tennis player - ${player.FullName} :${playerId} match history and statistics`});
+  
+        // get name initial svg
+        this.nameInitialSvg = this.getSvg(player);
+        
+        const clubIds = player.ClubIds?player.ClubIds:[player.PrimaryClubId];
+        const teamNames = player.Team;
+        console.log('teamNames', teamNames);
+        return zip(this.clubService.getClubByIds(clubIds), this.sndttaTeamService.searchTeams(teamNames));
+      })
+    ).subscribe(([clubs, teams]) => {
+      // load clubs
+      if(clubs){
+        this.clubs = clubs;
       }
-      
-      // load team and team players
-      if(player.Team) {
-        this.sndttaTeamService.searchTeams(player.Team).subscribe(teams =>{
-          for(var i=0;i<teams.length;i++){
-            for(var j=0;j<teams[i].Players.length;j++){
-              var player = teams[i].Players[j];
 
-              // get all other team mates, other than yourself
-              if(player && player.Id != this.player.Id){
-                this.teamPlayers.push({
-                  Id: player.Id,
-                  Rating: player.Rating,
-                  StDev: player.StDev,
-                  Team: teams[i].Id,
-                  FullName: player.FullName.trim(),
-                  FirstName: player.FirstName.trim(),
-                  LastName: player.LastName.trim(),
-                  Gender: player.Gender
-                });
-              }
+      // load team and team players
+      if(teams){
+        for(var i=0;i<teams.length;i++){
+          for(var j=0;j<teams[i].Players.length;j++){
+            var player = teams[i].Players[j];
+  
+            // get all other team mates, other than yourself
+            if(player && player.Id != this.player.Id){
+              this.teamPlayers.push({
+                Id: player.Id,
+                Rating: player.Rating,
+                StDev: player.StDev,
+                Team: teams[i].Id,
+                FullName: player.FullName.trim(),
+                FirstName: player.FirstName.trim(),
+                LastName: player.LastName.trim(),
+                Gender: player.Gender
+              });
             }
           }
-        });
+        }
       }
+      
     });
 
     // load statistics
